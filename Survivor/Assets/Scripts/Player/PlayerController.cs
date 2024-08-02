@@ -8,11 +8,12 @@ namespace Entities.Player
         [SerializeField] private float speed = 5f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance;
+        [SerializeField] private float edgeDetectionDistance = 0.5f;
 
         private CharacterController controller;
         private bool isClimbing = false;
         private bool canJump = false;
-        public float jumpHeight = 2f;
+        public float jumpHeight = 3f;
         public float gravity = -9.81f;
         private Vector3 velocity;
 
@@ -23,32 +24,35 @@ namespace Entities.Player
 
         void Update()
         {
-            HandleKeyboardInput();
             if (isClimbing)
             {
                 HandleClimbing();
             }
-            if (velocity.y < 0)
+            else
             {
-                velocity.y = 0f;
+                HandleKeyboardInput();
+                CheckEdgeAndJump();
             }
-            if (canJump)
-            {
-                HandleJump();
-            }
-            controller.Move(velocity * Time.deltaTime);
         }
-        private void HandleJump()
+
+        private void PerformJump()
         {
-            Debug.Log("jumped");
-            velocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             canJump = false;
         }
+
         private void HandleKeyboardInput()
         {
-            if (isClimbing)
+            if (!controller.isGrounded)
             {
-                return;
+                velocity.y += gravity * Time.deltaTime;
+            }
+            else
+            {
+                if (velocity.y < 0)
+                {
+                    velocity.y = -2f;
+                }
             }
 
             float moveX = Input.GetAxis("Horizontal");
@@ -57,6 +61,26 @@ namespace Entities.Player
             Vector3 moveDirection = new Vector3(moveX, 0, moveZ);
             moveDirection.Normalize();
             controller.Move(moveDirection * speed * Time.deltaTime);
+            controller.Move(velocity * Time.deltaTime);
+        }
+
+        private void CheckEdgeAndJump()
+        {
+            if (controller.isGrounded)
+            {
+                Vector3 origin = transform.position;
+                origin.y += 0.1f;
+                Ray ray = new Ray(origin, Vector3.down);
+                RaycastHit hit;
+
+                if (!Physics.Raycast(ray, out hit, edgeDetectionDistance))
+                {
+                    if (canJump)
+                    {
+                        PerformJump();
+                    }
+                }
+            }
         }
 
         private void HandleClimbing()
@@ -72,6 +96,12 @@ namespace Entities.Player
             {
                 isClimbing = true;
                 currentClimbable = other.transform;
+                canJump = false;
+            }
+
+            if (other.CompareTag("canJump"))
+            {
+                canJump = true;
             }
         }
 
@@ -90,10 +120,6 @@ namespace Entities.Player
                 currentClimbable = null;
             }
 
-            if (other.CompareTag("canJump"))
-            {
-                canJump = true;
-            }
         }
     }
 }
