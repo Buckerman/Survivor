@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
@@ -12,7 +13,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private int attackDamage = 10;
     private float attackCooldown = 2f;
-    private float lastAttackTime;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
         _enemyPool = pool;
     }
 
+    private bool isAttacking = false;
     private void Update()
     {
         if (_player != null)
@@ -33,22 +34,40 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(_player.position);
 
             float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-            if (distanceToPlayer <= attackRange && Time.time >= lastAttackTime + attackCooldown)
+            if (distanceToPlayer <= attackRange)
             {
-                AttackPlayer();
-                lastAttackTime = Time.time;
+                agent.isStopped = true;
+                if (!isAttacking)
+                {
+                    StartCoroutine(AttackPlayer());
+                }
+            }
+            else
+            {
+                agent.isStopped = false;
             }
         }
     }
 
-    private void AttackPlayer()
+    private IEnumerator AttackPlayer()
     {
-        agent.isStopped = true;
-        PlayerBehaviour player = _player.GetComponent<PlayerBehaviour>();
-        if (player != null)
+        isAttacking = true;
+
+        yield return new WaitForSeconds(attackCooldown);// delay for animation perform
+
+        if (_player != null)
         {
-            player.TakeDamage(attackDamage);
+            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+            if (distanceToPlayer <= attackRange)
+            {
+                PlayerBehaviour player = _player.GetComponent<PlayerBehaviour>();
+                if (player != null)
+                {
+                    player.TakeDamage(attackDamage);
+                }
+            }
         }
+        isAttacking = false;
     }
 
     private void OnDisable()

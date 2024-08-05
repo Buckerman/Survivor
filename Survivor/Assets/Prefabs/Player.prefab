@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9184635495617577341}
   - component: {fileID: 5265526939936845176}
   - component: {fileID: 2623388965952749205}
-  - component: {fileID: 8404314215142574839}
+  - component: {fileID: 167603251971976601}
   - component: {fileID: 5470004029117409808}
   m_Layer: 0
   m_Name: Player
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
---- !u!114 &8404314215142574839
+--- !u!114 &167603251971976601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,6 +166,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootInterval: 2
   bulletSpawnOffset: {x: 0.5, y: 0, z: 0.5}
+  bulletPrefab: {fileID: 9144469231115741932, guid: cf477bf75f1cf424681d2ea3609de538, type: 3}
+  bulletPoolSize: 10
 --- !u!114 &5470004029117409808
 MonoBehaviour:
   m_ObjectHideFlags: 0
