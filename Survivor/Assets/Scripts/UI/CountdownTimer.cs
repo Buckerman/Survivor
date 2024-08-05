@@ -6,11 +6,12 @@ public class CountdownTimer : MonoBehaviour
     float currentTime = 0f;
     float startingTime = 60f;
 
-    [SerializeField] Text countDown;
+    private Text _countDown;
 
     void Start()
     {
         currentTime = startingTime;
+        _countDown = GetComponent<Text>();
     }
 
     public void StartTimer()
@@ -22,7 +23,7 @@ public class CountdownTimer : MonoBehaviour
     void Update()
     {
         currentTime -= Time.deltaTime;
-        countDown.text = ((int)currentTime).ToString();
+        _countDown.text = ((int)currentTime).ToString();
         if (currentTime <= 0)
         {
             currentTime = 0;

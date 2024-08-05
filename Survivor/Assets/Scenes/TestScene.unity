@@ -270,10 +270,14 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.103973985
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1985086651853114342, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6677833401422773221, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 476973207}
   m_SourcePrefab: {fileID: 100100000, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
 --- !u!114 &303822844 stripped
 MonoBehaviour:
@@ -343,6 +347,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c302d67681ba48741be09bca4f710f2e, type: 3}
+--- !u!1 &476973203 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6677833401422773221, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
+  m_PrefabInstance: {fileID: 282194407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &476973207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476973203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 585e60b9878ab2d4cb9dfa69a81e98ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countDown: {fileID: 0}
 --- !u!1001 &549544246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1136,7 +1158,7 @@ PrefabInstance:
     - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: countdownTimer
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 476973207}
     - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: defeatGameText
       value: 
