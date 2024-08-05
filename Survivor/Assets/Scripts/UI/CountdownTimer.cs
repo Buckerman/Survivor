@@ -7,9 +7,16 @@ public class CountdownTimer : MonoBehaviour
     float startingTime = 60f;
 
     [SerializeField] Text countDown;
+
     void Start()
     {
         currentTime = startingTime;
+    }
+
+    public void StartTimer()
+    {
+        currentTime = startingTime;
+        enabled = true;
     }
 
     void Update()
@@ -20,6 +27,12 @@ public class CountdownTimer : MonoBehaviour
         {
             currentTime = 0;
             Time.timeScale = 0;
+            GameManager.Instance.EndGame();
         }
+    }
+
+    public void StopTimer()
+    {
+        enabled = false;
     }
 }
