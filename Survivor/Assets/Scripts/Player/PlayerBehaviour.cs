@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class PlayerBehaviour : MonoBehaviour
     private int _currentHealth;
     private PlayerHealthBar _healthBar;
 
+    [SerializeField] Text endGameText;
     private void Start()
     {
         _currentHealth = maxHealth;
@@ -30,5 +32,6 @@ public class PlayerBehaviour : MonoBehaviour
     private void Die()
     {
         Time.timeScale = 0;
+        endGameText.gameObject.SetActive(true);
     }
 }
