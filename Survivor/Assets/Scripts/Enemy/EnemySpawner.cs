@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask groundLayer;
+
     [SerializeField] private float planeSize = 4f;
     [SerializeField] private float raycastHeight = 10f;
     [SerializeField] private float spawnOffset = 1f;
@@ -30,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
         if (spawnPosition != Vector3.zero)
         {
             enemy.transform.position = spawnPosition + Vector3.up * spawnOffset;
-            enemy.Initialize(enemyPool, playerTransform);
+            enemy.Initialize(playerTransform, enemyPool);
         }
     }
 

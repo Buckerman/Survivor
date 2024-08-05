@@ -1,23 +1,31 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    private EnemyPool enemyPool;
+    private NavMeshAgent agent;
     private Transform _player;
+    private EnemyPool enemyPool;
+
     [SerializeField] private float speed = 2f;
 
-    public void Initialize(EnemyPool pool, Transform playerTransform)
+    private void Awake()
     {
-        enemyPool = pool;
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = speed;
+    }
+
+    public void Initialize(Transform playerTransform, EnemyPool pool)
+    {
         _player = playerTransform;
+        enemyPool = pool;
     }
 
     private void Update()
     {
         if (_player != null)
         {
-            Vector3 direction = (_player.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
+            agent.SetDestination(_player.position);
         }
     }
 
@@ -28,5 +36,4 @@ public class Enemy : MonoBehaviour
             enemyPool.ReturnEnemy(this);
         }
     }
-
 }
