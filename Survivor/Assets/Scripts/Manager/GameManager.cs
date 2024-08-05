@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text defeatGameText;
     [SerializeField] private Text winGameText;
     [SerializeField] private NavMeshSurface navMeshSurface;
-    [SerializeField] private EnemyPool enemyPool;
-    [SerializeField] private BulletPool bulletPool;
 
     private void Awake()
     {
@@ -37,8 +35,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         defeatGameText.gameObject.SetActive(false);
         winGameText.gameObject.SetActive(false);
-        enemyPool.gameObject.SetActive(true);
-        bulletPool.gameObject.SetActive(true);
         countdownTimer.StartTimer();
     }
 

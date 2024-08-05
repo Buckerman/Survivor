@@ -6,9 +6,11 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float detectionRadius = 0.5f;
     private Vector3 _direction;
 
-    public void Initialize(Vector3 initialDirection)
+    private BulletPool _bulletPool;
+    public void Initialize(Vector3 initialDirection, BulletPool bulletPool)
     {
         _direction = initialDirection;
+        _bulletPool = bulletPool;
     }
 
     private void Update()
@@ -32,6 +34,6 @@ public class Bullet : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        BulletPool.Instance.ReturnBullet(this);
+        _bulletPool.ReturnBullet(this);
     }
 }

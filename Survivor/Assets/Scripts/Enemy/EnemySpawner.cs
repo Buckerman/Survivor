@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private EnemyPool enemyPool;
-    [SerializeField] private float spawnInterval = 1f;
+    [SerializeField] private Enemy enemyPrefab;
+    [SerializeField] private int poolSize = 10;
+    [SerializeField] private float spawnInterval = 0.5f;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask groundLayer;
 
@@ -12,6 +13,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnOffset = 1f;
 
     private float timeSinceLastSpawn;
+    private EnemyPool _enemyPool;
+
+    private void Start()
+    {
+        _enemyPool = new EnemyPool(enemyPrefab, poolSize);
+    }
 
     private void Update()
     {
@@ -26,20 +33,20 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        Enemy enemy = enemyPool.GetEnemy();
+        Enemy enemy = _enemyPool.GetEnemy();
         Vector3 spawnPosition = GetRandomPositionOnGround();
         if (spawnPosition != Vector3.zero)
         {
             enemy.transform.position = spawnPosition + Vector3.up * spawnOffset;
-            enemy.Initialize(playerTransform, enemyPool);
+            enemy.Initialize(playerTransform, _enemyPool);
         }
     }
 
     private Vector3 GetRandomPositionOnGround()
     {
         Vector3 randomPosition = new Vector3(
-            Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f), //kazdy planeSize ma 10 kratek
-            raycastHeight,
+            Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f),
+            raycastHeight, // 1 size to 10 kratek
             Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f)
         );
 

@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Transform _player;
-    private EnemyPool enemyPool;
+    private EnemyPool _enemyPool;
 
     [SerializeField] private float speed = 2f;
 
@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     public void Initialize(Transform playerTransform, EnemyPool pool)
     {
         _player = playerTransform;
-        enemyPool = pool;
+        _enemyPool = pool;
     }
 
     private void Update()
@@ -53,9 +53,9 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
-        if (enemyPool != null)
+        if (_enemyPool != null)
         {
-            enemyPool.ReturnEnemy(this);
+            _enemyPool.ReturnEnemy(this);
         }
     }
 }

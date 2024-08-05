@@ -2,11 +2,19 @@
 
 public class PlayerShooting : MonoBehaviour
 {
-    [SerializeField] private float shootInterval = 1f;
+    [SerializeField] private float shootInterval = 2f;
     [SerializeField] private Vector3 bulletSpawnOffset = new Vector3(0.5f, 0, 0.5f);
+    [SerializeField] private Bullet bulletPrefab;
+    [SerializeField] private int bulletPoolSize = 10;
 
     private Transform closestEnemy;
     private float shootTimer;
+    private BulletPool _bulletPool;
+
+    private void Start()
+    {
+        _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
+    }
 
     private void Update()
     {
@@ -39,9 +47,9 @@ public class PlayerShooting : MonoBehaviour
             Vector3 spawnPos = transform.position + transform.TransformDirection(bulletSpawnOffset);
             Vector3 directionToEnemy = (closestEnemy.position - spawnPos).normalized;
 
-            Bullet bullet = BulletPool.Instance.GetBullet();
+            Bullet bullet = _bulletPool.GetBullet();
             bullet.transform.position = spawnPos;
-            bullet.Initialize(directionToEnemy);
+            bullet.Initialize(directionToEnemy, _bulletPool);
         }
     }
 

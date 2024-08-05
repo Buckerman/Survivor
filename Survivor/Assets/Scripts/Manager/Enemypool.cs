@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPool : MonoBehaviour
+public class EnemyPool
 {
-    [SerializeField] private Enemy enemyPrefab;
-    [SerializeField] private int poolSize = 10;
+    private Enemy enemyPrefab;
+    private int poolSize;
     private Queue<Enemy> pool;
 
-    public static EnemyPool Instance { get; private set; }
-
-    private void Awake()
+    public EnemyPool(Enemy enemyPrefab, int poolSize)
     {
+        this.enemyPrefab = enemyPrefab;
+        this.poolSize = poolSize;
         pool = new Queue<Enemy>();
 
         for (int i = 0; i < poolSize; i++)
         {
-            Enemy enemy = Instantiate(enemyPrefab);
+            Enemy enemy = Object.Instantiate(enemyPrefab);
             enemy.gameObject.SetActive(false);
             pool.Enqueue(enemy);
         }
@@ -31,7 +31,7 @@ public class EnemyPool : MonoBehaviour
         }
         else
         {
-            Enemy enemy = Instantiate(enemyPrefab);
+            Enemy enemy = Object.Instantiate(enemyPrefab);
             return enemy;
         }
     }

@@ -1,29 +1,21 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletPool : MonoBehaviour
+public class BulletPool
 {
-    [SerializeField] private Bullet bulletPrefab;
-    [SerializeField] private int poolSize = 10;
+    private Bullet bulletPrefab;
+    private int poolSize;
     private Queue<Bullet> pool;
 
-    public static BulletPool Instance { get; private set; }
-
-    private void Awake()
+    public BulletPool(Bullet bulletPrefab, int poolSize)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        this.bulletPrefab = bulletPrefab;
+        this.poolSize = poolSize;
         pool = new Queue<Bullet>();
+
         for (int i = 0; i < poolSize; i++)
         {
-            Bullet bullet = Instantiate(bulletPrefab);
+            Bullet bullet = Object.Instantiate(bulletPrefab);
             bullet.gameObject.SetActive(false);
             pool.Enqueue(bullet);
         }
@@ -41,12 +33,12 @@ public class BulletPool : MonoBehaviour
             }
             else
             {
-                return Instantiate(bulletPrefab);
+                return Object.Instantiate(bulletPrefab);
             }
         }
         else
         {
-            return Instantiate(bulletPrefab);
+            return Object.Instantiate(bulletPrefab);
         }
     }
 
