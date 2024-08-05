@@ -21,7 +21,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    private void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
         _healthBar.UpdateHealthBar(_currentHealth, maxHealth);

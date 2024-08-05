@@ -1,4 +1,6 @@
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private Text defeatGameText;
     [SerializeField] private Text winGameText;
+    [SerializeField] private NavMeshSurface navMeshSurface;
 
     private void Awake()
     {
@@ -23,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        BakeNavMesh();
         StartGame();
     }
 
@@ -34,12 +38,18 @@ public class GameManager : MonoBehaviour
         countdownTimer.StartTimer();
     }
 
+    private void BakeNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();
+    }
+
     public void EndWave()
     {
         Time.timeScale = 0;
         winGameText.gameObject.SetActive(true);
         countdownTimer.StopTimer();
     }
+
     public void EndGame()
     {
         Time.timeScale = 0;

@@ -9,6 +9,11 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float speed = 2f;
 
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private int attackDamage = 10;
+    private float attackCooldown = 2f;
+    private float lastAttackTime;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -26,6 +31,23 @@ public class Enemy : MonoBehaviour
         if (_player != null)
         {
             agent.SetDestination(_player.position);
+
+            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+            if (distanceToPlayer <= attackRange && Time.time >= lastAttackTime + attackCooldown)
+            {
+                AttackPlayer();
+                lastAttackTime = Time.time;
+            }
+        }
+    }
+
+    private void AttackPlayer()
+    {
+        agent.isStopped = true;
+        PlayerBehaviour player = _player.GetComponent<PlayerBehaviour>();
+        if (player != null)
+        {
+            player.TakeDamage(attackDamage);
         }
     }
 
