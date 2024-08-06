@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text defeatGameText;
     [SerializeField] private Text winGameText;
     [SerializeField] private NavMeshSurface navMeshSurface;
-    [SerializeField] private EnemySpawner spawner;
 
     private void Awake()
     {
@@ -36,7 +35,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         defeatGameText.gameObject.SetActive(false);
         winGameText.gameObject.SetActive(false);
-        spawner.GetComponent<EnemySpawner>().enabled = true;
+        navMeshSurface.GetComponent<EnemySpawner>().enabled = true;
         countdownTimer.StartTimer();
     }
 

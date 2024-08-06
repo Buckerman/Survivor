@@ -9,10 +9,10 @@ public class Enemy : MonoBehaviour
     private EnemyPool _enemyPool;
 
     [SerializeField] private float speed = 2f;
-
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private int attackDamage = 10;
     private float attackCooldown = 2f;
+    [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
 
     private void Awake()
     {
@@ -27,24 +27,39 @@ public class Enemy : MonoBehaviour
     }
 
     private bool isAttacking = false;
+
     private void Update()
     {
         if (_player != null)
         {
-            agent.SetDestination(_player.position);
-
-            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-            if (distanceToPlayer <= attackRange)
+            NavMeshPath path = new NavMeshPath();
+            agent.CalculatePath(_player.position, path);
+            if (path.status == NavMeshPathStatus.PathComplete)
             {
-                agent.isStopped = true;
-                if (!isAttacking)
+                agent.SetDestination(_player.position);
+
+                float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+                if (distanceToPlayer <= attackRange)
                 {
-                    StartCoroutine(AttackPlayer());
+                    agent.isStopped = true;
+                    if (!isAttacking)
+                    {
+                        StartCoroutine(AttackPlayer());
+                    }
+                }
+                else
+                {
+                    agent.isStopped = false;
                 }
             }
             else
             {
-                agent.isStopped = false;
+                // Calculate fallback position directly below the player
+                Vector3 fallbackPosition = GetFallbackPosition();
+                if (fallbackPosition != Vector3.zero)
+                {
+                    agent.SetDestination(fallbackPosition);
+                }
             }
         }
     }
@@ -52,8 +67,7 @@ public class Enemy : MonoBehaviour
     private IEnumerator AttackPlayer()
     {
         isAttacking = true;
-
-        yield return new WaitForSeconds(attackCooldown);// delay for animation perform
+        yield return new WaitForSeconds(attackCooldown);
 
         if (_player != null)
         {
@@ -68,6 +82,20 @@ public class Enemy : MonoBehaviour
             }
         }
         isAttacking = false;
+    }
+
+    private Vector3 GetFallbackPosition()
+    {
+        Vector3 playerPosition = _player.position;
+        Vector3 fallbackPosition = playerPosition - new Vector3(0, fallbackDistance, 0);
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fallbackPosition, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+
+        return Vector3.zero;
     }
 
     private void OnDisable()

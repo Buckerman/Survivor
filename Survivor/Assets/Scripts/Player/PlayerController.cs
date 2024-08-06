@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Entities.Player
@@ -34,11 +35,10 @@ namespace Entities.Player
                 CheckEdgeAndJump();
             }
         }
-
-        private void PerformJump()
+        private void HandleClimbing()
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            canJump = false;
+            Vector3 climbDirection = Vector3.up;
+            controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
 
         private void HandleKeyboardInput()
@@ -75,6 +75,7 @@ namespace Entities.Player
 
                 if (!Physics.Raycast(ray, out hit, edgeDetectionDistance))
                 {
+                    CheckForPlatform();
                     if (canJump)
                     {
                         PerformJump();
@@ -82,17 +83,24 @@ namespace Entities.Player
                 }
             }
         }
-
-        private void HandleClimbing()
+        private void CheckForPlatform()
         {
-            Vector3 climbDirection = Vector3.up;
-            controller.Move(climbDirection * climbSpeed * Time.deltaTime);
+            if (currentPlatform == null || !currentPlatform.gameObject.activeInHierarchy)
+            {
+                canJump = false;
+            }
+        }
+        private void PerformJump()
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            canJump = false;
         }
 
         private Transform currentClimbable;
+        private Transform currentPlatform;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Building"))
+            if (other.CompareTag("Building") || other.CompareTag("Platform"))
             {
                 isClimbing = true;
                 currentClimbable = other.transform;
@@ -101,13 +109,20 @@ namespace Entities.Player
 
             if (other.CompareTag("canJump"))
             {
+                currentPlatform = other.transform;
                 canJump = true;
+                StartCoroutine(PlatformRespawnTimer(other));
             }
+        }
+        private IEnumerator PlatformRespawnTimer(Collider other)
+        {
+            yield return new WaitForSeconds(3.5f);
+            other.transform.parent.gameObject.SetActive(true);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Building") && other.transform == currentClimbable)
+            if ((other.CompareTag("Building") || other.CompareTag("Platform")) && other.transform == currentClimbable)
             {
                 isClimbing = false;
 
@@ -119,7 +134,6 @@ namespace Entities.Player
 
                 currentClimbable = null;
             }
-
         }
     }
 }
