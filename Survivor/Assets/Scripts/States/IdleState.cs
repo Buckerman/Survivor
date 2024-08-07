@@ -10,6 +10,7 @@ public class IdleState : IPlayerState
         _player = player;
         _player.SetAnimation("isRunning", false);
         _player.SetAnimation("isClimbing", false);
+        _player.SetAnimation("isJumping", false);
     }
 
     public void Exit() { }

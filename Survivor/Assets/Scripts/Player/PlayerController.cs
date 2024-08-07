@@ -105,7 +105,7 @@ namespace Entities.Player
                     CheckForPlatform();
                     if (canJump)
                     {
-                        PerformJump();
+                        SetState(new JumpState());
                     }
                 }
             }
@@ -117,7 +117,7 @@ namespace Entities.Player
                 canJump = false;
             }
         }
-        private void PerformJump()
+        public void PerformJump()
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             canJump = false;
