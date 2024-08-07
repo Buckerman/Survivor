@@ -9,10 +9,16 @@ namespace Entities.Player
         [SerializeField] private float speed = 5f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance;
-        [SerializeField] private float edgeDetectionDistance = 0.5f;
+        [SerializeField] private float edgeDetectionDistance = 0.3f;
 
-        private CharacterController controller;
+        private CharacterController _controller;
+        private Animator _animator;
+
+        private IPlayerState _currentState;
+
         private bool isClimbing = false;
+        public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
+
         private bool canJump = false;
         public float jumpHeight = 3f;
         public float gravity = -9.81f;
@@ -20,12 +26,19 @@ namespace Entities.Player
 
         void Awake()
         {
-            controller = GetComponent<CharacterController>();
+            _controller = GetComponent<CharacterController>();
+            _animator = GetComponent<Animator>();
         }
 
+        private void Start()
+        {
+            SetState(new IdleState());
+        }
         void Update()
         {
-            if (isClimbing)
+            _currentState.Update();
+
+            if (IsClimbing)
             {
                 HandleClimbing();
             }
@@ -35,15 +48,29 @@ namespace Entities.Player
                 CheckEdgeAndJump();
             }
         }
+        public void SetState(IPlayerState newState)
+        {
+            if (_currentState != null)
+            {
+                _currentState.Exit();
+            }
+            _currentState = newState;
+            _currentState.Enter(this);
+        }
+        public void SetAnimation(string parameter, bool state)
+        {
+            _animator.SetBool(parameter, state);
+        }
         private void HandleClimbing()
         {
+            SetState(new ClimbingState());
             Vector3 climbDirection = Vector3.up;
-            controller.Move(climbDirection * climbSpeed * Time.deltaTime);
+            _controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
 
         private void HandleKeyboardInput()
         {
-            if (!controller.isGrounded)
+            if (!_controller.isGrounded)
             {
                 velocity.y += gravity * Time.deltaTime;
             }
@@ -60,16 +87,16 @@ namespace Entities.Player
 
             Vector3 moveDirection = new Vector3(moveX, 0, moveZ);
             moveDirection.Normalize();
-            controller.Move(moveDirection * speed * Time.deltaTime);
-            controller.Move(velocity * Time.deltaTime);
+            _controller.Move(moveDirection * speed * Time.deltaTime);
+            _controller.Move(velocity * Time.deltaTime);
         }
 
         private void CheckEdgeAndJump()
         {
-            if (controller.isGrounded)
+            if (_controller.isGrounded)
             {
                 Vector3 origin = transform.position;
-                origin.y += 0.1f;
+                origin.y += 1.1f;
                 Ray ray = new Ray(origin, Vector3.down);
                 RaycastHit hit;
 
@@ -98,11 +125,12 @@ namespace Entities.Player
 
         private Transform currentClimbable;
         private Transform currentPlatform;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Building") || other.CompareTag("Platform"))
             {
-                isClimbing = true;
+                IsClimbing = true;
                 currentClimbable = other.transform;
                 canJump = false;
             }
@@ -124,13 +152,13 @@ namespace Entities.Player
         {
             if ((other.CompareTag("Building") || other.CompareTag("Platform")) && other.transform == currentClimbable)
             {
-                isClimbing = false;
+                IsClimbing = false;
 
                 Vector3 moveTowardsDirection = (currentClimbable.position - transform.position).normalized;
                 moveTowardsDirection.y = 0;
 
                 Vector3 moveAmount = moveTowardsDirection * moveTowardsDistance;
-                controller.Move(moveAmount);
+                _controller.Move(moveAmount);
 
                 currentClimbable = null;
             }
