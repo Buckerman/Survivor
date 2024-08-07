@@ -21,7 +21,7 @@ namespace Entities.Player
 
         private bool canJump = false;
         public float jumpHeight = 3f;
-        public float gravity = -9.81f;
+        public float gravity = -9.81f; 
         private Vector3 velocity;
 
         void Awake()
@@ -105,7 +105,7 @@ namespace Entities.Player
                     CheckForPlatform();
                     if (canJump)
                     {
-                        SetState(new JumpState());
+                        PerformJump();
                     }
                 }
             }

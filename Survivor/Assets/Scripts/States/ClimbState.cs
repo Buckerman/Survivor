@@ -9,7 +9,6 @@ public class ClimbingState : IPlayerState
     {
         _player = player;
         _player.SetAnimation("isClimbing", true);
-        _player.SetAnimation("isJumping", false);
         _player.SetAnimation("isRunning", false);
     }
 

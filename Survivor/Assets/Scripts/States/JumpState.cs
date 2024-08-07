@@ -35,6 +35,9 @@ public class JumpState : IPlayerState
         {
             _player.SetState(new RunningState());
         }
-        else _player.SetState(new IdleState());
+        else
+        {
+            _player.SetState(new IdleState());
+        }
     }
 }
