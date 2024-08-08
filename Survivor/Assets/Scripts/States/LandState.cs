@@ -9,12 +9,13 @@ public class LandState : IPlayerState
     {
         _player = player;
         _player.SetAnimation("isLanding", true);
-        _player.SetAnimation("isRunning", false);
-        _player.SetAnimation("isClimbing", false);
-        _player.SetAnimation("isJumping", false);
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        _player.SetAnimation("isLanding", false);
+
+    }
 
     public void Update()
     {
@@ -27,5 +28,14 @@ public class LandState : IPlayerState
         {
             _player.SetState(new ClimbingState());
         }
+        else if (Mathf.Abs(Input.GetAxis("Horizontal")) <= 0.1f && Mathf.Abs(Input.GetAxis("Vertical")) <= 0.1f)
+        {
+            _player.SetState(new IdleState());
+        }
+        else if (_player.IsJumping)
+        {
+            _player.SetState(new JumpState());
+        }
+        else _player.SetState(new IdleState());
     }
 }

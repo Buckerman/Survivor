@@ -9,10 +9,12 @@ public class ClimbingState : IPlayerState
     {
         _player = player;
         _player.SetAnimation("isClimbing", true);
-        _player.SetAnimation("isRunning", false);
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        _player.SetAnimation("isClimbing", false);
+    }
 
     public void Update()
     {

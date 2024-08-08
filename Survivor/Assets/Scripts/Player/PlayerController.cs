@@ -7,10 +7,10 @@ namespace Entities.Player
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float speed = 5f;
-        [SerializeField] private float rotationSpeed = 5f;
+        [SerializeField] private float rotationSpeed = 15f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance = 1.25f;
-        [SerializeField] private float edgeDetectionDistance = 0.5f;
+        [SerializeField] private float edgeDetectionDistance = 1f;
 
         private CharacterController _controller;
         private Animator _animator;
@@ -18,7 +18,9 @@ namespace Entities.Player
         private IPlayerState _currentState;
 
         private bool isClimbing = false;
+        private bool isJumping = false;
         public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
+        public bool IsJumping { get => isJumping; set => isJumping = value; }
 
         private bool canJump = false;
         public float jumpHeight = 3f;
@@ -106,6 +108,7 @@ namespace Entities.Player
         {
             if (_controller.isGrounded)
             {
+                isJumping = false;
                 Vector3 origin = transform.position;
                 origin.y += 1.1f;
                 Ray ray = new Ray(origin, Vector3.down);
@@ -116,6 +119,7 @@ namespace Entities.Player
                     CheckForPlatform();
                     if (canJump)
                     {
+                        isJumping = true;
                         PerformJump();
                     }
                 }

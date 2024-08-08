@@ -10,6 +10,7 @@ public class JumpState : IPlayerState
         _player = player;
         _player.SetAnimation("isJumping", true);
         _player.SetAnimation("isClimbing", false);
+        _player.SetAnimation("isRunning", false);
     }
 
     public void Exit()
@@ -27,6 +28,10 @@ public class JumpState : IPlayerState
         if (_player.IsClimbing)
         {
             _player.SetState(new ClimbingState());
+        }
+        if (_player.GetComponent<CharacterController>().isGrounded)
+        {
+            _player.SetState(new LandState());
         }
     }
 }
