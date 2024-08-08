@@ -7,7 +7,7 @@ namespace Entities.Player
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float speed = 5f;
-        [SerializeField] private float rotationSpeed = 15f;
+        [SerializeField] private float rotationSpeed = 20f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance = 1.25f;
         [SerializeField] private float edgeDetectionDistance = 1f;
@@ -23,7 +23,7 @@ namespace Entities.Player
         public bool IsJumping { get => isJumping; set => isJumping = value; }
 
         private bool canJump = false;
-        public float jumpHeight = 3f;
+        public float jumpHeight = 2f;
         public float gravity = -9.81f;
         private Vector3 velocity;
 
@@ -150,6 +150,14 @@ namespace Entities.Player
                 IsClimbing = true;
                 currentClimbable = other.transform;
                 canJump = false;
+
+                Vector3 directionToLook = other.transform.position - transform.position;
+                directionToLook.y = 0;
+                if (directionToLook != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(directionToLook);
+                    transform.rotation = lookRotation;
+                }
             }
 
             if (other.CompareTag("canJump"))
@@ -176,7 +184,15 @@ namespace Entities.Player
                 moveTowardsDirection.y = 0;
 
                 Vector3 moveAmount = moveTowardsDirection * moveTowardsDistance;
-                _controller.Move(moveAmount);
+
+                Vector3 targetPosition = transform.position + moveAmount;
+                Ray ray = new Ray(targetPosition + Vector3.up * 0.5f, Vector3.down);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 1f))
+                {
+                    _controller.Move(moveAmount);
+                }
 
                 currentClimbable = null;
             }

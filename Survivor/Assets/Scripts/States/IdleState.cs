@@ -8,9 +8,17 @@ public class IdleState : IPlayerState
     public void Enter(PlayerController player)
     {
         _player = player;
+        _player.SetAnimation("isStanding", true);
+        _player.SetAnimation("isJumping", false);
+        _player.SetAnimation("isClimbing", false);
+        _player.SetAnimation("isRunning", false);
+        _player.SetAnimation("isInAir", false);
+        _player.SetAnimation("isLanding", false);
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+    }
 
     public void Update()
     {
@@ -23,7 +31,7 @@ public class IdleState : IPlayerState
         {
             _player.SetState(new ClimbingState());
         }
-        else if(Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+        else if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
         {
             _player.SetState(new RunningState());
         }
