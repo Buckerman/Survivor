@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -727,17 +727,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 570926191610588933, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7997017068351335157, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
       propertyPath: m_Name
       value: Plane
-      objectReference: {fileID: 0}
-    - target: {fileID: 7997017068351335157, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8113581185861112508, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
       propertyPath: playerTransform
@@ -797,17 +789,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1201152593 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8113581185861112508, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
-  m_PrefabInstance: {fileID: 1201152590}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c350dff0a65e36f43988866324b1a14b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &356384277533822296
@@ -894,15 +875,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454843768890144045, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 812.7118
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 454843768890144045, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 535.1539
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 454843768890144045, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -641.66724
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 454843768890144045, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_LocalRotation.w
@@ -933,14 +914,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
-      propertyPath: spawner
-      value: 
-      objectReference: {fileID: 1201152593}
-    - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: winGameText
       value: 
       objectReference: {fileID: 927981848}
@@ -956,10 +929,6 @@ PrefabInstance:
       propertyPath: defeatGameText
       value: 
       objectReference: {fileID: 927981849}
-    - target: {fileID: 6524171224393649984, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
-      propertyPath: navMeshSurface
-      value: 
-      objectReference: {fileID: 1201152592}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

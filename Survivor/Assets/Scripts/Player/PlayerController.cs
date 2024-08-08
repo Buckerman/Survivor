@@ -7,9 +7,10 @@ namespace Entities.Player
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float speed = 5f;
+        [SerializeField] private float rotationSpeed = 5f;
         [SerializeField] private float climbSpeed = 3f;
-        [SerializeField] private float moveTowardsDistance;
-        [SerializeField] private float edgeDetectionDistance = 0.3f;
+        [SerializeField] private float moveTowardsDistance = 1.25f;
+        [SerializeField] private float edgeDetectionDistance = 0.5f;
 
         private CharacterController _controller;
         private Animator _animator;
@@ -21,7 +22,7 @@ namespace Entities.Player
 
         private bool canJump = false;
         public float jumpHeight = 3f;
-        public float gravity = -9.81f; 
+        public float gravity = -9.81f;
         private Vector3 velocity;
 
         void Awake()
@@ -34,6 +35,7 @@ namespace Entities.Player
         {
             SetState(new IdleState());
         }
+
         void Update()
         {
             _currentState.Update();
@@ -48,22 +50,25 @@ namespace Entities.Player
                 CheckEdgeAndJump();
             }
         }
+
         public void SetState(IPlayerState newState)
         {
             if (_currentState != null)
             {
                 _currentState.Exit();
             }
+            Debug.Log("Entering State: " + newState.GetType().Name);
             _currentState = newState;
             _currentState.Enter(this);
         }
+
         public void SetAnimation(string parameter, bool state)
         {
             _animator.SetBool(parameter, state);
         }
+
         private void HandleClimbing()
         {
-            SetState(new ClimbingState());
             Vector3 climbDirection = Vector3.up;
             _controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
@@ -87,6 +92,12 @@ namespace Entities.Player
 
             Vector3 moveDirection = new Vector3(moveX, 0, moveZ);
             moveDirection.Normalize();
+
+            if (moveDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotationSpeed);
+            }
+
             _controller.Move(moveDirection * speed * Time.deltaTime);
             _controller.Move(velocity * Time.deltaTime);
         }
@@ -110,17 +121,19 @@ namespace Entities.Player
                 }
             }
         }
+
+        public void PerformJump()
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            canJump = false;
+        }
+
         private void CheckForPlatform()
         {
             if (currentPlatform == null || !currentPlatform.gameObject.activeInHierarchy)
             {
                 canJump = false;
             }
-        }
-        public void PerformJump()
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            canJump = false;
         }
 
         private Transform currentClimbable;
@@ -142,6 +155,7 @@ namespace Entities.Player
                 StartCoroutine(PlatformRespawnTimer(other));
             }
         }
+
         private IEnumerator PlatformRespawnTimer(Collider other)
         {
             yield return new WaitForSeconds(3.5f);

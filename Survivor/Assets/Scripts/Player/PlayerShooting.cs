@@ -24,21 +24,21 @@ public class PlayerShooting : MonoBehaviour
             closestEnemy = FindClosestEnemy();
             if (closestEnemy != null)
             {
-                RotateTowardsEnemy();
+                //RotateTowardsEnemy();
                 ShootAtEnemy();
                 shootTimer = shootInterval;
             }
         }
     }
 
-    private void RotateTowardsEnemy()
-    {
-        Vector3 directionToEnemy = closestEnemy.position - transform.position;
-        directionToEnemy.y = 0;
+    //private void RotateTowardsEnemy()
+    //{
+    //    Vector3 directionToEnemy = closestEnemy.position - transform.position;
+    //    directionToEnemy.y = 0;
 
-        Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
-        transform.rotation = targetRotation;
-    }
+    //    Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
+    //    transform.rotation = targetRotation;
+    //}
 
     private void ShootAtEnemy()
     {

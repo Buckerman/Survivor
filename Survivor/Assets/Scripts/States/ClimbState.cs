@@ -21,10 +21,13 @@ public class ClimbingState : IPlayerState
 
     public void HandleInput()
     {
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+        if (!_player.IsClimbing)
         {
-            _player.SetState(new RunningState());
+            if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+            {
+                _player.SetState(new RunningState());
+            }
+            else _player.SetState(new IdleState());
         }
-        else _player.SetState(new IdleState());
     }
 }
