@@ -8,16 +8,12 @@ public class InAirState : IPlayerState
     public void Enter(PlayerController player)
     {
         _player = player;
-        _player.SetAnimation("isStanding", false);
-        _player.SetAnimation("isJumping", false);
-        _player.SetAnimation("isClimbing", false);
-        _player.SetAnimation("isRunning", false);
         _player.SetAnimation("isInAir", true);
-        _player.SetAnimation("isLanding", false);
     }
 
     public void Exit()
     {
+        _player.SetAnimation("isInAir", false);
     }
 
     public void Update()

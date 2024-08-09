@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Entities.Player
 {
@@ -11,7 +12,9 @@ namespace Entities.Player
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance = 1.25f;
         [SerializeField] private float edgeDetectionDistance = 1f;
+        [SerializeField] public VariableJoystick joystick;
 
+        public float magnitude;
         private CharacterController _controller;
         private Animator _animator;
 
@@ -89,11 +92,9 @@ namespace Entities.Player
                 }
             }
 
-            float moveX = Input.GetAxis("Horizontal");
-            float moveZ = Input.GetAxis("Vertical");
 
-            Vector3 moveDirection = new Vector3(moveX, 0, moveZ);
-            moveDirection.Normalize();
+            Vector3 moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y).normalized;
+            magnitude = moveDirection.sqrMagnitude;
 
             if (moveDirection != Vector3.zero)
             {
@@ -119,12 +120,16 @@ namespace Entities.Player
                     CheckForPlatform();
                     if (canJump)
                     {
+                        Vector3 moveForwardDirection = transform.forward * 0.5f;
+                        _controller.Move(moveForwardDirection);
+
                         isJumping = true;
                         PerformJump();
                     }
                 }
             }
         }
+
 
         public void PerformJump()
         {

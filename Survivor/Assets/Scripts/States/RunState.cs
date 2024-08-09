@@ -27,13 +27,13 @@ public class RunningState : IPlayerState
         {
             _player.SetState(new ClimbingState());
         }
-        else if (Mathf.Abs(Input.GetAxis("Horizontal")) <= 0.1f && Mathf.Abs(Input.GetAxis("Vertical")) <= 0.1f)
-        {
-            _player.SetState(new IdleState());
-        }
         else if (_player.IsJumping)
         {
             _player.SetState(new JumpState());
+        }
+        else if (_player.magnitude <= 0.1f)
+        {
+            _player.SetState(new IdleState());
         }
     }
 }

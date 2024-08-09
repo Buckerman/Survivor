@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using QuangDM.Common;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
         BakeNavMesh();
         StartGame();
     }
@@ -41,6 +43,10 @@ public class GameManager : MonoBehaviour
         winGameText.gameObject.SetActive(false);
         groundSurface.GetComponent<EnemySpawner>().enabled = true;
         countdownTimer.StartTimer();
+
+        PlayerData.Instance.Load();
+        PlayerData.Instance.ConversationID = 2;
+        PlayerData.Instance.Save();
     }
 
     private void BakeNavMesh()
