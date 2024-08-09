@@ -4,6 +4,8 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using QuangDM.Common;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -53,16 +55,13 @@ public class GameManager : MonoBehaviour
     {
         groundSurface.BuildNavMesh();
 
-        //Find all buildings
         GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
         foreach (GameObject building in buildings)
         {
-            // Find wall objects that are children of the building
             foreach (Transform child in building.transform)
             {
                 if (child.CompareTag(wallTag))
                 {
-                    // Add NavMeshSurface to the wall if it doesn't have one already
                     NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
                     if (surface == null)
                     {
@@ -75,12 +74,20 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    private IEnumerator ReloadSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
     public void EndWave()
     {
         Time.timeScale = 0;
         winGameText.gameObject.SetActive(true);
         countdownTimer.StopTimer();
+
+        StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
 
     public void EndGame()
@@ -88,5 +95,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         defeatGameText.gameObject.SetActive(true);
         countdownTimer.StopTimer();
+
+        StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
 }

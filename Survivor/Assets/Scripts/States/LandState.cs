@@ -31,11 +31,11 @@ public class LandState : IPlayerState
         {
             _player.SetState(new JumpState());
         }
-        else if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+        else if (_player.magnitude > 0.1f)
         {
             _player.SetState(new RunningState());
         }
-        else if (Mathf.Abs(Input.GetAxis("Horizontal")) <= 0.1f && Mathf.Abs(Input.GetAxis("Vertical")) <= 0.1f)
+        else if (_player.magnitude <= 0.1f)
         {
             _player.SetState(new IdleState());
         }
