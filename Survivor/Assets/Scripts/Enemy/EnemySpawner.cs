@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -6,10 +7,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int poolSize = 10;
     [SerializeField] private float spawnInterval = 0.5f;
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private LayerMask groundLayer;
 
     [SerializeField] private float planeSize = 4f;
-    [SerializeField] private float raycastHeight = 10f;
+    [SerializeField] private float maxSampleDistance = 5f;
     [SerializeField] private float spawnOffset = 1f;
 
     private float timeSinceLastSpawn;
@@ -39,6 +39,7 @@ public class EnemySpawner : MonoBehaviour
         {
             enemy.transform.position = spawnPosition + Vector3.up * spawnOffset;
             enemy.Initialize(playerTransform, _enemyPool);
+            enemy.NavMeshAgent.enabled = true;
         }
     }
 
@@ -46,15 +47,14 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector3 randomPosition = new Vector3(
             Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f),
-            raycastHeight, // 1 size to 10 kratek
+            0f, // 1 size to 10 kratek
             Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f)
         );
 
-        Ray ray = new Ray(randomPosition, Vector3.down);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomPosition, out hit, maxSampleDistance, NavMesh.AllAreas))
         {
-            return hit.point;
+            return hit.position;
         }
         return Vector3.zero;
     }

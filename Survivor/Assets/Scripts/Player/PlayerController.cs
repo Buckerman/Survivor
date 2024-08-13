@@ -10,7 +10,7 @@ namespace Entities.Player
         [SerializeField] private float speed = 5f;
         [SerializeField] private float rotationSpeed = 20f;
         [SerializeField] private float climbSpeed = 3f;
-        [SerializeField] private float moveTowardsDistance = 1.25f;
+        [SerializeField] private float moveTowardsDistance = 1.5f;
         [SerializeField] private float edgeDetectionDistance = 1f;
         [SerializeField] public VariableJoystick joystick;
 
@@ -24,11 +24,13 @@ namespace Entities.Player
         private bool isJumping = false;
         public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
         public bool IsJumping { get => isJumping; set => isJumping = value; }
-
         private bool canJump = false;
+
         public float jumpHeight = 2f;
         public float gravity = -9.81f;
+
         private Vector3 velocity;
+        private Vector3 jumpDirection;
 
         void Awake()
         {
@@ -45,13 +47,17 @@ namespace Entities.Player
         {
             _currentState.Update();
 
-            if (IsClimbing)
+            if (IsJumping)
+            {
+                HandleAutoJump();
+            }
+            else if (IsClimbing)
             {
                 HandleClimbing();
             }
             else
             {
-                HandleKeyboardInput();
+                HandleMoveInput();
                 CheckEdgeAndJump();
             }
         }
@@ -78,7 +84,23 @@ namespace Entities.Player
             _controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
 
-        private void HandleKeyboardInput()
+        private void HandleMoveInput()
+        {
+            ApplyGravity();
+
+            Vector3 moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y).normalized;
+            magnitude = moveDirection.sqrMagnitude;
+
+            if (moveDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotationSpeed);
+            }
+
+            _controller.Move(moveDirection * speed * Time.deltaTime);
+            _controller.Move(velocity * Time.deltaTime);
+        }
+
+        private void ApplyGravity()
         {
             if (!_controller.isGrounded)
             {
@@ -91,18 +113,6 @@ namespace Entities.Player
                     velocity.y = -2f;
                 }
             }
-
-
-            Vector3 moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y).normalized;
-            magnitude = moveDirection.sqrMagnitude;
-
-            if (moveDirection != Vector3.zero)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotationSpeed);
-            }
-
-            _controller.Move(moveDirection * speed * Time.deltaTime);
-            _controller.Move(velocity * Time.deltaTime);
         }
 
         private void CheckEdgeAndJump()
@@ -120,21 +130,35 @@ namespace Entities.Player
                     CheckForPlatform();
                     if (canJump)
                     {
-                        Vector3 moveForwardDirection = transform.forward * 0.5f;
-                        _controller.Move(moveForwardDirection);
-
                         isJumping = true;
-                        PerformJump();
+                        PrepareAutoJump();
                     }
                 }
             }
         }
 
-
-        public void PerformJump()
+        private void PrepareAutoJump()
         {
+            IsJumping = true;
+            Vector3 forwardDirection = transform.forward;
+            jumpDirection = forwardDirection.normalized * 0.5f;
+            jumpDirection.y = 0;
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             canJump = false;
+        }
+
+        private void HandleAutoJump()
+        {
+            ApplyGravity();
+
+            _controller.Move(jumpDirection * speed * Time.deltaTime);
+            _controller.Move(velocity * Time.deltaTime);
+
+            if (_controller.isGrounded && velocity.y < 0)
+            {
+                IsJumping = false;
+                canJump = false;
+            }
         }
 
         private void CheckForPlatform()

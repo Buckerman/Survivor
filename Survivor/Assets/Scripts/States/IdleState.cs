@@ -27,10 +27,6 @@ public class IdleState : IPlayerState
         {
             _player.SetState(new ClimbingState());
         }
-        else if (_player.IsJumping && _player.magnitude <= 0.1f)
-        {
-            _player.SetState(new JumpState());
-        }
         else if (_player.magnitude > 0.1f)
         {
             _player.SetState(new RunningState());

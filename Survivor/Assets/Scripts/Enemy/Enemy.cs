@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     private Transform _player;
     private EnemyPool _enemyPool;
 
+    public NavMeshAgent NavMeshAgent => agent;
+
     [SerializeField] private float speed = 2f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private int attackDamage = 10;
@@ -24,6 +26,8 @@ public class Enemy : MonoBehaviour
     {
         _player = playerTransform;
         _enemyPool = pool;
+
+        agent.enabled = false;
     }
 
     private bool isAttacking = false;
