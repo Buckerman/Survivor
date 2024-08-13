@@ -24,21 +24,11 @@ public class PlayerShooting : MonoBehaviour
             closestEnemy = FindClosestEnemy();
             if (closestEnemy != null)
             {
-                //RotateTowardsEnemy();
                 ShootAtEnemy();
                 shootTimer = shootInterval;
             }
         }
     }
-
-    //private void RotateTowardsEnemy()
-    //{
-    //    Vector3 directionToEnemy = closestEnemy.position - transform.position;
-    //    directionToEnemy.y = 0;
-
-    //    Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
-    //    transform.rotation = targetRotation;
-    //}
 
     private void ShootAtEnemy()
     {
@@ -46,6 +36,7 @@ public class PlayerShooting : MonoBehaviour
         {
             Vector3 spawnPos = transform.position + transform.TransformDirection(bulletSpawnOffset);
             Vector3 directionToEnemy = (closestEnemy.position - spawnPos).normalized;
+            //directionToEnemy.y = 0; //do stabilizacjlotu pocisku
 
             Bullet bullet = _bulletPool.GetBullet();
             bullet.transform.position = spawnPos;

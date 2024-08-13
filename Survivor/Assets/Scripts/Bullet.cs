@@ -1,3 +1,4 @@
+using QuangDM.Common;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -27,6 +28,7 @@ public class Bullet : MonoBehaviour
             if (hit.CompareTag("Enemy"))
             {
                 hit.gameObject.SetActive(false);
+                Observer.Instance.Notify("EnemyDisabled", 1);
                 break;
             }
         }

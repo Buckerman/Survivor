@@ -68,7 +68,6 @@ namespace Entities.Player
             {
                 _currentState.Exit();
             }
-            Debug.Log("Entering State: " + newState.GetType().Name);
             _currentState = newState;
             _currentState.Enter(this);
         }

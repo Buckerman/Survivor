@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using QuangDM.Common;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +37,13 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
         BakeNavMesh();
         StartGame();
+        Observer.Instance.AddObserver("EnemyDisabled", EnemyDisabled);
+    }
+
+    private void EnemyDisabled(object data)
+    {
+        int value = (int)data;
+        Debug.Log($"{value} points");
     }
 
     public void StartGame()

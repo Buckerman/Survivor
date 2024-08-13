@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using QuangDM.Common;
 
 public class Enemy : MonoBehaviour
 {
