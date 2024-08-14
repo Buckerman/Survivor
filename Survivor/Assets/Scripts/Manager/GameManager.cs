@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 60;
+        defeatGameText.gameObject.SetActive(false);
+        winGameText.gameObject.SetActive(false);
         BakeNavMesh();
         StartGame();
         Observer.Instance.AddObserver("EnemyDisabled", EnemyDisabled);

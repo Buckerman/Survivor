@@ -30,6 +30,7 @@ public class CountdownTimer : MonoBehaviour
             currentTime = 0;
             Time.timeScale = 0;
             StopTimer();
+            GameManager.Instance.EndWave();
         }
     }
 
