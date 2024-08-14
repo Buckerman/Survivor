@@ -1,10 +1,11 @@
+using QuangDM.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CountdownTimer : MonoBehaviour
 {
     float currentTime = 0f;
-    float startingTime = 60f;
+    float startingTime = 15f;
 
     private Text _countDown;
 
@@ -28,7 +29,7 @@ public class CountdownTimer : MonoBehaviour
         {
             currentTime = 0;
             Time.timeScale = 0;
-            GameManager.Instance.EndWave();
+            StopTimer();
         }
     }
 

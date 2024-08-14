@@ -13,10 +13,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private CountdownTimer countdownTimer;
-    [SerializeField] private Text defeatGameText;
-    [SerializeField] private Text winGameText;
     [SerializeField] private NavMeshSurface groundSurface;
     [SerializeField] private string wallTag = "Wall";
+
+    [SerializeField] private Text defeatGameText;
+    [SerializeField] private Text winGameText;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
 
@@ -25,11 +26,35 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AssignReferences();
+    }
+
+    private void AssignReferences()
+    {
+        if (countdownTimer == null)
+            countdownTimer = FindObjectOfType<CountdownTimer>();
+
+        if (groundSurface == null)
+            groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
     }
 
     private void Start()
@@ -49,8 +74,6 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1;
-        defeatGameText.gameObject.SetActive(false);
-        winGameText.gameObject.SetActive(false);
         groundSurface.GetComponent<EnemySpawner>().enabled = true;
         countdownTimer.StartTimer();
 

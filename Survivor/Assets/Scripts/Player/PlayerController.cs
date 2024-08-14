@@ -134,7 +134,7 @@ namespace Entities.Player
         {
             IsJumping = true;
             Vector3 forwardDirection = transform.forward;
-            jumpDirection = forwardDirection.normalized * 0.5f;
+            jumpDirection = forwardDirection.normalized;
             jumpDirection.y = 0;
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
