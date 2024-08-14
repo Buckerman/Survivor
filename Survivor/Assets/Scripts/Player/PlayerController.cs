@@ -24,7 +24,6 @@ namespace Entities.Player
         private bool isJumping = false;
         public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
         public bool IsJumping { get => isJumping; set => isJumping = value; }
-        private bool canJump = false;
 
         public float jumpHeight = 2f;
         public float gravity = -9.81f;
@@ -127,11 +126,6 @@ namespace Entities.Player
                 if (!Physics.Raycast(ray, out hit, edgeDetectionDistance))
                 {
                     CheckForPlatform();
-                    if (canJump)
-                    {
-                        isJumping = true;
-                        PrepareAutoJump();
-                    }
                 }
             }
         }
@@ -143,7 +137,6 @@ namespace Entities.Player
             jumpDirection = forwardDirection.normalized * 0.5f;
             jumpDirection.y = 0;
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            canJump = false;
         }
 
         private void HandleAutoJump()
@@ -156,7 +149,6 @@ namespace Entities.Player
             if (_controller.isGrounded && velocity.y < 0)
             {
                 IsJumping = false;
-                canJump = false;
             }
         }
 
@@ -164,7 +156,7 @@ namespace Entities.Player
         {
             if (currentPlatform == null || !currentPlatform.gameObject.activeInHierarchy)
             {
-                canJump = false;
+                isJumping = false;
             }
         }
 
@@ -177,7 +169,6 @@ namespace Entities.Player
             {
                 IsClimbing = true;
                 currentClimbable = other.transform;
-                canJump = false;
 
                 Vector3 directionToLook = other.transform.position - transform.position;
                 directionToLook.y = 0;
@@ -186,13 +177,6 @@ namespace Entities.Player
                     Quaternion lookRotation = Quaternion.LookRotation(directionToLook);
                     transform.rotation = lookRotation;
                 }
-            }
-
-            if (other.CompareTag("canJump"))
-            {
-                currentPlatform = other.transform;
-                canJump = true;
-                StartCoroutine(PlatformRespawnTimer(other));
             }
         }
 
@@ -223,6 +207,14 @@ namespace Entities.Player
                 }
 
                 currentClimbable = null;
+            }
+
+            if (other.CompareTag("canJump"))
+            {
+                currentPlatform = other.transform;
+                isJumping = true;
+                PrepareAutoJump();
+                StartCoroutine(PlatformRespawnTimer(other));
             }
         }
     }
