@@ -17,6 +17,7 @@ namespace Entities.Player
         public float magnitude;
         private CharacterController _controller;
         private Animator _animator;
+        private PlayerShooting _playerShooting;
 
         private IPlayerState _currentState;
 
@@ -35,6 +36,7 @@ namespace Entities.Player
         {
             _controller = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
+            _playerShooting = GetComponent<PlayerShooting>();
         }
 
         private void Start()
@@ -58,6 +60,7 @@ namespace Entities.Player
             {
                 HandleMoveInput();
                 CheckEdgeAndJump();
+                _playerShooting.enabled = true;
             }
         }
 
@@ -78,6 +81,7 @@ namespace Entities.Player
 
         private void HandleClimbing()
         {
+            _playerShooting.enabled = false;
             Vector3 climbDirection = Vector3.up;
             _controller.Move(climbDirection * climbSpeed * Time.deltaTime);
         }
