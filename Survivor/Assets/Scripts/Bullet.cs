@@ -17,6 +17,11 @@ public class Bullet : MonoBehaviour
     private void FixedUpdate()
     {
         transform.position += _direction * speed * Time.deltaTime;
+
+        Quaternion desiredRotation = Quaternion.LookRotation(_direction);
+        Quaternion adjustedRotation = desiredRotation * Quaternion.Euler(0, 90, 0);
+        transform.rotation = adjustedRotation;
+
         CheckForCollision();
     }
 
