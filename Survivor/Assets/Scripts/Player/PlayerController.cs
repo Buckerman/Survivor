@@ -42,7 +42,7 @@ namespace Entities.Player
             SetState(new IdleState());
         }
 
-        void Update()
+        void FixedUpdate()
         {
             _currentState.Update();
 

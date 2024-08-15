@@ -12,12 +12,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private CountdownTimer countdownTimer;
-    [SerializeField] private NavMeshSurface groundSurface;
-    [SerializeField] private string wallTag = "Wall";
-
-    [SerializeField] private Text defeatGameText;
-    [SerializeField] private Text winGameText;
+    private CountdownTimer _countdownTimer;
+    private NavMeshSurface _groundSurface;
+    private string wallTag = "Wall";
+    private Text _defeatGameText;
+    private Text _winGameText;
+    private VariableJoystick _joystick;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
 
@@ -46,24 +46,41 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AssignReferences();
+        InitializeGame();
     }
 
     private void AssignReferences()
     {
-        if (countdownTimer == null)
-            countdownTimer = FindObjectOfType<CountdownTimer>();
+        if (_countdownTimer == null)
+            _countdownTimer = FindObjectOfType<CountdownTimer>();
 
-        if (groundSurface == null)
-            groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
+        if (_groundSurface == null)
+            _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
+
+        if (_defeatGameText == null)
+            _defeatGameText = GameObject.Find("GUI/DefeatGameText").GetComponent<Text>();
+
+        if (_winGameText == null)
+            _winGameText = GameObject.Find("GUI/WinGameText").GetComponent<Text>();
+
+        if (_joystick == null)
+            _joystick = FindObjectOfType<VariableJoystick>();
     }
 
     private void Start()
     {
+        InitializeGame();
+    }
+
+    private void InitializeGame()
+    {
         Application.targetFrameRate = 60;
-        defeatGameText.gameObject.SetActive(false);
-        winGameText.gameObject.SetActive(false);
+        _defeatGameText.gameObject.SetActive(false);
+        _winGameText.gameObject.SetActive(false);
+
         BakeNavMesh();
         StartGame();
+
         Observer.Instance.AddObserver("EnemyDisabled", EnemyDisabled);
     }
 
@@ -76,8 +93,9 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1;
-        groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        countdownTimer.StartTimer();
+        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
+        _joystick.enabled = true;
+        _countdownTimer.StartTimer();
 
         PlayerData.Instance.Load();
         PlayerData.Instance.ConversationID = 2;
@@ -86,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     private void BakeNavMesh()
     {
-        groundSurface.BuildNavMesh();
+        _groundSurface.BuildNavMesh();
 
         GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
         foreach (GameObject building in buildings)
@@ -117,8 +135,9 @@ public class GameManager : MonoBehaviour
     public void EndWave()
     {
         Time.timeScale = 0;
-        winGameText.gameObject.SetActive(true);
-        countdownTimer.StopTimer();
+        _winGameText.gameObject.SetActive(true);
+        _countdownTimer.StopTimer();
+        _joystick.enabled = false;
 
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
@@ -126,8 +145,9 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         Time.timeScale = 0;
-        defeatGameText.gameObject.SetActive(true);
-        countdownTimer.StopTimer();
+        _defeatGameText.gameObject.SetActive(true);
+        _countdownTimer.StopTimer();
+        _joystick.enabled = false;
 
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }

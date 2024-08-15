@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -7,16 +8,21 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private int bulletPoolSize = 10;
 
+    [Header("Right Hand Target")]
+    [SerializeField] private ChainIKConstraint rightHandIK;
+    [SerializeField] private Transform rightHandTarget;
+
     private Transform closestEnemy;
     private float shootTimer;
     private BulletPool _bulletPool;
+    private Vector3 initialHandRotation = new Vector3(190f, 135f, 90f);
 
     private void Start()
     {
         _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         shootTimer -= Time.deltaTime;
         if (shootTimer <= 0f)
@@ -24,6 +30,7 @@ public class PlayerShooting : MonoBehaviour
             closestEnemy = FindClosestEnemy();
             if (closestEnemy != null)
             {
+                rightHandIK.weight = 1f;
                 ShootAtEnemy();
                 shootTimer = shootInterval;
             }
@@ -36,7 +43,6 @@ public class PlayerShooting : MonoBehaviour
         {
             Vector3 spawnPos = transform.position + transform.TransformDirection(bulletSpawnOffset);
             Vector3 directionToEnemy = (closestEnemy.position - spawnPos).normalized;
-            //directionToEnemy.y = 0; //do stabilizacjlotu pocisku
 
             Bullet bullet = _bulletPool.GetBullet();
             bullet.transform.position = spawnPos;

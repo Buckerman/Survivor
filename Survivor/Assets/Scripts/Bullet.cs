@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
         _bulletPool = bulletPool;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         transform.position += _direction * speed * Time.deltaTime;
         CheckForCollision();

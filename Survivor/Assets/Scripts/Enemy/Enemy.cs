@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
 
     private bool isAttacking = false;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_player != null)
         {
