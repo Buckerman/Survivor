@@ -4,7 +4,6 @@ using UnityEngine;
 public class IdleState : IPlayerState
 {
     private PlayerController _player;
-    private VariableJoystick _joystick;
 
     public void Enter(PlayerController player)
     {

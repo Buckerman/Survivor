@@ -58,26 +58,22 @@ public class GameManager : MonoBehaviour
             _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
 
         if (_defeatGameText == null)
-            _defeatGameText = GameObject.Find("GUI/DefeatGameText").GetComponent<Text>();
+            _defeatGameText = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<Text>();
 
         if (_winGameText == null)
-            _winGameText = GameObject.Find("GUI/WinGameText").GetComponent<Text>();
+            _winGameText = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<Text>();
 
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
-    }
 
-    private void Start()
-    {
-        InitializeGame();
+        _joystick.enabled = true;
+        _defeatGameText.transform.parent.gameObject.SetActive(false);
+        _winGameText.transform.parent.gameObject.SetActive(false);
     }
 
     private void InitializeGame()
     {
         Application.targetFrameRate = 60;
-        _defeatGameText.gameObject.SetActive(false);
-        _winGameText.gameObject.SetActive(false);
-
         BakeNavMesh();
         StartGame();
 
@@ -94,7 +90,6 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        _joystick.enabled = true;
         _countdownTimer.StartTimer();
 
         PlayerData.Instance.Load();
@@ -135,7 +130,7 @@ public class GameManager : MonoBehaviour
     public void EndWave()
     {
         Time.timeScale = 0;
-        _winGameText.gameObject.SetActive(true);
+        _winGameText.transform.parent.gameObject.SetActive(true);
         _countdownTimer.StopTimer();
         _joystick.enabled = false;
 
@@ -145,7 +140,7 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         Time.timeScale = 0;
-        _defeatGameText.gameObject.SetActive(true);
+        _defeatGameText.transform.parent.gameObject.SetActive(true);
         _countdownTimer.StopTimer();
         _joystick.enabled = false;
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 454843768890144045}
   - component: {fileID: 6524171224393649984}
+  - component: {fileID: 8979681228543279478}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -39,13 +40,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352624878009854795}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e0ea75bd74e06a4e90d8911fe931160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTimer: {fileID: 0}
-  defeatGameText: {fileID: 0}
-  winGameText: {fileID: 0}
-  groundSurface: {fileID: 0}
-  wallTag: Wall
+--- !u!114 &8979681228543279478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352624878009854795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9890d48ac86d446a426e37eaa39269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

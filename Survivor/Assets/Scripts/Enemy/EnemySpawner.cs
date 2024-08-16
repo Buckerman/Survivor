@@ -59,3 +59,9 @@ public class EnemySpawner : MonoBehaviour
         return Vector3.zero;
     }
 }
+
+[System.Serializable]
+public class Wave
+{
+    public Enemy[] enemies;
+}

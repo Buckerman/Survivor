@@ -7,6 +7,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private int bulletPoolSize = 10;
+    [SerializeField] private float shootRange = 5f;
     public Transform bulletSpawnPos;
 
     [Header("Right Hand Target")]
@@ -39,7 +40,7 @@ public class PlayerShooting : MonoBehaviour
         if (shootTimer <= 0f)
         {
             closestEnemy = FindClosestEnemy();
-            if (closestEnemy != null)
+            if (closestEnemy != null && Vector3.Distance(closestEnemy.position,transform.position) <= shootRange)
             {
                 StartCoroutine(HandleShooting()); //temp until animator layer learnt
                 shootTimer = shootInterval;
