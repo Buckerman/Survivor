@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using QuangDM.Common;
+using System;
 
 public class Enemy : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
+    }
+
+    private void Start()
+    {
+        Observer.Instance.AddObserver("DisableAllEnemies", DisableAllEnemies);
     }
 
     public void Initialize(Transform playerTransform, EnemyPool pool)
@@ -102,7 +108,10 @@ public class Enemy : MonoBehaviour
 
         return Vector3.zero;
     }
-
+    private void DisableAllEnemies(object data)
+    {
+        OnDisable();
+    }
     private void OnDisable()
     {
         if (_enemyPool != null)

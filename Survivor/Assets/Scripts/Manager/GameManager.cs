@@ -1,6 +1,5 @@
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using QuangDM.Common;
@@ -12,11 +11,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    private CountdownTimer _countdownTimer;
+    private GameTimer _gameTimer;
     private NavMeshSurface _groundSurface;
     private string wallTag = "Wall";
-    private Text _defeatGameText;
-    private Text _winGameText;
+    private Text _defeatGame;
+    private Text _waveComplete;
+    private Text _waveLevel;
+    private Text _surviveTime;
     private VariableJoystick _joystick;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
@@ -51,24 +52,29 @@ public class GameManager : MonoBehaviour
 
     private void AssignReferences()
     {
-        if (_countdownTimer == null)
-            _countdownTimer = FindObjectOfType<CountdownTimer>();
+        if (_gameTimer == null)
+            _gameTimer = FindObjectOfType<GameTimer>();
 
         if (_groundSurface == null)
             _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
 
-        if (_defeatGameText == null)
-            _defeatGameText = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<Text>();
+        if (_defeatGame == null)
+            _defeatGame = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<Text>();
 
-        if (_winGameText == null)
-            _winGameText = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<Text>();
+        if (_waveComplete == null)
+            _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<Text>();
+
+        if (_waveLevel == null)
+            _waveLevel = GameObject.Find("GUI/WaveLevelBg/Level").GetComponentInChildren<Text>();
+
+        if (_surviveTime == null)
+            _surviveTime = GameObject.Find("GUI/SurviveTimeBg/SurviveTime").GetComponentInChildren<Text>();
 
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
-        _joystick.enabled = true;
-        _defeatGameText.transform.parent.gameObject.SetActive(false);
-        _winGameText.transform.parent.gameObject.SetActive(false);
+        _defeatGame.transform.parent.gameObject.SetActive(false);
+        _waveComplete.transform.parent.gameObject.SetActive(false);
     }
 
     private void InitializeGame()
@@ -77,24 +83,25 @@ public class GameManager : MonoBehaviour
         BakeNavMesh();
         StartGame();
 
-        Observer.Instance.AddObserver("EnemyDisabled", EnemyDisabled);
+        Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
     }
 
-    private void EnemyDisabled(object data)
+    private void WaveCompleted(object data)
     {
-        int value = (int)data;
-        Debug.Log($"{value} points");
+        StartCoroutine(WaveDelay(2.0f));
+        _waveLevel.text = data.ToString();
     }
 
     public void StartGame()
     {
-        Time.timeScale = 1;
+        _waveLevel.text = "1";
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        _countdownTimer.StartTimer();
+        _gameTimer.StartTimer();
+        StartCoroutine(SurviveTime());
 
-        PlayerData.Instance.Load();
-        PlayerData.Instance.ConversationID = 2;
-        PlayerData.Instance.Save();
+        //PlayerData.Instance.Load();
+        //PlayerData.Instance.ConversationID = 2;
+        //PlayerData.Instance.Save();
     }
 
     private void BakeNavMesh()
@@ -120,30 +127,56 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator WaveDelay(float delay)
+    {
+        _waveComplete.transform.parent.gameObject.SetActive(true);
+
+        _gameTimer.gameObject.SetActive(false);
+        _waveLevel.transform.parent.gameObject.SetActive(false);
+
+        Observer.Instance.Notify("Joy");
+        _joystick.transform.parent.gameObject.SetActive(false);
+        _joystick.enabled = false;
+
+        Time.timeScale = 0;
+
+        yield return new WaitForSecondsRealtime(delay);
+
+        _waveComplete.transform.parent.gameObject.SetActive(false);
+
+        _gameTimer.gameObject.SetActive(true);
+        _waveLevel.transform.parent.gameObject.SetActive(true);
+        _joystick.transform.parent.gameObject.SetActive(true);
+        _joystick.enabled = true;
+
+        StartCoroutine(SurviveTime());
+        Time.timeScale = 1;
+    }
+
+    private IEnumerator SurviveTime()
+    {
+        _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
+        _surviveTime.transform.parent.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(2.5f);
+
+        _surviveTime.transform.parent.gameObject.SetActive(false);
+    }
+    public void EndGame()
+    {
+        Time.timeScale = 0;
+        _gameTimer.StopTimer();
+        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
+        _defeatGame.transform.parent.gameObject.SetActive(true);
+        _joystick.transform.parent.gameObject.SetActive(false);
+
+        StartCoroutine(ReloadSceneAfterDelay(2.0f));
+    }
     private IEnumerator ReloadSceneAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void EndWave()
-    {
-        Time.timeScale = 0;
-        _winGameText.transform.parent.gameObject.SetActive(true);
-        _countdownTimer.StopTimer();
-        _joystick.enabled = false;
-
-        StartCoroutine(ReloadSceneAfterDelay(2.0f));
-    }
-
-    public void EndGame()
-    {
-        Time.timeScale = 0;
-        _defeatGameText.transform.parent.gameObject.SetActive(true);
-        _countdownTimer.StopTimer();
-        _joystick.enabled = false;
-
-        StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
 }

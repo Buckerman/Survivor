@@ -1,3 +1,5 @@
+using QuangDM.Common;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,6 +44,14 @@ namespace Entities.Player
         private void Start()
         {
             SetState(new IdleState());
+
+            Observer.Instance.AddObserver("Joy", Joy);
+        }
+
+        private void Joy(object data)
+        {
+            joystick.OnPointerUp2();//custom made
+
         }
 
         void FixedUpdate()

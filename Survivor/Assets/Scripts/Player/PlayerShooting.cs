@@ -7,7 +7,6 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private int bulletPoolSize = 10;
-    [SerializeField] private float shootRange = 5f;
     public Transform bulletSpawnPos;
 
     [Header("Right Hand Target")]
@@ -29,10 +28,11 @@ public class PlayerShooting : MonoBehaviour
         if (rightHandIK.weight > 0f && closestEnemy != null)
         {
             Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
-            Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f);
+            Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 0f, directionToEnemy.z * 3f);
             rightHandTarget.position = transform.position + targetOffset;
         }
     }
+    
 
     private void FixedUpdate()
     {
@@ -40,13 +40,23 @@ public class PlayerShooting : MonoBehaviour
         if (shootTimer <= 0f)
         {
             closestEnemy = FindClosestEnemy();
-            if (closestEnemy != null && Vector3.Distance(closestEnemy.position,transform.position) <= shootRange)
+            if (closestEnemy != null && IsEnemyVisible(closestEnemy))
             {
                 StartCoroutine(HandleShooting()); //temp until animator layer learnt
                 shootTimer = shootInterval;
             }
         }
     }
+    private bool IsEnemyVisible(Transform enemy)
+    {
+        Renderer enemyRenderer = enemy.GetComponent<Renderer>();
+
+        if (enemyRenderer == null)
+            return false;
+
+        return enemyRenderer.isVisible;
+    }
+
 
     private IEnumerator HandleShooting()//temp until animator layer learnt
     {

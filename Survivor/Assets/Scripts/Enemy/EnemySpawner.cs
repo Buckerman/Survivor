@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using QuangDM.Common;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private Enemy enemyPrefab;
-    [SerializeField] private int poolSize = 10;
+    [SerializeField] private List<Enemy> enemyPrefabs;
     [SerializeField] private float spawnInterval = 0.5f;
     [SerializeField] private Transform playerTransform;
 
@@ -12,22 +13,42 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float maxSampleDistance = 5f;
     [SerializeField] private float spawnOffset = 1f;
 
-    private float timeSinceLastSpawn;
+    [SerializeField] private int initialEnemiesPerWave = 10;
+    [SerializeField] private int enemyIncrementPerWave = 5;
+
+    private float _timeSinceLastSpawn;
+    private int _currentWave = 1;
+    private int _enemiesSpawnedThisWave = 0;
+    private int _totalEnemiesNextWave;
     private EnemyPool _enemyPool;
 
     private void Start()
     {
-        _enemyPool = new EnemyPool(enemyPrefab, poolSize);
+        // Initialize the enemy pool with the first type of enemy in the list
+        _enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
+        _totalEnemiesNextWave = initialEnemiesPerWave;
+
+        Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
+    }
+
+    private void WaveCompleted(object data)
+    {
+        _currentWave = (int)data;
+        _enemiesSpawnedThisWave = 0;
+        _totalEnemiesNextWave = initialEnemiesPerWave + (enemyIncrementPerWave * _currentWave);
+
+        Observer.Instance.Notify("CurrentWaveLevel");
     }
 
     private void Update()
     {
-        timeSinceLastSpawn += Time.deltaTime;
+        _timeSinceLastSpawn += Time.deltaTime;
 
-        if (timeSinceLastSpawn >= spawnInterval)
+        if (_timeSinceLastSpawn >= spawnInterval && _enemiesSpawnedThisWave < _totalEnemiesNextWave)
         {
             SpawnEnemy();
-            timeSinceLastSpawn = 0f;
+            _timeSinceLastSpawn = 0f;
+            _enemiesSpawnedThisWave++;
         }
     }
 
@@ -47,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector3 randomPosition = new Vector3(
             Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f),
-            0f, // 1 size to 10 kratek
+            0f,
             Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f)
         );
 
@@ -58,10 +79,4 @@ public class EnemySpawner : MonoBehaviour
         }
         return Vector3.zero;
     }
-}
-
-[System.Serializable]
-public class Wave
-{
-    public Enemy[] enemies;
 }
