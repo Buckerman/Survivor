@@ -32,7 +32,7 @@ public class PlayerShooting : MonoBehaviour
             rightHandTarget.position = transform.position + targetOffset;
         }
     }
-    
+
 
     private void FixedUpdate()
     {

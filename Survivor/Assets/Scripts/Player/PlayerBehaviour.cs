@@ -25,6 +25,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _currentHealth -= damage;
         _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
+
         if (_currentHealth <= 0) Die();
     }
 

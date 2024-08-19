@@ -11,9 +11,8 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private float planeSize = 4f;
     [SerializeField] private float maxSampleDistance = 5f;
-    [SerializeField] private float spawnOffset = 1f;
 
-    [SerializeField] private int initialEnemiesPerWave = 10;
+    [SerializeField] private int initialEnemiesPerWave = 30;
     [SerializeField] private int enemyIncrementPerWave = 5;
 
     private float _timeSinceLastSpawn;
@@ -58,9 +57,10 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = GetRandomPositionOnGround();
         if (spawnPosition != Vector3.zero)
         {
-            enemy.transform.position = spawnPosition + Vector3.up * spawnOffset;
+            enemy.transform.position = spawnPosition;
             enemy.Initialize(playerTransform, _enemyPool);
             enemy.NavMeshAgent.enabled = true;
+            enemy.SetState(new WalkState());
         }
     }
 

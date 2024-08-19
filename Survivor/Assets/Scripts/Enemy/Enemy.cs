@@ -9,18 +9,21 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent agent;
     private Transform _player;
     private EnemyPool _enemyPool;
+    private Animator _animator;
 
     public NavMeshAgent NavMeshAgent => agent;
 
     [SerializeField] private float speed = 2f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private int attackDamage = 10;
-    private float attackCooldown = 2f;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
+
+    private IEnemyState _currentState;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
         agent.speed = speed;
     }
 
@@ -37,9 +40,12 @@ public class Enemy : MonoBehaviour
         agent.enabled = false;
     }
 
-    private bool isAttacking = false;
-
     private void FixedUpdate()
+    {
+        Movement();
+    }
+
+    private void Movement()
     {
         if (_player != null)
         {
@@ -53,14 +59,12 @@ public class Enemy : MonoBehaviour
                 if (distanceToPlayer <= attackRange)
                 {
                     agent.isStopped = true;
-                    if (!isAttacking)
-                    {
-                        StartCoroutine(AttackPlayer());
-                    }
+                    SetState(new AttackState());
                 }
                 else
                 {
                     agent.isStopped = false;
+                    SetState(new WalkState());
                 }
             }
             else
@@ -75,25 +79,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackPlayer()
+    private void AttackPlayer()
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(attackCooldown);
-
-        if (_player != null)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-            if (distanceToPlayer <= attackRange)
-            {
-                PlayerBehaviour player = _player.GetComponent<PlayerBehaviour>();
-                if (player != null)
-                {
-                    player.TakeDamage(attackDamage);
-                }
-            }
-        }
-        isAttacking = false;
+        _player.GetComponent<PlayerBehaviour>().TakeDamage(attackDamage);
     }
+
 
     private Vector3 GetFallbackPosition()
     {
@@ -108,6 +98,22 @@ public class Enemy : MonoBehaviour
 
         return Vector3.zero;
     }
+
+    public void SetState(IEnemyState newState)
+    {
+        if (_currentState != null)
+        {
+            _currentState.Exit();
+        }
+        _currentState = newState;
+        _currentState.Enter(this);
+    }
+
+    public void SetAnimation(string parameter, bool state)
+    {
+        _animator.SetBool(parameter, state);
+    }
+
     private void DisableAllEnemies(object data)
     {
         OnDisable();

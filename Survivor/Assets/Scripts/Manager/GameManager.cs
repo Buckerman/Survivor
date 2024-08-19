@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private Text _waveComplete;
     private Text _waveLevel;
     private Text _surviveTime;
+    private Text _timeLeft;
     private VariableJoystick _joystick;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
@@ -65,16 +66,20 @@ public class GameManager : MonoBehaviour
             _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<Text>();
 
         if (_waveLevel == null)
-            _waveLevel = GameObject.Find("GUI/WaveLevelBg/Level").GetComponentInChildren<Text>();
+            _waveLevel = GameObject.Find("GUI/WaveLevelBg/LevelText").GetComponentInChildren<Text>();
 
         if (_surviveTime == null)
-            _surviveTime = GameObject.Find("GUI/SurviveTimeBg/SurviveTime").GetComponentInChildren<Text>();
+            _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<Text>();
+
+        if (_timeLeft == null)
+            _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<Text>();
 
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
         _defeatGame.transform.parent.gameObject.SetActive(false);
         _waveComplete.transform.parent.gameObject.SetActive(false);
+        _timeLeft.transform.parent.gameObject.SetActive(false);
     }
 
     private void InitializeGame()
@@ -84,6 +89,13 @@ public class GameManager : MonoBehaviour
         StartGame();
 
         Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
+        Observer.Instance.AddObserver("TimeLeft", TimeLeft);
+    }
+
+    private void TimeLeft(object data)
+    {
+        _timeLeft.transform.parent.gameObject.SetActive(true);
+        _timeLeft.text = $"{(int)_gameTimer.CurrentTime}s";
     }
 
     private void WaveCompleted(object data)
@@ -95,9 +107,9 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _waveLevel.text = "1";
+        StartCoroutine(SurviveTime());
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.StartTimer();
-        StartCoroutine(SurviveTime());
 
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
@@ -130,9 +142,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaveDelay(float delay)
     {
+        _timeLeft.transform.parent.gameObject.SetActive(false);
         _waveComplete.transform.parent.gameObject.SetActive(true);
 
-        _gameTimer.gameObject.SetActive(false);
+        _gameTimer.transform.parent.gameObject.SetActive(false);
         _waveLevel.transform.parent.gameObject.SetActive(false);
 
         Observer.Instance.Notify("Joy");
@@ -143,14 +156,16 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(delay);
 
+
         _waveComplete.transform.parent.gameObject.SetActive(false);
 
-        _gameTimer.gameObject.SetActive(true);
+        _gameTimer.transform.parent.gameObject.SetActive(true);
         _waveLevel.transform.parent.gameObject.SetActive(true);
         _joystick.transform.parent.gameObject.SetActive(true);
         _joystick.enabled = true;
 
         StartCoroutine(SurviveTime());
+
         Time.timeScale = 1;
     }
 
@@ -159,7 +174,7 @@ public class GameManager : MonoBehaviour
         _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
         _surviveTime.transform.parent.gameObject.SetActive(true);
 
-        yield return new WaitForSecondsRealtime(2.5f);
+        yield return new WaitForSecondsRealtime(2f);
 
         _surviveTime.transform.parent.gameObject.SetActive(false);
     }

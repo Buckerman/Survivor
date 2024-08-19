@@ -8,6 +8,7 @@ public class GameTimer : MonoBehaviour
     float currentTime = 0f;
     [SerializeField] float startingTime = 30f;
     public float StartingTime => startingTime;
+    public float CurrentTime => currentTime;
 
     private int waveLevel = 1;
     private Text _countDown;
@@ -22,7 +23,7 @@ public class GameTimer : MonoBehaviour
 
     private void CurrentWaveLevel(object data)
     {
-        startingTime += 15f;
+        startingTime += 5f;
         StartTimer();
     }
 
@@ -36,6 +37,10 @@ public class GameTimer : MonoBehaviour
     {
         currentTime -= Time.deltaTime;
         _countDown.text = ((int)currentTime).ToString();
+        if (currentTime < 6f)
+        {
+            Observer.Instance.Notify("TimeLeft");
+        }
         if (currentTime <= 0)
         {
             waveLevel++;

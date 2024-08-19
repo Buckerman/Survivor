@@ -63,22 +63,26 @@
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\VariableJoystick.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Manager\DamageTextPool.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerShooting.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttack.cs" />
-    <Compile Include="Assets\Scripts\States\RunState.cs" />
+    <Compile Include="Assets\Scripts\DamageText.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\IdleState.cs" />
+    <Compile Include="Assets\Scripts\States\EnemyStates\WalkState.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\RunState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHealthBar.cs" />
     <Compile Include="Assets\Scripts\Observer.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Base\Joystick.cs" />
     <Compile Include="Assets\Scripts\Manager\BulletPool.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\FixedJoystick.cs" />
-    <Compile Include="Assets\Scripts\States\JumpState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\InAirState.cs" />
     <Compile Include="Assets\Scripts\SavingSystem\DataManager.cs" />
-    <Compile Include="Assets\Scripts\States\LandState.cs" />
-    <Compile Include="Assets\Scripts\States\ClimbState.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\ClimbState.cs" />
     <Compile Include="Assets\Scripts\SavingSystem\PlayerData.cs" />
     <Compile Include="Assets\JoystickPack\Examples\JoystickPlayerExample.cs" />
-    <Compile Include="Assets\Scripts\States\InAirState.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\JumpState.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IEnemyState.cs" />
     <Compile Include="Assets\Scripts\Manager\GameTimer.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\JoystickPack\Examples\JoystickSetterExample.cs" />
@@ -86,9 +90,10 @@
     <Compile Include="Assets\Scripts\Interfaces\IPlayerState.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySpawner.cs" />
     <Compile Include="Assets\Scripts\Manager\Enemypool.cs" />
+    <Compile Include="Assets\Scripts\States\EnemyStates\AttackState.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\FloatingJoystick.cs" />
-    <Compile Include="Assets\Scripts\States\IdleState.cs" />
     <Compile Include="Assets\Scripts\Platform.cs" />
+    <Compile Include="Assets\Scripts\States\PlayerStates\LandState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
