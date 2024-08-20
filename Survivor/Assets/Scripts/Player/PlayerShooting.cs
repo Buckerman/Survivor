@@ -4,6 +4,7 @@ using System.Collections;
 
 public class PlayerShooting : MonoBehaviour
 {
+    [Header("Shooting Settings")]
     [SerializeField] private float shootInterval = 2f;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private int bulletPoolSize = 10;

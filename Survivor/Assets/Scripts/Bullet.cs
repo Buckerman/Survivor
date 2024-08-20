@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
+    [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float detectionRadius = 0.5f;
+    [SerializeField] private float bulletdamage = 12f;
     private Vector3 _direction;
 
     private BulletPool _bulletPool;
@@ -16,7 +17,7 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position += _direction * speed * Time.deltaTime;
+        transform.position += _direction * bulletSpeed * Time.deltaTime;
 
         Quaternion desiredRotation = Quaternion.LookRotation(_direction);
         Quaternion adjustedRotation = desiredRotation * Quaternion.Euler(0, 90, 0);
@@ -32,7 +33,7 @@ public class Bullet : MonoBehaviour
         {
             if (hit.CompareTag("Enemy"))
             {
-                hit.gameObject.SetActive(false);
+                hit.gameObject.GetComponent<EnemyHealth>().TakeDamage(bulletdamage);
                 break;
             }
         }

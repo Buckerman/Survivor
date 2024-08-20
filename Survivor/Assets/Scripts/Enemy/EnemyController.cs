@@ -4,19 +4,19 @@ using UnityEngine.AI;
 using QuangDM.Common;
 using System;
 
-public class Enemy : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
+    [Header("Enemy Settings")]
+    [SerializeField] private float enemySpeed = 2f;
+    [SerializeField] private float enemyAttackRange = 2f;
+    [SerializeField] private int enemyAttackDamage = 5;
+    [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
+
     private NavMeshAgent agent;
     private Transform _player;
     private EnemyPool _enemyPool;
     private Animator _animator;
-
     public NavMeshAgent NavMeshAgent => agent;
-
-    [SerializeField] private float speed = 2f;
-    [SerializeField] private float attackRange = 2f;
-    [SerializeField] private int attackDamage = 10;
-    [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
 
     private IEnemyState _currentState;
 
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
-        agent.speed = speed;
+        agent.speed = enemySpeed;
     }
 
     private void Start()
@@ -42,10 +42,10 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Movement();
+        Chase();
     }
 
-    private void Movement()
+    private void Chase()
     {
         if (_player != null)
         {
@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
                 agent.SetDestination(_player.position);
 
                 float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-                if (distanceToPlayer <= attackRange)
+                if (distanceToPlayer <= enemyAttackRange)
                 {
                     agent.isStopped = true;
                     SetState(new AttackState());
@@ -81,9 +81,8 @@ public class Enemy : MonoBehaviour
 
     private void AttackPlayer()
     {
-        _player.GetComponent<PlayerBehaviour>().TakeDamage(attackDamage);
+        _player.GetComponent<PlayerHealth>().TakeDamage(enemyAttackDamage);
     }
-
 
     private Vector3 GetFallbackPosition()
     {

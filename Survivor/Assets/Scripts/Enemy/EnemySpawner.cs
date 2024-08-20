@@ -5,7 +5,7 @@ using QuangDM.Common;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private List<Enemy> enemyPrefabs;
+    [SerializeField] private List<EnemyController> enemyPrefabs;
     [SerializeField] private float spawnInterval = 0.5f;
     [SerializeField] private Transform playerTransform;
 
@@ -53,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        Enemy enemy = _enemyPool.GetEnemy();
+        EnemyController enemy = _enemyPool.GetEnemy();
         Vector3 spawnPosition = GetRandomPositionOnGround();
         if (spawnPosition != Vector3.zero)
         {

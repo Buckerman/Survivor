@@ -651,6 +651,7 @@ GameObject:
   - component: {fileID: 1157189318057192564}
   - component: {fileID: 6457057946235830839}
   - component: {fileID: 216945577216541225}
+  - component: {fileID: 4629978639259507880}
   - component: {fileID: 9067388151833095014}
   - component: {fileID: 6813362385624764815}
   m_Layer: 6
@@ -758,6 +759,21 @@ MonoBehaviour:
   attackRange: 2
   attackDamage: 10
   fallbackDistance: 10
+--- !u!114 &4629978639259507880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5832024315241714047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01984dbde2296384eb8a2c42bc0f83cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 12
+  damageTextPrefab: {fileID: 7528803629466236702, guid: 9805ffc77b55ffb45ba300470bed97e4, type: 3}
+  damageTextPoolSize: 2
 --- !u!195 &9067388151833095014
 NavMeshAgent:
   m_ObjectHideFlags: 0

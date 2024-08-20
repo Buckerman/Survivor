@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class WalkState : IEnemyState
 {
-    private Enemy _enemy;
-    public void Enter(Enemy enemy)
+    private EnemyController _enemy;
+    public void Enter(EnemyController enemy)
     {
         _enemy = enemy;
         _enemy.SetAnimation("isWalking",true);

@@ -47,6 +47,7 @@ public class GameTimer : MonoBehaviour
             StopTimer();
 
             Observer.Instance.Notify("DisableAllEnemies");
+            Observer.Instance.Notify("DisableAllDamageText");
             Observer.Instance.Notify("WaveCompleted", waveLevel);
         }
     }

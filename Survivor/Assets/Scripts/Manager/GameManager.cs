@@ -9,6 +9,10 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Damage Text Settings")]
+    [SerializeField] private DamageText damageTextPrefab;
+    [SerializeField] private int damageTextPoolSize = 10;
+    private DamageTextPool _damageTextPool;
     public static GameManager Instance { get; private set; }
 
     private GameTimer _gameTimer;
@@ -90,6 +94,49 @@ public class GameManager : MonoBehaviour
 
         Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
         Observer.Instance.AddObserver("TimeLeft", TimeLeft);
+        Observer.Instance.AddObserver("DamageReceived", DamageReceived);
+    }
+
+    public void StartGame()
+    {
+        _waveLevel.text = "1";
+        StartCoroutine(SurviveTime());
+        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
+        _gameTimer.StartTimer();
+
+        _damageTextPool = new DamageTextPool(damageTextPrefab, damageTextPoolSize);
+
+        //PlayerData.Instance.Load();
+        //PlayerData.Instance.ConversationID = 2;
+        //PlayerData.Instance.Save();
+    }
+
+    private void DamageReceived(object data)
+    {
+        if (data == null) return;
+
+        Transform targetTransform = null;
+        DamageText damageText = null;
+
+        if (data is ValueTuple<PlayerHealth, float> playerData)
+        {
+            var (playerHealth, damage) = playerData;
+            targetTransform = playerHealth.transform;
+            damageText = _damageTextPool.GetDamageText();
+            damageText.Setup((int)damage, Color.red);
+        }
+        else if (data is ValueTuple<EnemyHealth, float> enemyData)
+        {
+            var (enemyHealth, damage) = enemyData;
+            targetTransform = enemyHealth.transform;
+            damageText = _damageTextPool.GetDamageText();
+            damageText.Setup((int)damage, Color.white);
+        }
+
+        float randomX = UnityEngine.Random.Range(-1f, 1f);
+        Vector3 offset = new Vector3(randomX, 2f, 0f);
+        damageText.transform.position = targetTransform.position + offset;
+        damageText.Initialize(_damageTextPool);
     }
 
     private void TimeLeft(object data)
@@ -102,42 +149,6 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(WaveDelay(2.0f));
         _waveLevel.text = data.ToString();
-    }
-
-    public void StartGame()
-    {
-        _waveLevel.text = "1";
-        StartCoroutine(SurviveTime());
-        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        _gameTimer.StartTimer();
-
-        //PlayerData.Instance.Load();
-        //PlayerData.Instance.ConversationID = 2;
-        //PlayerData.Instance.Save();
-    }
-
-    private void BakeNavMesh()
-    {
-        _groundSurface.BuildNavMesh();
-
-        GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
-        foreach (GameObject building in buildings)
-        {
-            foreach (Transform child in building.transform)
-            {
-                if (child.CompareTag(wallTag))
-                {
-                    NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
-                    if (surface == null)
-                    {
-                        surface = child.gameObject.AddComponent<NavMeshSurface>();
-                    }
-
-                    wallSurfaces.Add(surface);
-                    surface.BuildNavMesh();
-                }
-            }
-        }
     }
 
     private IEnumerator WaveDelay(float delay)
@@ -178,6 +189,31 @@ public class GameManager : MonoBehaviour
 
         _surviveTime.transform.parent.gameObject.SetActive(false);
     }
+
+    private void BakeNavMesh()
+    {
+        _groundSurface.BuildNavMesh();
+
+        GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+        foreach (GameObject building in buildings)
+        {
+            foreach (Transform child in building.transform)
+            {
+                if (child.CompareTag(wallTag))
+                {
+                    NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
+                    if (surface == null)
+                    {
+                        surface = child.gameObject.AddComponent<NavMeshSurface>();
+                    }
+
+                    wallSurfaces.Add(surface);
+                    surface.BuildNavMesh();
+                }
+            }
+        }
+    }
+
     public void EndGame()
     {
         Time.timeScale = 0;

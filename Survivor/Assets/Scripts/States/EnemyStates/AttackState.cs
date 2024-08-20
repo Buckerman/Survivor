@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class AttackState : IEnemyState
 {
-    private Enemy _enemy;
-    public void Enter(Enemy enemy)
+    private EnemyController _enemy;
+    public void Enter(EnemyController enemy)
     {
         _enemy = enemy;
         _enemy.SetAnimation("isAttacking",true);

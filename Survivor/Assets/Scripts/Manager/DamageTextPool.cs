@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageTextPool : MonoBehaviour
+public class DamageTextPool
 {
     private DamageText damageTextPrefab;
     private int poolSize;

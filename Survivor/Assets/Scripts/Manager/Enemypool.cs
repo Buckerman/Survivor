@@ -3,38 +3,38 @@ using UnityEngine;
 
 public class EnemyPool
 {
-    private List<Enemy> enemyPrefabs;
+    private List<EnemyController> enemyPrefabs;
     private int poolSize;
-    private Queue<Enemy> pool;
+    private Queue<EnemyController> pool;
 
-    public EnemyPool(List<Enemy> enemyPrefabs, int poolSize)
+    public EnemyPool(List<EnemyController> enemyPrefabs, int poolSize)
     {
         this.enemyPrefabs = enemyPrefabs;
         this.poolSize = poolSize;
-        pool = new Queue<Enemy>();
+        pool = new Queue<EnemyController>();
 
         // Initialize pool with random enemy prefabs
         for (int i = 0; i < poolSize; i++)
         {
-            Enemy enemy = InstantiateRandomEnemyPrefab();
+            EnemyController enemy = InstantiateRandomEnemyPrefab();
             enemy.gameObject.SetActive(false);
             pool.Enqueue(enemy);
         }
     }
 
-    private Enemy InstantiateRandomEnemyPrefab()
+    private EnemyController InstantiateRandomEnemyPrefab()
     {
         // Select a random prefab from the list
         int randomIndex = Random.Range(0, enemyPrefabs.Count);
-        Enemy randomPrefab = enemyPrefabs[randomIndex];
+        EnemyController randomPrefab = enemyPrefabs[randomIndex];
         return Object.Instantiate(randomPrefab);
     }
 
-    public Enemy GetEnemy()
+    public EnemyController GetEnemy()
     {
         if (pool.Count > 0)
         {
-            Enemy enemy = pool.Dequeue();
+            EnemyController enemy = pool.Dequeue();
             enemy.gameObject.SetActive(true);
             return enemy;
         }
@@ -44,14 +44,14 @@ public class EnemyPool
         }
     }
 
-    public void ReturnEnemy(Enemy enemy)
+    public void ReturnEnemy(EnemyController enemy)
     {
         enemy.gameObject.SetActive(false);
         pool.Enqueue(enemy);
     }
 
     //moze kiedys sie przyda
-    public void ResetPool(List<Enemy> newEnemyPrefabs, int newSize)
+    public void ResetPool(List<EnemyController> newEnemyPrefabs, int newSize)
     {
         // Clear current pool
         pool.Clear();
@@ -61,7 +61,7 @@ public class EnemyPool
         // Refill pool with new prefabs
         for (int i = 0; i < poolSize; i++)
         {
-            Enemy enemy = InstantiateRandomEnemyPrefab();
+            EnemyController enemy = InstantiateRandomEnemyPrefab();
             enemy.gameObject.SetActive(false);
             pool.Enqueue(enemy);
         }
