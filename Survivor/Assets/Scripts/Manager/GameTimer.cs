@@ -1,7 +1,7 @@
 using QuangDM.Common;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class GameTimer : MonoBehaviour
 {
@@ -11,12 +11,12 @@ public class GameTimer : MonoBehaviour
     public float CurrentTime => currentTime;
 
     private int waveLevel = 1;
-    private Text _countDown;
+    private TextMeshProUGUI _countDown;
 
     void Start()
     {
         currentTime = startingTime;
-        _countDown = GetComponent<Text>();
+        _countDown = GetComponent<TextMeshProUGUI>();
 
         Observer.Instance.AddObserver("CurrentWaveLevel", CurrentWaveLevel);
     }

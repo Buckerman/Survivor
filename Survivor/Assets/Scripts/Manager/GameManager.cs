@@ -1,6 +1,6 @@
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro; 
 using System.Collections.Generic;
 using QuangDM.Common;
 using UnityEngine.SceneManagement;
@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviour
     private GameTimer _gameTimer;
     private NavMeshSurface _groundSurface;
     private string wallTag = "Wall";
-    private Text _defeatGame;
-    private Text _waveComplete;
-    private Text _waveLevel;
-    private Text _surviveTime;
-    private Text _timeLeft;
+    private TextMeshProUGUI _defeatGame; 
+    private TextMeshProUGUI _waveComplete;
+    private TextMeshProUGUI _waveLevel; 
+    private TextMeshProUGUI _surviveTime; 
+    private TextMeshProUGUI _timeLeft; 
     private VariableJoystick _joystick;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
@@ -64,19 +64,19 @@ public class GameManager : MonoBehaviour
             _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
 
         if (_defeatGame == null)
-            _defeatGame = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<Text>();
+            _defeatGame = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_waveComplete == null)
-            _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<Text>();
+            _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_waveLevel == null)
-            _waveLevel = GameObject.Find("GUI/WaveLevelBg/LevelText").GetComponentInChildren<Text>();
+            _waveLevel = GameObject.Find("GUI/WaveLevelBg/LevelText").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_surviveTime == null)
-            _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<Text>();
+            _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_timeLeft == null)
-            _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<Text>();
+            _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
@@ -166,7 +166,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
 
         yield return new WaitForSecondsRealtime(delay);
-
 
         _waveComplete.transform.parent.gameObject.SetActive(false);
 
