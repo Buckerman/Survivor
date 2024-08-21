@@ -14,6 +14,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private ChainIKConstraint rightHandIK;
     [SerializeField] private Transform rightHandTarget;
 
+    private Animator animator;
     private Transform closestEnemy;
     private float shootTimer;
     private BulletPool _bulletPool;
@@ -21,19 +22,23 @@ public class PlayerShooting : MonoBehaviour
     private void Start()
     {
         _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        // Adjust the right hand target position each frame based on the player's rotation
-        if (rightHandIK.weight > 0f && closestEnemy != null)
+        if (closestEnemy != null && animator.GetLayerWeight(2) > 0f) 
         {
             Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
-            Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 0f, directionToEnemy.z * 3f);
+            Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.5f, directionToEnemy.z * 3f);
             rightHandTarget.position = transform.position + targetOffset;
+            rightHandIK.weight = animator.GetLayerWeight(2);
+        }
+        else
+        {
+            rightHandIK.weight = 0f;
         }
     }
-
 
     private void FixedUpdate()
     {
@@ -43,34 +48,20 @@ public class PlayerShooting : MonoBehaviour
             closestEnemy = FindClosestEnemy();
             if (closestEnemy != null && IsEnemyVisible(closestEnemy))
             {
-                StartCoroutine(HandleShooting()); //temp until animator layer learnt
+                StartCoroutine(HandleShooting());
                 shootTimer = shootInterval;
             }
         }
     }
-    private bool IsEnemyVisible(Transform enemy)
+
+    private IEnumerator HandleShooting()
     {
-        Renderer enemyRenderer = enemy.GetComponent<Renderer>();
-
-        if (enemyRenderer == null)
-            return false;
-
-        return enemyRenderer.isVisible;
-    }
-
-
-    private IEnumerator HandleShooting()//temp until animator layer learnt
-    {
-        // Smoothly transition to full weight
-        yield return StartCoroutine(ChangeIKWeight(1f, 0.2f)); //the duration for the transition
-
+        yield return StartCoroutine(ChangeIKWeight(1f, 0.2f));
         ShootAtEnemy();
-
-        // Smoothly transition back to zero weight
         yield return StartCoroutine(ChangeIKWeight(0f, 0.2f));
     }
 
-    private IEnumerator ChangeIKWeight(float targetWeight, float duration)//temp until animator layer learnt
+    private IEnumerator ChangeIKWeight(float targetWeight, float duration)
     {
         float startWeight = rightHandIK.weight;
         float elapsedTime = 0f;
@@ -90,6 +81,8 @@ public class PlayerShooting : MonoBehaviour
         if (closestEnemy != null)
         {
             Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
+            directionToEnemy.y = 0;
+
             Vector3 spawnPos = bulletSpawnPos.position;
 
             Bullet bullet = _bulletPool.GetBullet();
@@ -97,6 +90,7 @@ public class PlayerShooting : MonoBehaviour
             bullet.Initialize(directionToEnemy, _bulletPool);
         }
     }
+
 
     private Transform FindClosestEnemy()
     {
@@ -114,5 +108,11 @@ public class PlayerShooting : MonoBehaviour
             }
         }
         return closestTransform;
+    }
+
+    private bool IsEnemyVisible(Transform enemy)
+    {
+        Renderer enemyRenderer = enemy.GetComponent<Renderer>();
+        return enemyRenderer != null && enemyRenderer.isVisible;
     }
 }
