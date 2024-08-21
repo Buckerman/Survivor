@@ -19,25 +19,13 @@ public class PlayerShooting : MonoBehaviour
     private float shootTimer;
     private BulletPool _bulletPool;
 
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
     private void Start()
     {
         _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
-        animator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        if (closestEnemy != null && animator.GetLayerWeight(2) > 0f) 
-        {
-            Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
-            Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.5f, directionToEnemy.z * 3f);
-            rightHandTarget.position = transform.position + targetOffset;
-            rightHandIK.weight = animator.GetLayerWeight(2);
-        }
-        else
-        {
-            rightHandIK.weight = 0f;
-        }
     }
 
     private void FixedUpdate()
@@ -48,32 +36,19 @@ public class PlayerShooting : MonoBehaviour
             closestEnemy = FindClosestEnemy();
             if (closestEnemy != null && IsEnemyVisible(closestEnemy))
             {
-                StartCoroutine(HandleShooting());
-                shootTimer = shootInterval;
+                AimAtEnemy();
             }
         }
     }
 
-    private IEnumerator HandleShooting()
+    private void AimAtEnemy()
     {
-        yield return StartCoroutine(ChangeIKWeight(1f, 0.2f));
+        Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
+        Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.5f, directionToEnemy.z * 3f);
+        rightHandTarget.position = transform.position + targetOffset;
+        rightHandIK.weight = 1f;
+
         ShootAtEnemy();
-        yield return StartCoroutine(ChangeIKWeight(0f, 0.2f));
-    }
-
-    private IEnumerator ChangeIKWeight(float targetWeight, float duration)
-    {
-        float startWeight = rightHandIK.weight;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            rightHandIK.weight = Mathf.Lerp(startWeight, targetWeight, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        rightHandIK.weight = targetWeight;
     }
 
     private void ShootAtEnemy()
@@ -88,9 +63,10 @@ public class PlayerShooting : MonoBehaviour
             Bullet bullet = _bulletPool.GetBullet();
             bullet.transform.position = spawnPos;
             bullet.Initialize(directionToEnemy, _bulletPool);
+
+            shootTimer = shootInterval;
         }
     }
-
 
     private Transform FindClosestEnemy()
     {

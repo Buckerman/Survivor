@@ -10,18 +10,19 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform leftHandTarget;
 
     private Animator animator;
+    private Collider leftHandCollider;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        leftHandCollider = leftHandTarget.GetComponent<Collider>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (animator.GetLayerWeight(1) > 0f) 
+        if (animator.GetLayerWeight(1) > 0f)
         {
-            leftHandTarget.position = transform.position + transform.forward; 
-            leftHandIK.weight = animator.GetLayerWeight(1);
+            leftHandTarget.position = transform.position + transform.forward + Vector3.up * 1f;
         }
         else
         {
