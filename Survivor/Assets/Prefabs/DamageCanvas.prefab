@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3544390613722784965}
   - component: {fileID: 4599144680971087753}
-  - component: {fileID: 7155052555785080835}
   - component: {fileID: 6100373157366630635}
   m_Layer: 5
   m_Name: DamageText
@@ -67,7 +66,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 2583691263
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -130,27 +129,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6100373157366630635}
   m_maskType: 0
---- !u!95 &7155052555785080835
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1984407140871288533}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e4eebc1b5e4dda441aeafc429a99732b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!23 &6100373157366630635
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -205,7 +183,8 @@ GameObject:
   - component: {fileID: 8256881303677052111}
   - component: {fileID: 6582290486295191717}
   - component: {fileID: 7239248180893688768}
-  - component: {fileID: 1997758877367641863}
+  - component: {fileID: 609511530292302193}
+  - component: {fileID: 469245538502582586}
   m_Layer: 5
   m_Name: DamageCanvas
   m_TagString: Untagged
@@ -296,7 +275,28 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1997758877367641863
+--- !u!95 &609511530292302193
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4698698060928488932}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b5c9f182f3a71144b1a2d630990033f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &469245538502582586
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
