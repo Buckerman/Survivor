@@ -132,10 +132,11 @@ public class GameManager : MonoBehaviour
             damageText = _damageTextPool.GetDamageText();
             damageText.Setup((int)damage, Color.white);
         }
-
+        
         float randomX = UnityEngine.Random.Range(-1f, 1f);
         Vector3 offset = new Vector3(randomX, 2f, 0f);
         damageText.transform.position = targetTransform.position + offset;
+
         damageText.Initialize(_damageTextPool);
     }
 

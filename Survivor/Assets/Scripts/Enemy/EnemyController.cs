@@ -83,6 +83,17 @@ public class EnemyController : MonoBehaviour
     {
         _player.GetComponent<PlayerHealth>().TakeDamage(enemyAttackDamage);
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(enemyAttackDamage);
+            }
+        }
+    }
 
     private Vector3 GetFallbackPosition()
     {

@@ -2967,7 +2967,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -3021,11 +3021,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7505544566272607256}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2b78913b7844ad48aa9117e5930cd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootInterval: 2
+  bulletPrefab: {fileID: 1476492806190693115, guid: cf477bf75f1cf424681d2ea3609de538, type: 3}
+  bulletPoolSize: 10
+  bulletSpawnPos: {fileID: 4698891445361275585}
+  rightHandIK: {fileID: 5460791103660342563}
+  rightHandTarget: {fileID: 2612028779334519636}
 --- !u!114 &965878199754275489
 MonoBehaviour:
   m_ObjectHideFlags: 0

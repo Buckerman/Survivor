@@ -4,8 +4,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed = 10f;
-    [SerializeField] private float detectionRadius = 0.5f;
-    [SerializeField] private float bulletdamage = 12f;
+    [SerializeField] private float bulletDamage = 12f;
     private Vector3 _direction;
 
     private BulletPool _bulletPool;
@@ -17,24 +16,24 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
+        MoveBullet();
+    }
+    private void MoveBullet()
+    {
         transform.position += _direction * bulletSpeed * Time.deltaTime;
 
         Quaternion desiredRotation = Quaternion.LookRotation(_direction);
         Quaternion adjustedRotation = desiredRotation * Quaternion.Euler(0, 90, 0);
         transform.rotation = adjustedRotation;
-
-        CheckForCollision();
     }
 
-    private void CheckForCollision()
+    private void OnTriggerEnter(Collider other)
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius);
-        foreach (var hit in hits)
+        if (other.CompareTag("Enemy"))
         {
-            if (hit.CompareTag("Enemy"))
+            if (other.gameObject.activeInHierarchy)
             {
-                hit.gameObject.GetComponent<EnemyHealth>().TakeDamage(bulletdamage);
-                break;
+                other.gameObject.GetComponent<EnemyHealth>().TakeDamage(bulletDamage);
             }
         }
     }

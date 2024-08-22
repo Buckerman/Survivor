@@ -39,7 +39,10 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (EnemyHealth enemy in enemiesInRange)
         {
-            enemy.TakeDamage(attackDamage);
+            if (enemy.gameObject.activeInHierarchy)
+            {
+                enemy.TakeDamage(attackDamage);
+            }
         }
 
         currentSwordTrigger.ClearEnemiesInRange();
