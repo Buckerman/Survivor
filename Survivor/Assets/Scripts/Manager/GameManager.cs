@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
 
     private void WaveCompleted(object data)
     {
+        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
         StartCoroutine(WaveDelay(2.0f));
         _waveLevel.text = data.ToString();
     }
@@ -170,6 +171,7 @@ public class GameManager : MonoBehaviour
 
         _waveComplete.transform.parent.gameObject.SetActive(false);
 
+        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.transform.parent.gameObject.SetActive(true);
         _waveLevel.transform.parent.gameObject.SetActive(true);
         _joystick.transform.parent.gameObject.SetActive(true);

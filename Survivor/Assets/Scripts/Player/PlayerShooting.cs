@@ -46,9 +46,14 @@ public class PlayerShooting : MonoBehaviour
         Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
         Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f);//custom offset for bullet spawn
         rightHandTarget.position = transform.position + targetOffset;
-        rightHandIK.weight = 1f;
+        //rightHandIK.weight = 1f;  
 
-        ShootAtEnemy();
+        animator.Play("PlayerShoot");
+    }
+
+    private void ChangeWeight()
+    {
+        rightHandIK.weight = 0f;
     }
 
     private void ShootAtEnemy()
