@@ -1,3 +1,5 @@
+using QuangDM.Common;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -10,23 +12,36 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform leftHandTarget;
 
     private Animator animator;
-    private Collider leftHandCollider;
+    private SwordTrigger currentSwordTrigger;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        leftHandCollider = leftHandTarget.GetComponent<Collider>();
+        Observer.Instance.AddObserver("Slash", Slash);
     }
 
     private void FixedUpdate()
     {
-        if (animator.GetLayerWeight(1) > 0f)
+        // Change IK weight
+    }
+
+    private void Slash(object data)
+    {
+        currentSwordTrigger = (SwordTrigger)data;
+        animator.Play("PlayerAttack");
+    }
+
+    private void DealDamage()
+    {
+        if (currentSwordTrigger == null) return;
+
+        List<EnemyHealth> enemiesInRange = currentSwordTrigger.GetEnemiesInRange();
+
+        foreach (EnemyHealth enemy in enemiesInRange)
         {
-            leftHandTarget.position = transform.position + transform.forward + Vector3.up * 1f;
+            enemy.TakeDamage(attackDamage);
         }
-        else
-        {
-            leftHandIK.weight = 0.3f;
-        }
+
+        currentSwordTrigger.ClearEnemiesInRange();
     }
 }

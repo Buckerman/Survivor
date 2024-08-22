@@ -26,6 +26,14 @@ public class PlayerHealth : MonoBehaviour
             Die();
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            TakeDamage(5f);
+        }
+    }
+
     private void Die()
     {
         Observer.Instance.Notify("DisableAllEnemies");
