@@ -10,10 +10,18 @@ public class PlayerHealth : MonoBehaviour
     private int _currentHealth;
     private PlayerHealthBar _healthBar;
 
+    private void Awake()
+    {
+        _healthBar = GetComponentInChildren<PlayerHealthBar>();
+    }
     private void Start()
     {
+        ResetHealth();
+    }
+    public void ResetHealth()
+    {
         _currentHealth = (int)maxHealth;
-        _healthBar = GetComponentInChildren<PlayerHealthBar>();
+        _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
     }
 
     public void TakeDamage(float damage)

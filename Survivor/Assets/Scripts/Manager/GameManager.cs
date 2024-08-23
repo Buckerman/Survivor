@@ -1,11 +1,13 @@
 using Unity.AI.Navigation;
 using UnityEngine;
-using TMPro; 
+using TMPro;
 using System.Collections.Generic;
 using QuangDM.Common;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
+using Entities.Player;
+using Cinemachine; // Add this for Cinemachine
 
 public class GameManager : MonoBehaviour
 {
@@ -18,12 +20,16 @@ public class GameManager : MonoBehaviour
     private GameTimer _gameTimer;
     private NavMeshSurface _groundSurface;
     private string wallTag = "Wall";
-    private TextMeshProUGUI _defeatGame; 
+    private TextMeshProUGUI _defeatGame;
     private TextMeshProUGUI _waveComplete;
-    private TextMeshProUGUI _waveLevel; 
-    private TextMeshProUGUI _surviveTime; 
-    private TextMeshProUGUI _timeLeft; 
+    private TextMeshProUGUI _waveLevel;
+    private TextMeshProUGUI _surviveTime;
+    private TextMeshProUGUI _timeLeft;
     private VariableJoystick _joystick;
+    private CinemachineVirtualCamera _cinemachineVirtualCamera; // Add this field
+
+
+    public VariableJoystick Joystick => _joystick;
 
     private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
 
@@ -39,6 +45,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -53,6 +60,7 @@ public class GameManager : MonoBehaviour
     {
         AssignReferences();
         InitializeGame();
+        SetupCameraFollow();
     }
 
     private void AssignReferences()
@@ -81,9 +89,14 @@ public class GameManager : MonoBehaviour
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
+        if (_cinemachineVirtualCamera == null)
+            _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
         _defeatGame.transform.parent.gameObject.SetActive(false);
         _waveComplete.transform.parent.gameObject.SetActive(false);
         _timeLeft.transform.parent.gameObject.SetActive(false);
+
+        PlayerController.Instance.Joystick = _joystick;
     }
 
     private void InitializeGame()
@@ -97,9 +110,24 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver("DamageReceived", DamageReceived);
     }
 
+    private void SetupCameraFollow()
+    {
+        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
+        {
+            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
+        }
+    }
+
     public void StartGame()
     {
         _waveLevel.text = "1";
+
+        PlayerHealth playerHealth = PlayerController.Instance.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+        }
+
         StartCoroutine(SurviveTime());
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.StartTimer();
@@ -132,7 +160,7 @@ public class GameManager : MonoBehaviour
             damageText = _damageTextPool.GetDamageText();
             damageText.Setup((int)damage, Color.white);
         }
-        
+
         float randomX = UnityEngine.Random.Range(-1f, 1f);
         Vector3 offset = new Vector3(randomX, 2f, 0f);
         damageText.transform.position = targetTransform.position + offset;
@@ -194,8 +222,6 @@ public class GameManager : MonoBehaviour
 
     private void BakeNavMesh()
     {
-        //_groundSurface.BuildNavMesh();
-
         GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
         foreach (GameObject building in buildings)
         {
@@ -228,6 +254,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
+
     private IEnumerator ReloadSceneAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);

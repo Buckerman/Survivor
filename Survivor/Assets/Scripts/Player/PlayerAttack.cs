@@ -39,7 +39,7 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (EnemyHealth enemy in enemiesInRange)
         {
-            if (enemy.gameObject.activeInHierarchy)
+            if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.TakeDamage(attackDamage);
             }

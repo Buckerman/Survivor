@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using QuangDM.Common;
+using Entities.Player;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<EnemyController> enemyPrefabs;
     [SerializeField] private float spawnInterval = 0.5f;
-    [SerializeField] private Transform playerTransform;
 
-    [SerializeField] private float planeSize = 4f;
+    [SerializeField] private float radius = 10f;
     [SerializeField] private float maxSampleDistance = 5f;
 
     [SerializeField] private int initialEnemiesPerWave = 30;
@@ -58,7 +58,7 @@ public class EnemySpawner : MonoBehaviour
         if (spawnPosition != Vector3.zero)
         {
             enemy.transform.position = spawnPosition;
-            enemy.Initialize(playerTransform, _enemyPool);
+            enemy.Initialize(PlayerController.Instance.transform, _enemyPool);
             enemy.NavMeshAgent.enabled = true;
             enemy.SetState(new WalkState());
         }
@@ -66,11 +66,17 @@ public class EnemySpawner : MonoBehaviour
 
     private Vector3 GetRandomPositionOnGround()
     {
-        Vector3 randomPosition = new Vector3(
-            Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f),
+        Vector3 playerPosition = PlayerController.Instance.transform.position;
+
+        Vector3 randomDirection = new Vector3(
+            Random.Range(-1f, 1f),
             0f,
-            Random.Range(-planeSize * 10f / 2f, planeSize * 10f / 2f)
-        );
+            Random.Range(-1f, 1f)
+        ).normalized;
+
+        float randomDistance = Random.Range(5f, radius);
+
+        Vector3 randomPosition = playerPosition + randomDirection * randomDistance;
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomPosition, out hit, maxSampleDistance, NavMesh.AllAreas))
@@ -79,4 +85,5 @@ public class EnemySpawner : MonoBehaviour
         }
         return Vector3.zero;
     }
+
 }

@@ -9,17 +9,20 @@ namespace Entities.Player
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController Instance { get; private set; }
+
         [SerializeField] private float speed = 5f;
         [SerializeField] private float rotationSpeed = 20f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance = 1.5f;
         [SerializeField] private float edgeDetectionDistance = 1f;
-        [SerializeField] public VariableJoystick joystick;
 
         public float magnitude;
         private CharacterController _controller;
         private Animator _animator;
         private PlayerShooting _playerShooting;
+        private VariableJoystick joystick;
+
 
         private IPlayerState _currentState;
 
@@ -27,6 +30,7 @@ namespace Entities.Player
         private bool isJumping = false;
         public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
         public bool IsJumping { get => isJumping; set => isJumping = value; }
+        public VariableJoystick Joystick { get => joystick; set => joystick = value; }
 
         public float jumpHeight = 2f;
         public float gravity = -9.81f;
@@ -36,6 +40,17 @@ namespace Entities.Player
 
         void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+
+
             _controller = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
             _playerShooting = GetComponent<PlayerShooting>();
@@ -50,8 +65,7 @@ namespace Entities.Player
 
         private void Joy(object data)
         {
-            joystick.OnPointerUp2();//custom made
-
+            joystick.OnPointerUp2(); //custom made
         }
 
         void FixedUpdate()
@@ -81,7 +95,7 @@ namespace Entities.Player
                 _currentState.Exit();
             }
             _currentState = newState;
-            _currentState.Enter(this);
+            _currentState.Enter();
         }
 
         public void SetAnimation(string parameter, bool state)
@@ -199,7 +213,6 @@ namespace Entities.Player
                 {
                     _controller.Move(moveAmount);
                 }
-
                 currentClimbable = null;
             }
         }
