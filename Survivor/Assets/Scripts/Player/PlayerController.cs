@@ -112,21 +112,6 @@ namespace Entities.Player
             _controller.Move(velocity * Time.deltaTime);
         }
 
-        private void ApplyGravity()
-        {
-            if (!_controller.isGrounded)
-            {
-                velocity.y += gravity * Time.deltaTime;
-            }
-            else
-            {
-                if (velocity.y < 0)
-                {
-                    velocity.y = -2f;
-                }
-            }
-        }
-
         private void CheckEdgeAndJump()
         {
             if (_controller.isGrounded)
@@ -136,11 +121,6 @@ namespace Entities.Player
                 origin.y += 1.1f;
                 Ray ray = new Ray(origin, Vector3.down);
                 RaycastHit hit;
-
-                if (!Physics.Raycast(ray, out hit, edgeDetectionDistance))
-                {
-                    CheckForPlatform();
-                }
             }
         }
 
@@ -166,16 +146,22 @@ namespace Entities.Player
             }
         }
 
-        private void CheckForPlatform()
+        private void ApplyGravity()
         {
-            if (currentPlatform == null || !currentPlatform.gameObject.activeInHierarchy)
+            if (!_controller.isGrounded)
             {
-                isJumping = false;
+                velocity.y += gravity * Time.deltaTime;
+            }
+            else
+            {
+                if (velocity.y < 0)
+                {
+                    velocity.y = -2f;
+                }
             }
         }
 
         private Transform currentClimbable;
-        private Transform currentPlatform;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -192,12 +178,6 @@ namespace Entities.Player
                     transform.rotation = lookRotation;
                 }
             }
-        }
-
-        private IEnumerator PlatformRespawnTimer(Collider other)
-        {
-            yield return new WaitForSeconds(3.5f);
-            other.transform.parent.gameObject.SetActive(true);
         }
 
         private void OnTriggerExit(Collider other)
@@ -221,14 +201,6 @@ namespace Entities.Player
                 }
 
                 currentClimbable = null;
-            }
-
-            if (other.CompareTag("canJump"))
-            {
-                currentPlatform = other.transform;
-                isJumping = true;
-                PrepareAutoJump();
-                StartCoroutine(PlatformRespawnTimer(other));
             }
         }
     }
