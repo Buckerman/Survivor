@@ -14,6 +14,9 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private ChainIKConstraint rightHandIK;
     [SerializeField] private Transform rightHandTarget;
 
+    [Header("Height Tolerance")]
+    [SerializeField] private float heightTolerance = 0.5f; // Tolerance for height comparison
+
     private Animator animator;
     private Transform closestEnemy;
     private float shootTimer;
@@ -23,6 +26,7 @@ public class PlayerShooting : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
+
     private void Start()
     {
         _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
@@ -34,7 +38,7 @@ public class PlayerShooting : MonoBehaviour
         if (shootTimer <= 0f)
         {
             closestEnemy = FindClosestEnemy();
-            if (closestEnemy != null && IsEnemyVisible(closestEnemy))
+            if (closestEnemy != null && IsEnemyVisible(closestEnemy) && IsSameHeight(closestEnemy))
             {
                 AimAtEnemy();
             }
@@ -44,9 +48,9 @@ public class PlayerShooting : MonoBehaviour
     private void AimAtEnemy()
     {
         Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
-        Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f);//custom offset for bullet spawn
+        Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f); // Custom offset for bullet spawn
         rightHandTarget.position = transform.position + targetOffset;
-        //rightHandIK.weight = 1f;  
+        //rightHandIK.weight = 1f;
 
         animator.Play("PlayerShoot");
     }
@@ -95,5 +99,11 @@ public class PlayerShooting : MonoBehaviour
     {
         Renderer enemyRenderer = enemy.GetComponent<Renderer>();
         return enemyRenderer != null && enemyRenderer.isVisible;
+    }
+
+    private bool IsSameHeight(Transform enemy)
+    {
+        float heightDifference = Mathf.Abs(transform.position.y - enemy.position.y);
+        return heightDifference <= heightTolerance;
     }
 }

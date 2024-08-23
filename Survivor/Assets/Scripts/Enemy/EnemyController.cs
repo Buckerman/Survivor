@@ -56,7 +56,10 @@ public class EnemyController : MonoBehaviour
                 agent.SetDestination(_player.position);
 
                 float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-                if (distanceToPlayer <= enemyAttackRange)
+                float rotationX = Mathf.Abs(transform.eulerAngles.x);
+                float rotationZ = Mathf.Abs(transform.eulerAngles.z);
+
+                if (distanceToPlayer <= enemyAttackRange && rotationX < 1f && rotationZ < 1f)
                 {
                     agent.isStopped = true;
                     SetState(new AttackState());
@@ -78,6 +81,7 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
 
     private void AttackPlayer()
     {
