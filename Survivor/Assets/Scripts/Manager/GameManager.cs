@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
 
     private void BakeNavMesh()
     {
-        _groundSurface.BuildNavMesh();
+        //_groundSurface.BuildNavMesh();
 
         GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
         foreach (GameObject building in buildings)
@@ -208,6 +208,8 @@ public class GameManager : MonoBehaviour
                     {
                         surface = child.gameObject.AddComponent<NavMeshSurface>();
                     }
+
+                    surface.layerMask = 1 << LayerMask.NameToLayer("Wall");
 
                     wallSurfaces.Add(surface);
                     surface.BuildNavMesh();
