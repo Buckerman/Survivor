@@ -13,7 +13,7 @@ public class RunningState : IPlayerState
 
     public void Exit()
     {
-        _player.SetAnimation("isRunning", false);
+        _player.SetAnimation("isRunning", false);   
     }
 
     public void Update()
@@ -26,10 +26,6 @@ public class RunningState : IPlayerState
         if (_player.IsClimbing)
         {
             _player.SetState(new ClimbingState());
-        }
-        else if (_player.IsJumping)
-        {
-            _player.SetState(new JumpState());
         }
         else if (_player.magnitude <= 0.1f)
         {

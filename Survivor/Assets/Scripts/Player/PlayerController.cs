@@ -27,9 +27,8 @@ namespace Entities.Player
         private IPlayerState _currentState;
 
         private bool isClimbing = false;
-        private bool isJumping = false;
         public bool IsClimbing { get => isClimbing; set => isClimbing = value; }
-        public bool IsJumping { get => isJumping; set => isJumping = value; }
+        private bool jumpAnimationPlaying = false;
         public VariableJoystick Joystick { get => joystick; set => joystick = value; }
 
         public float jumpHeight = 2f;
@@ -77,10 +76,9 @@ namespace Entities.Player
             else
             {
                 HandleMoveInput();
+                CheckEdgeAndJump();
                 _playerShooting.enabled = true;
             }
-
-            
         }
 
         public void SetState(IPlayerState newState)
@@ -108,7 +106,6 @@ namespace Entities.Player
         private void HandleMoveInput()
         {
             ApplyGravity();
-            CheckEdgeAndJump();
 
             Vector3 moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y).normalized;
             magnitude = moveDirection.sqrMagnitude;
@@ -125,10 +122,10 @@ namespace Entities.Player
         float offsetDistance = 0.5f;
         private void CheckEdgeAndJump()
         {
+            if (jumpAnimationPlaying) return;
+
             if (_controller.isGrounded)
             {
-                isJumping = false;
-
                 Vector3 origin = transform.position + transform.forward * offsetDistance;
 
                 Vector3 forwardDirection = transform.forward;
@@ -154,9 +151,18 @@ namespace Entities.Player
         {
             ApplyGravity();
 
-            IsJumping = true;
+            _animator.Play("PlayerJump");
+            SetAnimation("isJumping", true);
+            jumpAnimationPlaying = true;
+
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
             _controller.Move(velocity * Time.deltaTime);
+        }
+        public void OnJumpAnimationEnd()
+        {
+            jumpAnimationPlaying = false;
+            SetAnimation("isJumping", false);
         }
 
         private void ApplyGravity()

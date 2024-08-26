@@ -21,14 +21,14 @@ public class EnemySpawner : MonoBehaviour
     private int _totalEnemiesNextWave;
     private EnemyPool _enemyPool;
 
-    //private void Start()
-    //{
-    //    // Initialize the enemy pool with the first type of enemy in the list
-    //    _enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
-    //    _totalEnemiesNextWave = initialEnemiesPerWave;
+    private void Start()
+    {
+        // Initialize the enemy pool with the first type of enemy in the list
+        //_enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
+        //_totalEnemiesNextWave = initialEnemiesPerWave;
 
-    //    Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
-    //}
+        //Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
+    }
 
     private void WaveCompleted(object data)
     {

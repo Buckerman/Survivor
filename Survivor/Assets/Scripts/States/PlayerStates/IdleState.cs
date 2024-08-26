@@ -8,7 +8,6 @@ public class IdleState : IPlayerState
     public void Enter()
     {
         _player = PlayerController.Instance;
-        _player.SetAnimation("isRunning", false);
     }
 
     public void Exit()
