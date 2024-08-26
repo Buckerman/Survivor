@@ -190,17 +190,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5218213291368542554, guid: 889fa7821008ba84a9a3a1ef8e1dd584, type: 3}
   m_PrefabInstance: {fileID: 356384277533822296}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &102650857 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8693120178316561956, guid: 9241b658713ea1642856c0562a896dac, type: 3}
-  m_PrefabInstance: {fileID: 8073190739796667756}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42844a4fccbd54746b90cade4ff70f73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &169859672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,7 +1563,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7804717341180677025, guid: 8bc155b348245944b8729df124502ace, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.32274
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7804717341180677025, guid: 8bc155b348245944b8729df124502ace, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1582,7 +1571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7804717341180677025, guid: 8bc155b348245944b8729df124502ace, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.790049
+      value: 6.37
       objectReference: {fileID: 0}
     - target: {fileID: 7804717341180677025, guid: 8bc155b348245944b8729df124502ace, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1931,10 +1920,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5727005709693059450, guid: 889fa7821008ba84a9a3a1ef8e1dd584, type: 3}
-      propertyPath: joystick
-      value: 
-      objectReference: {fileID: 102650857}
     - target: {fileID: 7505544566272607256, guid: 889fa7821008ba84a9a3a1ef8e1dd584, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1963,6 +1948,10 @@ PrefabInstance:
     - target: {fileID: 352624878009854795, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 352624878009854795, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 454843768890144045, guid: 21a06bc524f58084d91f7d18c2345216, type: 3}
       propertyPath: m_LocalPosition.x

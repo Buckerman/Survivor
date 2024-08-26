@@ -14,7 +14,7 @@ namespace Entities.Player
         [SerializeField] private float speed = 5f;
         [SerializeField] private float rotationSpeed = 20f;
         [SerializeField] private float climbSpeed = 3f;
-        [SerializeField] private float moveTowardsDistance = 1.5f;
+        [SerializeField] private float moveTowardsDistance = 2f;
         [SerializeField] private float edgeDetectionDistance = 1f;
 
         public float magnitude;
@@ -36,7 +36,6 @@ namespace Entities.Player
         public float gravity = -9.81f;
 
         private Vector3 velocity;
-        private Vector3 jumpDirection;
 
         void Awake()
         {
@@ -49,7 +48,6 @@ namespace Entities.Player
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
-
 
             _controller = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
@@ -72,20 +70,17 @@ namespace Entities.Player
         {
             _currentState.Update();
 
-            if (IsJumping)
-            {
-                HandleAutoJump();
-            }
-            else if (IsClimbing)
+            if (IsClimbing)
             {
                 HandleClimbing();
             }
             else
             {
                 HandleMoveInput();
-                CheckEdgeAndJump();
                 _playerShooting.enabled = true;
             }
+
+            
         }
 
         public void SetState(IPlayerState newState)
@@ -113,6 +108,7 @@ namespace Entities.Player
         private void HandleMoveInput()
         {
             ApplyGravity();
+            CheckEdgeAndJump();
 
             Vector3 moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y).normalized;
             magnitude = moveDirection.sqrMagnitude;
@@ -126,38 +122,41 @@ namespace Entities.Player
             _controller.Move(velocity * Time.deltaTime);
         }
 
+        float offsetDistance = 0.5f;
         private void CheckEdgeAndJump()
         {
             if (_controller.isGrounded)
             {
                 isJumping = false;
-                Vector3 origin = transform.position;
-                origin.y += 1.1f;
-                Ray ray = new Ray(origin, Vector3.down);
-                RaycastHit hit;
+
+                Vector3 origin = transform.position + transform.forward * offsetDistance;
+
+                Vector3 forwardDirection = transform.forward;
+                Ray forwardRay = new Ray(origin, forwardDirection);
+                RaycastHit forwardHit;
+
+                Ray downwardRay = new Ray(origin, Vector3.down);
+                RaycastHit downwardHit;
+
+                if (Physics.Raycast(forwardRay, out forwardHit, edgeDetectionDistance))
+                {
+                    return;
+                }
+
+                if (!Physics.Raycast(downwardRay, out downwardHit, edgeDetectionDistance))
+                {
+                    HandleJump();
+                }
             }
         }
 
-        private void PrepareAutoJump()
-        {
-            IsJumping = true;
-            Vector3 forwardDirection = transform.forward;
-            jumpDirection = forwardDirection.normalized;
-            jumpDirection.y = 0;
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-
-        private void HandleAutoJump()
+        private void HandleJump()
         {
             ApplyGravity();
 
-            _controller.Move(jumpDirection * speed * Time.deltaTime);
+            IsJumping = true;
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             _controller.Move(velocity * Time.deltaTime);
-
-            if (_controller.isGrounded && velocity.y < 0)
-            {
-                IsJumping = false;
-            }
         }
 
         private void ApplyGravity()
