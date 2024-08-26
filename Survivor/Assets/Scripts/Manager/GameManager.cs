@@ -108,16 +108,8 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
         Observer.Instance.AddObserver("TimeLeft", TimeLeft);
         Observer.Instance.AddObserver("DamageReceived", DamageReceived);
+        Observer.Instance.AddObserver("ReactivatePlatform", ReactivatePlatform);
     }
-
-    private void SetupCameraFollow()
-    {
-        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
-        {
-            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
-        }
-    }
-
     public void StartGame()
     {
         _waveLevel.text = "1";
@@ -138,6 +130,27 @@ public class GameManager : MonoBehaviour
         //PlayerData.Instance.ConversationID = 2;
         //PlayerData.Instance.Save();
     }
+
+    public void ReactivatePlatform(object data)
+    {
+        StartCoroutine(ReactivatePlatformCoroutine((GameObject)data));
+    }
+
+    private IEnumerator ReactivatePlatformCoroutine(GameObject platform)
+    {
+        yield return new WaitForSeconds(3f);
+        platform.SetActive(true);
+    }
+
+    private void SetupCameraFollow()
+    {
+        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
+        {
+            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
+        }
+    }
+
+
 
     private void DamageReceived(object data)
     {
