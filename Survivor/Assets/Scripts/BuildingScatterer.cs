@@ -14,7 +14,7 @@ public class BuildingScatterer : MonoBehaviour
     }
 
     public BuildingType[] buildingTypes;
-    public float scatterRange = 400f;
+    public float scatterRange = 450f;
     public LayerMask buildingLayerMask;
 
     public Transform hugeBuildingsParent;
@@ -23,6 +23,8 @@ public class BuildingScatterer : MonoBehaviour
     public Transform smallBuildingsParent;
     public Transform tinyBuildingsParent;
     public Transform platformParent;
+
+    private List<Vector3> hugeAndBigBuildingPositions = new List<Vector3>();
 
     [ContextMenu("Scatter Buildings")]
     public void ScatterBuildings()
@@ -35,8 +37,13 @@ public class BuildingScatterer : MonoBehaviour
         ClearExistingBuildings(tinyBuildingsParent);
         ClearExistingBuildings(platformParent);
 
-
         // Sort and instantiate buildings by category
+        SpawnBuildings();
+
+    }
+
+    private void SpawnBuildings()
+    {
         foreach (BuildingType buildingType in buildingTypes)
         {
             Transform parent = GetParentByCategory(buildingType.sizeCategory);
@@ -97,8 +104,6 @@ public class BuildingScatterer : MonoBehaviour
                 return smallBuildingsParent;
             case "Tiny":
                 return tinyBuildingsParent;
-            case "Platform":
-                return platformParent;
             default:
                 return null;
         }

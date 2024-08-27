@@ -24,10 +24,10 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         // Initialize the enemy pool with the first type of enemy in the list
-        //_enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
-        //_totalEnemiesNextWave = initialEnemiesPerWave;
+        _enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
+        _totalEnemiesNextWave = initialEnemiesPerWave;
 
-        //Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
+        Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
     }
 
     private void WaveCompleted(object data)
@@ -82,14 +82,10 @@ public class EnemySpawner : MonoBehaviour
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomPosition, out hit, maxSampleDistance, NavMesh.AllAreas))
         {
-            Collider[] hitColliders = Physics.OverlapSphere(hit.position, 1f, buildingLayerMask);
-            if (hitColliders.Length == 0)
-            {
-                return hit.position;
-            }
+            return hit.position;
         }
 
-        return GetRandomPositionOnGround();
+        return Vector3.zero;
     }
 
 }
