@@ -13,10 +13,12 @@ public class PlayerAttack : MonoBehaviour
 
     private Animator animator;
     private SwordTrigger currentSwordTrigger;
-
-    private void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
+    }
+    private void Start()
+    {
         Observer.Instance.AddObserver("Slash", Slash);
     }
 

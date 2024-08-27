@@ -38,14 +38,14 @@ namespace Entities.Player
 
         void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
+            if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
             }
 
             _controller = GetComponent<CharacterController>();

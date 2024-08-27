@@ -32,8 +32,15 @@ namespace QuangDM.Common
         public static Observer Instance;
         private void Awake()
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         public delegate void CallBackObserver(System.Object data);
 
