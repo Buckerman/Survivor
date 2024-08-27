@@ -22,6 +22,7 @@ public class BuildingScatterer : MonoBehaviour
     public Transform mediumBuildingsParent;
     public Transform smallBuildingsParent;
     public Transform tinyBuildingsParent;
+    public Transform platformParent;
 
     [ContextMenu("Scatter Buildings")]
     public void ScatterBuildings()
@@ -32,6 +33,7 @@ public class BuildingScatterer : MonoBehaviour
         ClearExistingBuildings(mediumBuildingsParent);
         ClearExistingBuildings(smallBuildingsParent);
         ClearExistingBuildings(tinyBuildingsParent);
+        ClearExistingBuildings(platformParent);
 
 
         // Sort and instantiate buildings by category
@@ -55,45 +57,6 @@ public class BuildingScatterer : MonoBehaviour
             }
         }
     }
-    //[ContextMenu("Scatter Buildings")]
-    //public void ScatterBuildings()
-    //{
-    //    // Clear existing buildings
-    //    ClearExistingBuildings(hugeBuildingsParent);
-    //    ClearExistingBuildings(bigBuildingsParent);
-    //    ClearExistingBuildings(mediumBuildingsParent);
-    //    ClearExistingBuildings(smallBuildingsParent);
-    //    ClearExistingBuildings(tinyBuildingsParent);
-
-    //    //Sort and instantiate buildings by category
-    //    foreach (BuildingType buildingType in buildingTypes)
-    //    {
-    //        Transform parent = GetParentByCategory(buildingType.sizeCategory);
-
-    //        int placedCount = 0;
-    //        int attemptCount = 0;
-    //        const int maxAttempts = 100;
-
-    //        while (placedCount < buildingType.amount && attemptCount < maxAttempts)
-    //        {
-    //            Vector3 randomPosition = GetRandomPosition(buildingType.prefab);
-    //            Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-
-    //            if (!IsOverlapping(randomPosition, buildingType.prefab))
-    //            {
-    //                Instantiate(buildingType.prefab, randomPosition, randomRotation, parent);
-    //                placedCount++;
-    //            }
-
-    //            attemptCount++;
-    //        }
-
-    //        if (placedCount < buildingType.amount)
-    //        {
-    //            Debug.LogWarning($"Only placed {placedCount} out of {buildingType.amount} buildings for {buildingType.prefab.name} due to overlap issues.");
-    //        }
-    //    }
-    //}
 
     private void ClearExistingBuildings(Transform parent)
     {
@@ -134,6 +97,8 @@ public class BuildingScatterer : MonoBehaviour
                 return smallBuildingsParent;
             case "Tiny":
                 return tinyBuildingsParent;
+            case "Platform":
+                return platformParent;
             default:
                 return null;
         }
