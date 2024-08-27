@@ -67,6 +67,7 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 GetRandomPositionOnGround()
     {
         Vector3 playerPosition = PlayerController.Instance.transform.position;
+        int buildingLayerMask = LayerMask.GetMask("Building");
 
         Vector3 randomDirection = new Vector3(
             Random.Range(-1f, 1f),
@@ -81,9 +82,14 @@ public class EnemySpawner : MonoBehaviour
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomPosition, out hit, maxSampleDistance, NavMesh.AllAreas))
         {
-            return hit.position;
+            Collider[] hitColliders = Physics.OverlapSphere(hit.position, 1f, buildingLayerMask);
+            if (hitColliders.Length == 0)
+            {
+                return hit.position;
+            }
         }
-        return Vector3.zero;
+
+        return GetRandomPositionOnGround();
     }
 
 }

@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
 
     private GameTimer _gameTimer;
     private NavMeshSurface _groundSurface;
-    private string wallTag = "Wall";
     private TextMeshProUGUI _defeatGame;
     private TextMeshProUGUI _waveComplete;
     private TextMeshProUGUI _waveLevel;
@@ -27,11 +26,8 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _timeLeft;
     private VariableJoystick _joystick;
     private CinemachineVirtualCamera _cinemachineVirtualCamera; // Add this field
-
-
     public VariableJoystick Joystick => _joystick;
 
-    private List<NavMeshSurface> wallSurfaces = new List<NavMeshSurface>();
 
     private void Awake()
     {
@@ -102,7 +98,7 @@ public class GameManager : MonoBehaviour
     private void InitializeGame()
     {
         Application.targetFrameRate = 60;
-        BakeNavMesh();
+        //BakeNavMesh();
         StartGame();
 
         Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
@@ -149,8 +145,6 @@ public class GameManager : MonoBehaviour
             _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
         }
     }
-
-
 
     private void DamageReceived(object data)
     {
@@ -233,29 +227,29 @@ public class GameManager : MonoBehaviour
         _surviveTime.transform.parent.gameObject.SetActive(false);
     }
 
-    private void BakeNavMesh()
-    {
-        GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
-        foreach (GameObject building in buildings)
-        {
-            foreach (Transform child in building.transform)
-            {
-                if (child.CompareTag(wallTag))
-                {
-                    NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
-                    if (surface == null)
-                    {
-                        surface = child.gameObject.AddComponent<NavMeshSurface>();
-                    }
+    //private void BakeNavMesh()
+    //{
+    //    GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+    //    foreach (GameObject building in buildings)
+    //    {
+    //        foreach (Transform child in building.transform)
+    //        {
+    //            if (child.CompareTag(wallTag))
+    //            {
+    //                NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
+    //                if (surface == null)
+    //                {
+    //                    surface = child.gameObject.AddComponent<NavMeshSurface>();
+    //                }
 
-                    surface.layerMask = 1 << LayerMask.NameToLayer("Wall");
+    //                surface.layerMask = 1 << LayerMask.NameToLayer("Wall");
 
-                    wallSurfaces.Add(surface);
-                    surface.BuildNavMesh();
-                }
-            }
-        }
-    }
+    //                wallSurfaces.Add(surface);
+    //                surface.BuildNavMesh();
+    //            }
+    //        }
+    //    }
+    //}
 
     public void EndGame()
     {
