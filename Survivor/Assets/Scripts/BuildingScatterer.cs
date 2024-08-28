@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.AI.Navigation;
 
-public class BuildingScatterer : MonoBehaviour
+public class BuildingAndPlatformScatterer : MonoBehaviour
 {
     [System.Serializable]
     public class BuildingType
@@ -14,6 +12,8 @@ public class BuildingScatterer : MonoBehaviour
     }
 
     public BuildingType[] buildingTypes;
+    public GameObject platformPrefab;
+    public int platformAmount;
     public float scatterRange = 450f;
     public LayerMask buildingLayerMask;
 
@@ -22,24 +22,27 @@ public class BuildingScatterer : MonoBehaviour
     public Transform mediumBuildingsParent;
     public Transform smallBuildingsParent;
     public Transform tinyBuildingsParent;
-    public Transform platformParent;
+    public Transform platformsParent;
 
-    private List<Vector3> hugeAndBigBuildingPositions = new List<Vector3>();
+    private List<Vector3> buildingPositionList = new List<Vector3>();
 
-    [ContextMenu("Scatter Buildings")]
-    public void ScatterBuildings()
+    [ContextMenu("Scatter Buildings and Platforms")]
+    public void ScatterBuildingsAndPlatforms()
     {
-        // Clear existing buildings
-        ClearExistingBuildings(hugeBuildingsParent);
-        ClearExistingBuildings(bigBuildingsParent);
-        ClearExistingBuildings(mediumBuildingsParent);
-        ClearExistingBuildings(smallBuildingsParent);
-        ClearExistingBuildings(tinyBuildingsParent);
-        ClearExistingBuildings(platformParent);
+        // Clear existing buildings and platforms
+        ClearExistingObjects(hugeBuildingsParent);
+        ClearExistingObjects(bigBuildingsParent);
+        ClearExistingObjects(mediumBuildingsParent);
+        ClearExistingObjects(smallBuildingsParent);
+        ClearExistingObjects(tinyBuildingsParent);
+        ClearExistingObjects(platformsParent);
+        buildingPositionList.Clear();
 
         // Sort and instantiate buildings by category
         SpawnBuildings();
 
+        // Scatter platforms based on building positions
+        SpawnPlatforms();
     }
 
     private void SpawnBuildings()
@@ -56,6 +59,10 @@ public class BuildingScatterer : MonoBehaviour
                 if (!IsOverlapping(randomPosition, buildingType.prefab))
                 {
                     Instantiate(buildingType.prefab, randomPosition, randomRotation, parent);
+                    if (buildingType.sizeCategory == "Huge" || buildingType.sizeCategory == "Big")
+                    {
+                        buildingPositionList.Add(randomPosition);
+                    }
                 }
                 else
                 {
@@ -65,7 +72,60 @@ public class BuildingScatterer : MonoBehaviour
         }
     }
 
-    private void ClearExistingBuildings(Transform parent)
+    private void SpawnPlatforms()
+    {
+        const int maxGlobalAttempts = 1000; // Total maximum attempts to find valid positions
+        int platformsPlaced = 0;
+        int globalAttempts = 0;
+
+        HashSet<Vector3> usedPositions = new HashSet<Vector3>();
+
+        while (platformsPlaced < platformAmount && globalAttempts < maxGlobalAttempts)
+        {
+            foreach (Vector3 buildingPosition in buildingPositionList)
+            {
+                if (platformsPlaced >= platformAmount)
+                    break;
+
+                Vector3 possiblePosition = LookForPlatformPosition(buildingPosition);
+                globalAttempts++;
+
+                if (!IsOverlapping(possiblePosition, platformPrefab) && !usedPositions.Contains(possiblePosition))
+                {
+                    Instantiate(platformPrefab, possiblePosition, Quaternion.identity, platformsParent);
+                    usedPositions.Add(possiblePosition);
+                    platformsPlaced++;
+                }
+
+                if (globalAttempts >= maxGlobalAttempts)
+                {
+                    Debug.LogWarning("Max attempts reached. Could not place all platforms.");
+                    break;
+                }
+            }
+        }
+
+        if (platformsPlaced < platformAmount)
+        {
+            Debug.LogWarning($"Only {platformsPlaced} platforms were placed out of the desired {platformAmount}.");
+        }
+    }
+
+    private Vector3 LookForPlatformPosition(Vector3 buildingPosition)
+    {
+        // Generate a random direction
+        Vector3 randomDirection = Random.insideUnitCircle.normalized;
+
+        Vector3 platformPosition = buildingPosition + randomDirection * 17f;
+
+        // Keep the Y position the same as the prefab's Y position
+        platformPosition.y = platformPrefab.transform.position.y;
+
+        return platformPosition;
+    }
+
+
+    private void ClearExistingObjects(Transform parent)
     {
         if (parent != null)
         {

@@ -52,13 +52,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingTypes:
   - prefab: {fileID: 3955569017889604954, guid: 84646f15c5698314098fa7742bd37680, type: 3}
-    amount: 40
+    amount: 60
     sizeCategory: Huge
   - prefab: {fileID: 9037739772919638035, guid: 8bc155b348245944b8729df124502ace, type: 3}
-    amount: 40
+    amount: 60
     sizeCategory: Big
   - prefab: {fileID: 335882352607283904, guid: 0c116fcab13ec194da882f603357efc5, type: 3}
-    amount: 40
+    amount: 60
     sizeCategory: Medium
   - prefab: {fileID: 6628352147650722139, guid: 26d34891255e23449a6fcd61858291af, type: 3}
     amount: 40
@@ -66,7 +66,9 @@ MonoBehaviour:
   - prefab: {fileID: 5994648571176386867, guid: feb63f423c43aad4d981ad758c786d8e, type: 3}
     amount: 40
     sizeCategory: Tiny
-  scatterRange: 450
+  platformPrefab: {fileID: 1683741433425363050, guid: 227c1302d1ddba641b24aceea899a7f1, type: 3}
+  platformAmount: 20
+  scatterRange: 300
   buildingLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -75,7 +77,7 @@ MonoBehaviour:
   mediumBuildingsParent: {fileID: 5941791528041502255}
   smallBuildingsParent: {fileID: 5877261049323813498}
   tinyBuildingsParent: {fileID: 8715078471618688124}
-  platformParent: {fileID: 6562388226664114443}
+  platformsParent: {fileID: 6562388226664114443}
 --- !u!1 &2099261025042568965
 GameObject:
   m_ObjectHideFlags: 0
