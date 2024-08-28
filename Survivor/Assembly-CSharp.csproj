@@ -60,6 +60,7 @@
     <Analyzer Include="D:\Aplikacje\Unity\2022.3.17f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Loot\Coin.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\VariableJoystick.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Entities\Player\SwordTrigger.cs" />
@@ -78,23 +79,25 @@
     <Compile Include="Assets\Scripts\Entities\Player\PlayerShooting.cs" />
     <Compile Include="Assets\Scripts\SavingSystem\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Entities\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Loot\LootPool.cs" />
     <Compile Include="Assets\Scripts\Entities\Player\PlayerAttack.cs" />
     <Compile Include="Assets\JoystickPack\Examples\JoystickPlayerExample.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IEnemyState.cs" />
-    <Compile Include="Assets\Scripts\Entities\Enemy\Enemypool.cs" />
     <Compile Include="Assets\Scripts\Manager\GameTimer.cs" />
     <Compile Include="Assets\Scripts\Manager\Observer.cs" />
+    <Compile Include="Assets\Scripts\Loot\Loot.cs" />
     <Compile Include="Assets\JoystickPack\Examples\JoystickSetterExample.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\DynamicJoystick.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerState.cs" />
-    <Compile Include="Assets\Scripts\BuildingScatterer.cs" />
     <Compile Include="Assets\Scripts\Entities\Enemy\EnemyHealth.cs" />
     <Compile Include="Assets\Scripts\States\EnemyStates\AttackState.cs" />
+    <Compile Include="Assets\Scripts\Manager\BuildingScatterer.cs" />
     <Compile Include="Assets\JoystickPack\Scripts\Joysticks\FloatingJoystick.cs" />
     <Compile Include="Assets\Scripts\Platform.cs" />
-    <Compile Include="Assets\Scripts\PlatformScatterer.cs" />
+    <Compile Include="Assets\Scripts\Entities\Enemy\EnemyPool.cs" />
     <Compile Include="Assets\Scripts\Entities\Enemy\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Entities\Player\PlayerHealth.cs" />
+    <Compile Include="Assets\Scripts\Loot\HealthPack.cs" />
     <Compile Include="Assets\Scripts\Entities\Enemy\EnemySpawner.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using QuangDM.Common;
 using System;
+using System.Collections.Generic;
 
 public class EnemyController : MonoBehaviour
 {
@@ -12,9 +13,15 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
 
+    [Header("Loot Settings")]
+    [SerializeField] private List<Loot> lootPrefabs;
+    [SerializeField] private int lootPoolSize = 10;
+
+
     private NavMeshAgent agent;
     private Transform _player;
     private EnemyPool _enemyPool;
+    private LootPool _lootPool;
     private Animator _animator;
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -30,6 +37,7 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         Observer.Instance.AddObserver("DisableAllEnemies", DisableAllEnemies);
+        _lootPool = new LootPool(lootPrefabs, lootPoolSize);
     }
 
     public void Initialize(Transform playerTransform, EnemyPool pool)
@@ -81,7 +89,6 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-
 
     private void AttackPlayer()
     {
@@ -137,6 +144,7 @@ public class EnemyController : MonoBehaviour
         if (_enemyPool != null)
         {
             _enemyPool.ReturnEnemy(this);
+            //_lootPool.GetLoot(transform.position);
         }
     }
 }
