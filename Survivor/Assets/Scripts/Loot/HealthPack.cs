@@ -1,7 +1,9 @@
+using Entities.Player;
 using UnityEngine;
 
 public class HealthPack : Loot
 {
+    public float _amount = 5f;
     public override void Initialize(Vector3 position, LootPool pool)
     {
         base.Initialize(position, pool);
@@ -11,7 +13,7 @@ public class HealthPack : Loot
     {
         if (other.CompareTag("Player"))
         {
-            // Increase player's health
+            PlayerController.Instance.GetComponent<PlayerHealth>().Heal(_amount);
             ReturnToPool();
         }
     }

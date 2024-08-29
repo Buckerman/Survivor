@@ -1,3 +1,5 @@
+using QuangDM.Common;
+using System;
 using UnityEngine;
 
 public abstract class Loot : MonoBehaviour
@@ -8,10 +10,22 @@ public abstract class Loot : MonoBehaviour
         Vector3 newPosition = new Vector3(position.x, transform.position.y, position.z);
         transform.position = newPosition;
         lootPool = pool;
+
+        Observer.Instance.AddObserver("DisableAllLoot", DisableAllLoot);
+    }
+
+    private void DisableAllLoot(object data)
+    {
+        ReturnToPool();
     }
 
     public void ReturnToPool()
     {
+        Invoke(nameof(RemoveObserver), 0f);
         lootPool.ReturnLoot(this);
+    }
+    private void RemoveObserver()
+    {
+        Observer.Instance.RemoveObserver("DisableAllLoot", DisableAllLoot);
     }
 }

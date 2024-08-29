@@ -13,15 +13,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
 
-    [Header("Loot Settings")]
-    [SerializeField] private List<Loot> lootPrefabs;
-    [SerializeField] private int lootPoolSize = 10;
-
-
     private NavMeshAgent agent;
     private Transform _player;
     private EnemyPool _enemyPool;
-    private LootPool _lootPool;
     private Animator _animator;
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -34,17 +28,12 @@ public class EnemyController : MonoBehaviour
         agent.speed = enemySpeed;
     }
 
-    private void Start()
-    {
-        Observer.Instance.AddObserver("DisableAllEnemies", DisableAllEnemies);
-        _lootPool = new LootPool(lootPrefabs, lootPoolSize);
-    }
-
     public void Initialize(Transform playerTransform, EnemyPool pool)
     {
         _player = playerTransform;
         _enemyPool = pool;
 
+        Observer.Instance.AddObserver("DisableAllEnemies", DisableAllEnemies);
         agent.enabled = false;
     }
 
@@ -143,8 +132,14 @@ public class EnemyController : MonoBehaviour
     {
         if (_enemyPool != null)
         {
+            if (!this.gameObject.scene.isLoaded) return;
+            Observer.Instance.Notify("DropLoot", this.transform.position);
+            Invoke(nameof(RemoveObserver), 0f);
             _enemyPool.ReturnEnemy(this);
-            //_lootPool.GetLoot(transform.position);
         }
+    }
+    private void RemoveObserver()
+    {
+        Observer.Instance.RemoveObserver("DisableAllEnemies", DisableAllEnemies);
     }
 }

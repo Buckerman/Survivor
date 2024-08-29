@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 454843768890144045}
   - component: {fileID: 6524171224393649984}
-  - component: {fileID: 8979681228543279478}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -47,15 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageTextPrefab: {fileID: 469245538502582586, guid: 1120262b1c1d7aa4a8745e9507510cdf, type: 3}
   damageTextPoolSize: 10
---- !u!114 &8979681228543279478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 352624878009854795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a9890d48ac86d446a426e37eaa39269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  lootPrefabs:
+  - {fileID: -5027592555022169034, guid: 7ecea1522a989494a86437763a220669, type: 3}
+  - {fileID: 5804138843811534919, guid: 636e0cf82e18f544481e480617d1ae48, type: 3}
+  lootPoolSize: 10

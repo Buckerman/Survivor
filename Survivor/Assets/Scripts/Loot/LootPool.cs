@@ -31,8 +31,7 @@ public class LootPool
     {
         Loot lootToSpawn;
 
-        // 25% chance to drop a health pack
-        if (Random.value <= 0.25f && healthPackPrefab != null)
+        if (Random.value <= 0.05f && healthPackPrefab != null)
         {
             lootToSpawn = GetLootFromPoolOrInstantiate(healthPackPrefab);
         }

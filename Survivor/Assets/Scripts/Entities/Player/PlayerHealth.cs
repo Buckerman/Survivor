@@ -34,6 +34,13 @@ public class PlayerHealth : MonoBehaviour
             Die();
     }
 
+    public void Heal(float amount)
+    {
+        _currentHealth += (int)amount;
+        if (_currentHealth >= maxHealth) _currentHealth = (int)maxHealth;
+        _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
+    }
+
     private void Die()
     {
         Observer.Instance.Notify("DisableAllEnemies");

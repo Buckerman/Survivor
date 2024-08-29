@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private DamageText damageTextPrefab;
     [SerializeField] private int damageTextPoolSize = 10;
     private DamageTextPool _damageTextPool;
+
+    [Header("Loot Drop Settings")]
+    [SerializeField] private List<Loot> lootPrefabs;
+    [SerializeField] private int lootPoolSize = 10;
+    private LootPool _lootPool;
     public static GameManager Instance { get; private set; }
 
     private GameTimer _gameTimer;
@@ -25,7 +30,7 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _surviveTime;
     private TextMeshProUGUI _timeLeft;
     private VariableJoystick _joystick;
-    private CinemachineVirtualCamera _cinemachineVirtualCamera; // Add this field
+    private CinemachineVirtualCamera _cinemachineVirtualCamera;
     public VariableJoystick Joystick => _joystick;
 
 
@@ -105,7 +110,9 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver("TimeLeft", TimeLeft);
         Observer.Instance.AddObserver("DamageReceived", DamageReceived);
         Observer.Instance.AddObserver("ReactivatePlatform", ReactivatePlatform);
+        Observer.Instance.AddObserver("DropLoot", DropLoot);
     }
+
     public void StartGame()
     {
         _waveLevel.text = "1";
@@ -121,6 +128,7 @@ public class GameManager : MonoBehaviour
         _gameTimer.StartTimer();
 
         _damageTextPool = new DamageTextPool(damageTextPrefab, damageTextPoolSize);
+        _lootPool = new LootPool(lootPrefabs,lootPoolSize);
 
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
@@ -173,6 +181,10 @@ public class GameManager : MonoBehaviour
         damageText.transform.position = targetTransform.position + offset;
 
         damageText.Initialize(_damageTextPool);
+    }
+    private void DropLoot(object data)
+    {
+        _lootPool.GetLoot((Vector3)data);
     }
 
     private void TimeLeft(object data)
@@ -253,6 +265,14 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
+        Observer.Instance.Notify("DisableAllLoot");
+
+        Observer.Instance.RemoveObserver("WaveCompleted", WaveCompleted);
+        Observer.Instance.RemoveObserver("TimeLeft", TimeLeft);
+        Observer.Instance.RemoveObserver("DamageReceived", DamageReceived);
+        Observer.Instance.RemoveObserver("ReactivatePlatform", ReactivatePlatform);
+        Observer.Instance.RemoveObserver("DropLoot", DropLoot);
+
         Time.timeScale = 0;
         _gameTimer.StopTimer();
         _groundSurface.GetComponent<EnemySpawner>().enabled = false;

@@ -15,14 +15,10 @@ public class DamageText : MonoBehaviour
         _textMeshPro = GetComponentInChildren<TextMeshPro>();
     }
 
-    private void Start()
-    {
-        Observer.Instance.AddObserver("DisableAllDamageText", DisableAllDamage);
-    }
-
     public void Initialize(DamageTextPool pool)
     {
         _damageTextPool = pool;
+        Observer.Instance.AddObserver("DisableAllDamageText", DisableAllDamage);
     }
 
     public void Setup(int damageAmount, Color color)
@@ -44,7 +40,12 @@ public class DamageText : MonoBehaviour
     {
         if (_damageTextPool != null)
         {
+            Invoke(nameof(RemoveObserver), 0f);
             _damageTextPool.ReturnDamageText(this);
         }
+    }
+    private void RemoveObserver()
+    {
+        Observer.Instance.RemoveObserver("DisableAllDamageText", DisableAllDamage);
     }
 }
