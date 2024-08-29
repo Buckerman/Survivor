@@ -18,7 +18,7 @@ public class GameTimer : MonoBehaviour
         currentTime = startingTime;
         _countDown = GetComponent<TextMeshProUGUI>();
 
-        Observer.Instance.AddObserver("CurrentWaveLevel", CurrentWaveLevel);
+        Observer.Instance.AddObserver(EventName.CurrentWaveLevel, CurrentWaveLevel);
     }
 
     private void CurrentWaveLevel(object data)
@@ -39,17 +39,17 @@ public class GameTimer : MonoBehaviour
         _countDown.text = ((int)currentTime).ToString();
         if (currentTime < 6f)
         {
-            Observer.Instance.Notify("TimeLeft");
+            Observer.Instance.Notify(EventName.TimeLeft);   
         }
         if (currentTime <= 0)
         {
             waveLevel++;
             StopTimer();
 
-            Observer.Instance.Notify("DisableAllEnemies");
-            Observer.Instance.Notify("DisableAllDamageText");
-            Observer.Instance.Notify("DisableAllLoot");
-            Observer.Instance.Notify("WaveCompleted", waveLevel);
+            Observer.Instance.Notify(EventName.DisableAllEnemies);
+            Observer.Instance.Notify(EventName.DisableAllDamageText);
+            Observer.Instance.Notify(EventName.DisableAllLoot);
+            Observer.Instance.Notify(EventName.WaveCompleted, waveLevel);
         }
     }
 

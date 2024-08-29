@@ -10,6 +10,6 @@ public class PlayerWallet : MonoBehaviour
     public void UpdateWallet(int amount)
     {
         _coinAmount += amount;
-        Observer.Instance.Notify("UpdateWalletUI", _coinAmount);
+        Observer.Instance.Notify(EventName.UpdateWalletUI, _coinAmount);
     }
 }

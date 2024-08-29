@@ -11,7 +11,7 @@ public abstract class Loot : MonoBehaviour
         transform.position = newPosition;
         lootPool = pool;
 
-        Observer.Instance.AddObserver("DisableAllLoot", DisableAllLoot);
+        Observer.Instance.AddObserver(EventName.DisableAllLoot, DisableAllLoot);
     }
 
     private void DisableAllLoot(object data)
@@ -26,6 +26,6 @@ public abstract class Loot : MonoBehaviour
     }
     private void RemoveObserver()
     {
-        Observer.Instance.RemoveObserver("DisableAllLoot", DisableAllLoot);
+        Observer.Instance.RemoveObserver(EventName.DisableAllLoot, DisableAllLoot);
     }
 }

@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _currentHealth -= (int)damage;
-        Observer.Instance.Notify("DamageReceived", (this, damage));
+        Observer.Instance.Notify(EventName.DamageReceived, (this, damage));
         _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
 
         if (_currentHealth <= 0)
@@ -43,8 +43,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        Observer.Instance.Notify("DisableAllEnemies");
-        Observer.Instance.Notify("DisableAllDamageText");
+        Observer.Instance.Notify(EventName.DisableAllEnemies);
+        Observer.Instance.Notify(EventName.DisableAllDamageText);
 
         GameManager.Instance.EndGame();
     }

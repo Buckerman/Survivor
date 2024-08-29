@@ -110,14 +110,13 @@ public class GameManager : MonoBehaviour
         //BakeNavMesh();
         StartGame();
 
-        Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
-        Observer.Instance.AddObserver("TimeLeft", TimeLeft);
-        Observer.Instance.AddObserver("DamageReceived", DamageReceived);
-        Observer.Instance.AddObserver("ReactivatePlatform", ReactivatePlatform);
-        Observer.Instance.AddObserver("DropLoot", DropLoot);
-        Observer.Instance.AddObserver("UpdateWalletUI", UpdateWalletUI);
+        Observer.Instance.AddObserver(EventName.WaveCompleted, WaveCompleted);
+        Observer.Instance.AddObserver(EventName.TimeLeft, TimeLeft);
+        Observer.Instance.AddObserver(EventName.DamageReceived, DamageReceived);
+        Observer.Instance.AddObserver(EventName.ReactivatePlatform, ReactivatePlatform);
+        Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
     }
-
 
     public void StartGame()
     {
@@ -208,7 +207,7 @@ public class GameManager : MonoBehaviour
         _coinAmount.transform.parent.gameObject.SetActive(false);
 
 
-        Observer.Instance.Notify("Joy");
+        Observer.Instance.Notify(EventName.Joy);
         _joystick.transform.parent.gameObject.SetActive(false);
         _joystick.enabled = false;
 
@@ -256,14 +255,14 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Observer.Instance.Notify("DisableAllLoot");
+        Observer.Instance.Notify(EventName.DisableAllLoot);
 
-        Observer.Instance.RemoveObserver("WaveCompleted", WaveCompleted);
-        Observer.Instance.RemoveObserver("TimeLeft", TimeLeft);
-        Observer.Instance.RemoveObserver("DamageReceived", DamageReceived);
-        Observer.Instance.RemoveObserver("ReactivatePlatform", ReactivatePlatform);
-        Observer.Instance.RemoveObserver("DropLoot", DropLoot);
-        Observer.Instance.AddObserver("UpdateWalletUI", UpdateWalletUI);
+        Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);
+        Observer.Instance.RemoveObserver(EventName.TimeLeft, TimeLeft);
+        Observer.Instance.RemoveObserver(EventName.DamageReceived, DamageReceived);
+        Observer.Instance.RemoveObserver(EventName.ReactivatePlatform, ReactivatePlatform);
+        Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
 
         Time.timeScale = 0;
         _gameTimer.StopTimer();

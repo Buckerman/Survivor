@@ -18,7 +18,7 @@ public class DamageText : MonoBehaviour
     public void Initialize(DamageTextPool pool)
     {
         _damageTextPool = pool;
-        Observer.Instance.AddObserver("DisableAllDamageText", DisableAllDamage);
+        Observer.Instance.AddObserver(EventName.DisableAllDamageText, DisableAllDamage);
     }
 
     public void Setup(int damageAmount, Color color)
@@ -46,6 +46,6 @@ public class DamageText : MonoBehaviour
     }
     private void RemoveObserver()
     {
-        Observer.Instance.RemoveObserver("DisableAllDamageText", DisableAllDamage);
+        Observer.Instance.RemoveObserver(EventName.DisableAllDamageText, DisableAllDamage);
     }
 }

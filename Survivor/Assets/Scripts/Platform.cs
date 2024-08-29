@@ -15,7 +15,7 @@ public class Platform : MonoBehaviour
     private IEnumerator DropTimer()
     {
         yield return new WaitForSeconds(1.5f);
-        Observer.Instance.Notify("ReactivatePlatform", this.transform.parent.gameObject);
+        Observer.Instance.Notify(EventName.ReactivatePlatform, this.transform.parent.gameObject);
         this.transform.parent.gameObject.SetActive(false);
     }
 }

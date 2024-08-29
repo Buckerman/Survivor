@@ -7,24 +7,18 @@ namespace QuangDM.Common
 {
     public static class EventName
     {
-        public static readonly string PlayerOutSafeZone = "PlayerOutSafeZone";
-        public static readonly string PlayerGoIntoBossZone = "PlayerGoIntoBossZone";
-        public static readonly string DropHandle = "DropHandle";
-        public static readonly string BossDie = "BossDie";
-        public static readonly string GetEssences = "GetEssences";
-        public static readonly string GetRunes = "GetRunes";
-        public static readonly string PlayerEndGame = "PlayerEndGame";
-        public static readonly string SpawnMap = "SpawnMap";
-        public static readonly string LoadingCombatDone = "LoadingCombatDone";
-        public static readonly string PlayerInChestZone = "PlayerInChestZone";
-        public static readonly string PlayerOutChestZone = "PlayerOutChestZone";
-        public static readonly string ReturnBase = "ReturnBase";
-        public static readonly string GetBoosterPowerUp = "GetBoosterPowerUp";
-        public static readonly string GetChestInGame = "GetChestInGame";
-        public static readonly string LoadMapDone = "LoadMapDone";
-        public static readonly string PlayerEffectUpdate = "PlayerEffectUpdate";
-        public static readonly string PlayerInDoorSystem = "PlayerInDoorSystem";
-        public static readonly string PlayerOutDoorSystem = "PlayerOutDoorSystem";
+        public static readonly string DisableAllEnemies = "DisableAllEnemies";
+        public static readonly string DisableAllDamageText = "DisableAllDamageText";
+        public static readonly string DisableAllLoot = "DisableAllLoot";
+        public static readonly string WaveCompleted = "WaveCompleted";
+        public static readonly string TimeLeft = "TimeLeft";
+        public static readonly string DamageReceived = "DamageReceived";
+        public static readonly string ReactivatePlatform = "ReactivatePlatform";
+        public static readonly string DropLoot = "DropLoot";
+        public static readonly string UpdateWalletUI = "UpdateWalletUI";
+        public static readonly string CurrentWaveLevel = "CurrentWaveLevel";
+        public static readonly string Joy = "Joy";
+        public static readonly string Slash = "Slash";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {

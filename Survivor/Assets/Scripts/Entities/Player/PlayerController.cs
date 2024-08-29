@@ -57,7 +57,7 @@ namespace Entities.Player
         {
             SetState(new IdleState());
 
-            Observer.Instance.AddObserver("Joy", Joy);
+            Observer.Instance.AddObserver(EventName.Joy, Joy);
         }
 
         private void Joy(object data)

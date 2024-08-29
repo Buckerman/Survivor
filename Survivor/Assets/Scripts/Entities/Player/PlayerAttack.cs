@@ -19,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Start()
     {
-        Observer.Instance.AddObserver("Slash", Slash);
+        Observer.Instance.AddObserver(EventName.Slash, Slash);
     }
 
     private void FixedUpdate()

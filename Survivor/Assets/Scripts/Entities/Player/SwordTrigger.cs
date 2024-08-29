@@ -20,7 +20,7 @@ public class SwordTrigger : MonoBehaviour
             if (enemyHealth != null && !enemiesInRange.Contains(enemyHealth))
             {
                 enemiesInRange.Add(enemyHealth);
-                Observer.Instance.Notify("Slash", this);
+                Observer.Instance.Notify(EventName.Slash, this);
             }
         }
     }

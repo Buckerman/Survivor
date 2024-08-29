@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
         _player = playerTransform;
         _enemyPool = pool;
 
-        Observer.Instance.AddObserver("DisableAllEnemies", DisableAllEnemies);
+        Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
         agent.enabled = false;
     }
 
@@ -133,13 +133,13 @@ public class EnemyController : MonoBehaviour
         if (_enemyPool != null)
         {
             if (!this.gameObject.scene.isLoaded) return;
-            Observer.Instance.Notify("DropLoot", this.transform.position);
+            Observer.Instance.Notify(EventName.DropLoot, this.transform.position);
             Invoke(nameof(RemoveObserver), 0f);
             _enemyPool.ReturnEnemy(this);
         }
     }
     private void RemoveObserver()
     {
-        Observer.Instance.RemoveObserver("DisableAllEnemies", DisableAllEnemies);
+        Observer.Instance.RemoveObserver(EventName.DisableAllEnemies, DisableAllEnemies);
     }
 }

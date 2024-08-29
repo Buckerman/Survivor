@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour
         _enemyPool = new EnemyPool(enemyPrefabs, initialEnemiesPerWave);
         _totalEnemiesNextWave = initialEnemiesPerWave;
 
-        Observer.Instance.AddObserver("WaveCompleted", WaveCompleted);
+        Observer.Instance.AddObserver(EventName.WaveCompleted, WaveCompleted);
     }
 
     private void WaveCompleted(object data)
@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
         _enemiesSpawnedThisWave = 0;
         _totalEnemiesNextWave = initialEnemiesPerWave + (enemyIncrementPerWave * _currentWave);
 
-        Observer.Instance.Notify("CurrentWaveLevel");
+        Observer.Instance.Notify(EventName.DisableAllDamageText);
     }
 
     private void Update()

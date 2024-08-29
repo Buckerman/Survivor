@@ -16,7 +16,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _currentHealth -= (int)damage;
-        Observer.Instance.Notify("DamageReceived", (this, damage));
+        Observer.Instance.Notify(EventName.DamageReceived, (this, damage));
 
         if (_currentHealth <= 0)
             Die();
