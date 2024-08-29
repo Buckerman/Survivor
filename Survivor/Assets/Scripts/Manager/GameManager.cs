@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using Entities.Player;
-using Cinemachine; // Add this for Cinemachine
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _waveLevel;
     private TextMeshProUGUI _surviveTime;
     private TextMeshProUGUI _timeLeft;
+    private TextMeshProUGUI _coinAmount;
     private VariableJoystick _joystick;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
     public VariableJoystick Joystick => _joystick;
@@ -87,6 +88,9 @@ public class GameManager : MonoBehaviour
         if (_timeLeft == null)
             _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
 
+        if (_coinAmount == null)
+            _coinAmount = GameObject.Find("GUI/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
+
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
@@ -111,11 +115,14 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver("DamageReceived", DamageReceived);
         Observer.Instance.AddObserver("ReactivatePlatform", ReactivatePlatform);
         Observer.Instance.AddObserver("DropLoot", DropLoot);
+        Observer.Instance.AddObserver("UpdateWalletUI", UpdateWalletUI);
     }
+
 
     public void StartGame()
     {
         _waveLevel.text = "1";
+        _coinAmount.text = "0";
 
         PlayerHealth playerHealth = PlayerController.Instance.GetComponent<PlayerHealth>();
         if (playerHealth != null)
@@ -133,25 +140,6 @@ public class GameManager : MonoBehaviour
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
         //PlayerData.Instance.Save();
-    }
-
-    public void ReactivatePlatform(object data)
-    {
-        StartCoroutine(ReactivatePlatformCoroutine((GameObject)data));
-    }
-
-    private IEnumerator ReactivatePlatformCoroutine(GameObject platform)
-    {
-        yield return new WaitForSeconds(3f);
-        platform.SetActive(true);
-    }
-
-    private void SetupCameraFollow()
-    {
-        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
-        {
-            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
-        }
     }
 
     private void DamageReceived(object data)
@@ -187,6 +175,16 @@ public class GameManager : MonoBehaviour
         _lootPool.GetLoot((Vector3)data);
     }
 
+    private IEnumerator SurviveTime()
+    {
+        _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
+        _surviveTime.transform.parent.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        _surviveTime.transform.parent.gameObject.SetActive(false);
+    }
+
     private void TimeLeft(object data)
     {
         _timeLeft.transform.parent.gameObject.SetActive(true);
@@ -207,6 +205,8 @@ public class GameManager : MonoBehaviour
 
         _gameTimer.transform.parent.gameObject.SetActive(false);
         _waveLevel.transform.parent.gameObject.SetActive(false);
+        _coinAmount.transform.parent.gameObject.SetActive(false);
+
 
         Observer.Instance.Notify("Joy");
         _joystick.transform.parent.gameObject.SetActive(false);
@@ -221,6 +221,8 @@ public class GameManager : MonoBehaviour
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.transform.parent.gameObject.SetActive(true);
         _waveLevel.transform.parent.gameObject.SetActive(true);
+        _coinAmount.transform.parent.gameObject.SetActive(true);
+
         _joystick.transform.parent.gameObject.SetActive(true);
         _joystick.enabled = true;
 
@@ -228,15 +230,55 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1;
     }
-
-    private IEnumerator SurviveTime()
+    private void UpdateWalletUI(object data)
     {
-        _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
-        _surviveTime.transform.parent.gameObject.SetActive(true);
+        _coinAmount.text = data.ToString();
+    }
 
-        yield return new WaitForSecondsRealtime(2f);
+    private void SetupCameraFollow()
+    {
+        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
+        {
+            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
+        }
+    }
 
-        _surviveTime.transform.parent.gameObject.SetActive(false);
+    public void ReactivatePlatform(object data)
+    {
+        StartCoroutine(ReactivatePlatformCoroutine((GameObject)data));
+    }
+
+    private IEnumerator ReactivatePlatformCoroutine(GameObject platform)
+    {
+        yield return new WaitForSeconds(3f);
+        platform.SetActive(true);
+    }
+
+    public void EndGame()
+    {
+        Observer.Instance.Notify("DisableAllLoot");
+
+        Observer.Instance.RemoveObserver("WaveCompleted", WaveCompleted);
+        Observer.Instance.RemoveObserver("TimeLeft", TimeLeft);
+        Observer.Instance.RemoveObserver("DamageReceived", DamageReceived);
+        Observer.Instance.RemoveObserver("ReactivatePlatform", ReactivatePlatform);
+        Observer.Instance.RemoveObserver("DropLoot", DropLoot);
+        Observer.Instance.AddObserver("UpdateWalletUI", UpdateWalletUI);
+
+        Time.timeScale = 0;
+        _gameTimer.StopTimer();
+        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
+        _defeatGame.transform.parent.gameObject.SetActive(true);
+        _joystick.transform.parent.gameObject.SetActive(false);
+
+        StartCoroutine(ReloadSceneAfterDelay(2.0f));
+    }
+
+    private IEnumerator ReloadSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //private void BakeNavMesh()
@@ -263,29 +305,4 @@ public class GameManager : MonoBehaviour
     //    }
     //}
 
-    public void EndGame()
-    {
-        Observer.Instance.Notify("DisableAllLoot");
-
-        Observer.Instance.RemoveObserver("WaveCompleted", WaveCompleted);
-        Observer.Instance.RemoveObserver("TimeLeft", TimeLeft);
-        Observer.Instance.RemoveObserver("DamageReceived", DamageReceived);
-        Observer.Instance.RemoveObserver("ReactivatePlatform", ReactivatePlatform);
-        Observer.Instance.RemoveObserver("DropLoot", DropLoot);
-
-        Time.timeScale = 0;
-        _gameTimer.StopTimer();
-        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
-        _defeatGame.transform.parent.gameObject.SetActive(true);
-        _joystick.transform.parent.gameObject.SetActive(false);
-
-        StartCoroutine(ReloadSceneAfterDelay(2.0f));
-    }
-
-    private IEnumerator ReloadSceneAfterDelay(float delay)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
 }

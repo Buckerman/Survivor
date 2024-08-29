@@ -2897,9 +2897,10 @@ GameObject:
   - component: {fileID: 5218213291368542554}
   - component: {fileID: 7208909520932055161}
   - component: {fileID: 5727005709693059450}
-  - component: {fileID: 2692370054954391934}
-  - component: {fileID: 5032794199111803448}
   - component: {fileID: 965878199754275489}
+  - component: {fileID: 5032794199111803448}
+  - component: {fileID: 2692370054954391934}
+  - component: {fileID: 182321741213678943}
   - component: {fileID: 8459363523458530232}
   - component: {fileID: 2854538049833962971}
   - component: {fileID: 2494914002511229249}
@@ -2976,7 +2977,7 @@ MonoBehaviour:
   magnitude: 0
   jumpHeight: 2
   gravity: -9.81
---- !u!114 &2692370054954391934
+--- !u!114 &965878199754275489
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2985,10 +2986,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7505544566272607256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7e8243775a3e294b9fad7583ad43bb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 80088aaf2e8363c4582d409593254c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  attackDamage: 12
+  leftHandIK: {fileID: 8703609542460928080}
+  leftHandTarget: {fileID: 1388589067487881134}
 --- !u!114 &5032794199111803448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3008,7 +3011,7 @@ MonoBehaviour:
   rightHandIK: {fileID: 5460791103660342563}
   rightHandTarget: {fileID: 2612028779334519636}
   heightTolerance: 0.5
---- !u!114 &965878199754275489
+--- !u!114 &2692370054954391934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3017,12 +3020,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 7505544566272607256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80088aaf2e8363c4582d409593254c32, type: 3}
+  m_Script: {fileID: 11500000, guid: d7e8243775a3e294b9fad7583ad43bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 12
-  leftHandIK: {fileID: 8703609542460928080}
-  leftHandTarget: {fileID: 1388589067487881134}
+  maxHealth: 100
+--- !u!114 &182321741213678943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7505544566272607256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202ba6d687ea84e448c208665b2d30dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8459363523458530232
 Animator:
   serializedVersion: 5

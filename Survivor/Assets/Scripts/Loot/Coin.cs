@@ -1,7 +1,10 @@
+using Entities.Player;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 
 public class Coin : Loot
 {
+    private int _amount = 1;
     public override void Initialize(Vector3 position, LootPool pool)
     {
         base.Initialize(position, pool);
@@ -11,7 +14,7 @@ public class Coin : Loot
     {
         if (other.CompareTag("Player"))
         {
-            // Add coins to player's inventory or score
+            PlayerController.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);
             ReturnToPool();
         }
     }
