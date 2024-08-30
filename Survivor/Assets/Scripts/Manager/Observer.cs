@@ -19,6 +19,7 @@ namespace QuangDM.Common
         public static readonly string CurrentWaveLevel = "CurrentWaveLevel";
         public static readonly string Joy = "Joy";
         public static readonly string Slash = "Slash";
+        public static readonly string PickUpAllLoot = "PickUpAllLoot";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {
