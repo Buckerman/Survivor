@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour
         InitializeGame();
         SetupCameraFollow();
     }
-
     private void AssignReferences()
     {
         if (_gameTimer == null)
@@ -103,7 +102,6 @@ public class GameManager : MonoBehaviour
 
         PlayerController.Instance.Joystick = _joystick;
     }
-
     private void InitializeGame()
     {
         Application.targetFrameRate = 60;
@@ -117,7 +115,6 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
         Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
     }
-
     public void StartGame()
     {
         _waveLevel.text = "1";
@@ -140,7 +137,6 @@ public class GameManager : MonoBehaviour
         //PlayerData.Instance.ConversationID = 2;
         //PlayerData.Instance.Save();
     }
-
     private void DamageReceived(object data)
     {
         if (data == null) return;
@@ -173,7 +169,6 @@ public class GameManager : MonoBehaviour
     {
         _lootPool.GetLoot((Vector3)data);
     }
-
     private IEnumerator SurviveTime()
     {
         _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
@@ -183,20 +178,17 @@ public class GameManager : MonoBehaviour
 
         _surviveTime.transform.parent.gameObject.SetActive(false);
     }
-
     private void TimeLeft(object data)
     {
         _timeLeft.transform.parent.gameObject.SetActive(true);
         _timeLeft.text = $"{(int)_gameTimer.CurrentTime}s";
     }
-
     private void WaveCompleted(object data)
     {
         _groundSurface.GetComponent<EnemySpawner>().enabled = false;
         StartCoroutine(WaveDelay(2.0f));
         _waveLevel.text = data.ToString();
     }
-
     private IEnumerator WaveDelay(float delay)
     {
         _timeLeft.transform.parent.gameObject.SetActive(false);
@@ -233,7 +225,6 @@ public class GameManager : MonoBehaviour
     {
         _coinAmount.text = data.ToString();
     }
-
     private void SetupCameraFollow()
     {
         if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
@@ -241,18 +232,15 @@ public class GameManager : MonoBehaviour
             _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
         }
     }
-
     public void ReactivatePlatform(object data)
     {
         StartCoroutine(ReactivatePlatformCoroutine((GameObject)data));
     }
-
     private IEnumerator ReactivatePlatformCoroutine(GameObject platform)
     {
         yield return new WaitForSeconds(3f);
         platform.SetActive(true);
     }
-
     public void EndGame()
     {
         Observer.Instance.Notify(EventName.DisableAllLoot);
@@ -272,7 +260,6 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
-
     private IEnumerator ReloadSceneAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2446417706359320290}
   - component: {fileID: 621805954606585814}
   - component: {fileID: -5027592555022169034}
-  - component: {fileID: 249294995280527220}
   m_Layer: 11
   m_Name: Coin
   m_TagString: Loot
@@ -97,24 +96,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a0f59dd87b7a164aabf60455b832bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &249294995280527220
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3102827308729024908}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7976477, y: 1.7976477, z: 0.1326072}
-  m_Center: {x: 0, y: -2.3555775e-16, z: -0.0663036}
+  pickUpRadius: 1.5
+  moveSpeed: 10

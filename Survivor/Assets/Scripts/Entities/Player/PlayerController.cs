@@ -15,7 +15,7 @@ namespace Entities.Player
         [SerializeField] private float rotationSpeed = 20f;
         [SerializeField] private float climbSpeed = 3f;
         [SerializeField] private float moveTowardsDistance = 2f;
-        [SerializeField] private float edgeDetectionDistance = 1f;
+        [SerializeField] private float edgeDetectionDistance = 2f;
 
         public float magnitude;
         private CharacterController _controller;
