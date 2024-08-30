@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float radius = 10f;
     [SerializeField] private float maxSampleDistance = 5f;
 
-    [SerializeField] private int initialEnemiesPerWave = 30;
+    [SerializeField] private int initialEnemiesPerWave = 50;
     [SerializeField] private int enemyIncrementPerWave = 5;
 
     private float _timeSinceLastSpawn;
