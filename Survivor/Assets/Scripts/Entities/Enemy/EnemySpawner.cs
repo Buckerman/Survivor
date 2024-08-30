@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
         _enemiesSpawnedThisWave = 0;
         _totalEnemiesNextWave = initialEnemiesPerWave + (enemyIncrementPerWave * _currentWave);
 
-        Observer.Instance.Notify(EventName.DisableAllDamageText);
+        Observer.Instance.Notify(EventName.CurrentWaveLevel);
     }
 
     private void Update()

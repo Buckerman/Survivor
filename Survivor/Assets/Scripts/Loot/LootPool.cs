@@ -5,7 +5,8 @@ public class LootPool
 {
     private List<Loot> lootPrefabs;
     private int poolSize;
-    private Queue<Loot> pool;
+    private Queue<Loot> coinPool;
+    private Queue<Loot> healthPackPool;
     private Loot coinPrefab;
     private Loot healthPackPrefab;
 
@@ -13,15 +14,25 @@ public class LootPool
     {
         this.lootPrefabs = lootPrefabs;
         this.poolSize = poolSize;
-        pool = new Queue<Loot>();
 
-        // Dynamically find the Coin and HealthPack prefabs
+        // Initialize separate pools
+        coinPool = new Queue<Loot>();
+        healthPackPool = new Queue<Loot>();
+
+        // Find the Coin and HealthPack prefabs
         coinPrefab = lootPrefabs.Find(loot => loot is Coin);
         healthPackPrefab = lootPrefabs.Find(loot => loot is HealthPack);
 
+        // Populate the pools
+        PopulatePool(coinPool, coinPrefab);
+        PopulatePool(healthPackPool, healthPackPrefab);
+    }
+
+    private void PopulatePool(Queue<Loot> pool, Loot prefab)
+    {
         for (int i = 0; i < poolSize; i++)
         {
-            Loot loot = Object.Instantiate(lootPrefabs[Random.Range(0, lootPrefabs.Count)]);
+            Loot loot = Object.Instantiate(prefab);
             loot.gameObject.SetActive(false);
             pool.Enqueue(loot);
         }
@@ -30,32 +41,33 @@ public class LootPool
     public Loot GetLoot(Vector3 position)
     {
         Loot lootToSpawn;
+        float randomValue = Random.value;
 
-        if (Random.value <= 0.05f && healthPackPrefab != null)
+        if (randomValue <= 0.05f && healthPackPrefab != null)
         {
-            lootToSpawn = GetLootFromPoolOrInstantiate(healthPackPrefab);
+            lootToSpawn = GetLootFromPool(healthPackPool, healthPackPrefab);
         }
         else
         {
-            lootToSpawn = GetLootFromPoolOrInstantiate(coinPrefab);
+            lootToSpawn = GetLootFromPool(coinPool, coinPrefab);
         }
 
         lootToSpawn.Initialize(position, this);
         return lootToSpawn;
     }
 
-    private Loot GetLootFromPoolOrInstantiate(Loot lootPrefab)
+    private Loot GetLootFromPool(Queue<Loot> pool, Loot prefab)
     {
         if (pool.Count > 0)
         {
             Loot loot = pool.Dequeue();
-            if (loot != null && loot.gameObject != null)
-            {
-                loot.gameObject.SetActive(true);
-                return loot;
-            }
+            loot.gameObject.SetActive(true);
+            return loot;
         }
-        return Object.Instantiate(lootPrefab);
+        else
+        {
+            return Object.Instantiate(prefab);
+        }
     }
 
     public void ReturnLoot(Loot loot)
@@ -63,7 +75,15 @@ public class LootPool
         if (loot != null && loot.gameObject != null)
         {
             loot.gameObject.SetActive(false);
-            pool.Enqueue(loot);
+
+            if (loot is Coin)
+            {
+                coinPool.Enqueue(loot);
+            }
+            else if (loot is HealthPack)
+            {
+                healthPackPool.Enqueue(loot);
+            }
         }
     }
 }
