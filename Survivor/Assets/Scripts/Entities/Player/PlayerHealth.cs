@@ -1,4 +1,5 @@
-﻿using QuangDM.Common;
+﻿using Entities.Player;
+using QuangDM.Common;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     private int _currentHealth;
     private PlayerHealthBar _healthBar;
+
+    public PlayerHealthBar HealthBar { get => _healthBar; set => _healthBar = value; }
 
     private void Awake()
     {
@@ -43,9 +46,19 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
+        StartCoroutine(HandleDeath());
+    }
+
+    private IEnumerator HandleDeath()
+    {
         Observer.Instance.Notify(EventName.DisableAllEnemies);
         Observer.Instance.Notify(EventName.DisableAllDamageText);
+        PlayerController.Instance.GetComponent<PlayerWallet>().ResetWallet();
+        _healthBar.gameObject.SetActive(false);
 
+        yield return new WaitForSeconds(0.3f);
         GameManager.Instance.EndGame();
     }
+
+
 }

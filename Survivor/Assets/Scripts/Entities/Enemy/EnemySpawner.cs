@@ -7,10 +7,10 @@ using Entities.Player;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<EnemyController> enemyPrefabs;
-    [SerializeField] private float spawnInterval = 0.5f;
+    [SerializeField] private float spawnInterval = 0.3f;
 
-    [SerializeField] private float radius = 10f;
-    [SerializeField] private float maxSampleDistance = 5f;
+    [SerializeField] private float radius = 15f;
+    [SerializeField] private float maxSampleDistance = 2f;
 
     [SerializeField] private int initialEnemiesPerWave = 50;
     [SerializeField] private int enemyIncrementPerWave = 5;
@@ -67,15 +67,13 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 GetRandomPositionOnGround()
     {
         Vector3 playerPosition = PlayerController.Instance.transform.position;
-        int buildingLayerMask = LayerMask.GetMask("Building");
-
         Vector3 randomDirection = new Vector3(
             Random.Range(-1f, 1f),
             0f,
             Random.Range(-1f, 1f)
         ).normalized;
 
-        float randomDistance = Random.Range(5f, radius);
+        float randomDistance = Random.Range(10f, radius);
 
         Vector3 randomPosition = playerPosition + randomDirection * randomDistance;
 
@@ -88,4 +86,8 @@ public class EnemySpawner : MonoBehaviour
         return Vector3.zero;
     }
 
+    void OnDestroy()
+    {
+        Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);
+    }
 }

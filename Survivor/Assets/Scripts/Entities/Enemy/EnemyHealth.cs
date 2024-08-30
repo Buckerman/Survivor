@@ -24,6 +24,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
+        Observer.Instance.Notify(EventName.DropLoot, this.transform.position);
         this.gameObject.SetActive(false);
     }
 }

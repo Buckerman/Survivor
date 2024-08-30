@@ -132,8 +132,6 @@ public class EnemyController : MonoBehaviour
     {
         if (_enemyPool != null)
         {
-            if (!this.gameObject.scene.isLoaded) return;
-            Observer.Instance.Notify(EventName.DropLoot, this.transform.position);
             Invoke(nameof(RemoveObserver), 0f);
             _enemyPool.ReturnEnemy(this);
         }

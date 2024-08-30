@@ -23,27 +23,23 @@ public class Coin : Loot
 
         if (distanceToPlayer <= pickUpRadius)
         {
-            PickUpLoot();
-        }
-    }
-
-    private void PickUpLoot()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, PlayerController.Instance.transform.position, moveSpeed * Time.deltaTime);
-        if (distanceToPlayer <= 0.1f)
-        {
-            PlayerController.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);
-            Invoke(nameof(RemoveObserver), 0f);
-            ReturnToPool();
+            transform.position = Vector3.MoveTowards(transform.position, PlayerController.Instance.transform.position, moveSpeed * Time.deltaTime);
+            if (distanceToPlayer <= 0.1f)
+            {
+                DOTween.Kill(transform);
+                PlayerController.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);
+                Invoke(nameof(RemoveObserver), 0f);
+                ReturnToPool();
+            }
         }
     }
 
     private void PickUpAllLoot(object data)
     {
-        transform.DOMove(PlayerController.Instance.transform.position, 0.5f).OnComplete(() =>
+        if (this != null && gameObject.activeInHierarchy)
         {
-            Observer.Instance.Notify(EventName.DisableAllLoot);
-        });
+            transform.DOMove(PlayerController.Instance.transform.position, 0.2f);
+        }
     }
 
     private void RemoveObserver()

@@ -545,17 +545,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 570926191610588933, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: a259fabdbbb762f45b9d375d9fbd7bd7, type: 2}
     - target: {fileID: 7997017068351335157, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
       propertyPath: m_Name
       value: MapGround
       objectReference: {fileID: 0}
     - target: {fileID: 8113581185861112508, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
-      propertyPath: initialEnemiesPerWave
-      value: 50
+      propertyPath: radius
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113581185861112508, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
+      propertyPath: spawnInterval
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8614657893438255784, guid: a38aa5324dbf56c4a865c137a54b147e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -678,6 +678,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3980826668450209691, guid: 889fa7821008ba84a9a3a1ef8e1dd584, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5218213291368542554, guid: 889fa7821008ba84a9a3a1ef8e1dd584, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -919,6 +923,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1466180260562233762, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2839851595514462245, guid: f1f8e4adba16c83439512a977ad565f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0

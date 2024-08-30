@@ -67,7 +67,9 @@ public class GameManager : MonoBehaviour
     private void AssignReferences()
     {
         if (_gameTimer == null)
+        {
             _gameTimer = FindObjectOfType<GameTimer>();
+        }
 
         if (_groundSurface == null)
             _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
@@ -124,6 +126,7 @@ public class GameManager : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.ResetHealth();
+            playerHealth.HealthBar.gameObject.SetActive(true);
         }
 
         StartCoroutine(SurviveTime());
@@ -198,8 +201,8 @@ public class GameManager : MonoBehaviour
         _waveLevel.transform.parent.gameObject.SetActive(false);
         _coinAmount.transform.parent.gameObject.SetActive(false);
 
-
         Observer.Instance.Notify(EventName.Joy);
+
         _joystick.transform.parent.gameObject.SetActive(false);
         _joystick.enabled = false;
 
@@ -250,7 +253,7 @@ public class GameManager : MonoBehaviour
         Observer.Instance.RemoveObserver(EventName.DamageReceived, DamageReceived);
         Observer.Instance.RemoveObserver(EventName.ReactivatePlatform, ReactivatePlatform);
         Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
-        Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
+        Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
 
         Time.timeScale = 0;
         _gameTimer.StopTimer();

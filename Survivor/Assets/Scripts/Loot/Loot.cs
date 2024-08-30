@@ -5,16 +5,16 @@ using UnityEngine;
 public abstract class Loot : MonoBehaviour
 {
     protected LootPool lootPool;
-    private float initialYPosition;
+    private float yPositionOffset;
 
     public virtual void Initialize(Vector3 position, LootPool pool)
     {
-        if (Math.Abs(initialYPosition) < Mathf.Epsilon)
+        if (Math.Abs(yPositionOffset) < Mathf.Epsilon)
         {
-            initialYPosition = transform.position.y;
+            yPositionOffset = transform.position.y;
         }
 
-        Vector3 newPosition = new Vector3(position.x, initialYPosition, position.z);
+        Vector3 newPosition = new Vector3(position.x, position.y + yPositionOffset, position.z);
         transform.position = newPosition;
         lootPool = pool;
 
@@ -28,8 +28,11 @@ public abstract class Loot : MonoBehaviour
 
     public void ReturnToPool()
     {
-        Invoke(nameof(RemoveObserver), 0f);
-        lootPool.ReturnLoot(this);
+        if (this != null)
+        {
+            Invoke(nameof(RemoveObserver), 0f);
+            lootPool.ReturnLoot(this);
+        }
     }
 
     private void RemoveObserver()
