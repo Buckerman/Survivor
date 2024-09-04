@@ -52,7 +52,10 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator HandleDeath()
     {
         Observer.Instance.Notify(EventName.DisableAllEnemies);
+        Observer.Instance.Notify(EventName.DisableAllBloodSplash);
         Observer.Instance.Notify(EventName.DisableAllDamageText);
+        Observer.Instance.Notify(EventName.DisableAllLoot);
+
         PlayerController.Instance.GetComponent<PlayerWallet>().ResetWallet();
         _healthBar.gameObject.SetActive(false);
 

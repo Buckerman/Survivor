@@ -10,6 +10,7 @@ namespace QuangDM.Common
         public static readonly string DisableAllEnemies = "DisableAllEnemies";
         public static readonly string DisableAllDamageText = "DisableAllDamageText";
         public static readonly string DisableAllLoot = "DisableAllLoot";
+        public static readonly string DisableAllBloodSplash = "DisableAllBloodSplash";
         public static readonly string WaveCompleted = "WaveCompleted";
         public static readonly string TimeLeft = "TimeLeft";
         public static readonly string DamageReceived = "DamageReceived";
@@ -20,6 +21,7 @@ namespace QuangDM.Common
         public static readonly string Joy = "Joy";
         public static readonly string Slash = "Slash";
         public static readonly string PickUpAllLoot = "PickUpAllLoot";
+        public static readonly string BloodSpawn = "BloodSpawn";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {

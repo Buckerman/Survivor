@@ -23,9 +23,11 @@ public class BulletPool
 
     public Bullet GetBullet()
     {
+        Bullet bullet;
+
         if (pool.Count > 0)
         {
-            Bullet bullet = pool.Dequeue();
+            bullet = pool.Dequeue();
             if (bullet != null && bullet.gameObject != null)
             {
                 bullet.gameObject.SetActive(true);

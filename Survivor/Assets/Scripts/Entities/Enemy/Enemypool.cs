@@ -32,9 +32,10 @@ public class EnemyPool
 
     public EnemyController GetEnemy()
     {
+        EnemyController enemy;
         if (pool.Count > 0)
         {
-            EnemyController enemy = pool.Dequeue();
+            enemy = pool.Dequeue();
             enemy.gameObject.SetActive(true);
             return enemy;
         }

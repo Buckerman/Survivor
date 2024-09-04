@@ -24,9 +24,11 @@ public class DamageTextPool
 
     public DamageText GetDamageText()
     {
+        DamageText damageText;
+
         if (pool.Count > 0)
         {
-            DamageText damageText = pool.Dequeue();
+            damageText = pool.Dequeue();
             if (damageText != null && damageText.gameObject != null)
             {
                 damageText.gameObject.SetActive(true);

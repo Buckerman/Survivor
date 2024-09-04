@@ -63,6 +63,7 @@ public class GameTimer : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         Observer.Instance.Notify(EventName.DisableAllEnemies);
+        Observer.Instance.Notify(EventName.DisableAllBloodSplash);
         Observer.Instance.Notify(EventName.DisableAllDamageText);
         Observer.Instance.Notify(EventName.DisableAllLoot);
         Observer.Instance.Notify(EventName.WaveCompleted, waveLevel);

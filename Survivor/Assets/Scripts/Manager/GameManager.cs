@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Loot> lootPrefabs;
     [SerializeField] private int lootPoolSize = 10;
     private LootPool _lootPool;
+
+    [Header("Blood Splash Settings")]
+    [SerializeField] private BloodSplash bloodSplashPrefab;
+    [SerializeField] private int bloodSplashPoolSize = 10;
+    private BloodSplashPool _bloodSplashPool;
+
     public static GameManager Instance { get; private set; }
 
     private GameTimer _gameTimer;
@@ -32,8 +38,6 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _coinAmount;
     private VariableJoystick _joystick;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
-    public VariableJoystick Joystick => _joystick;
-
 
     private void Awake()
     {
@@ -67,9 +71,7 @@ public class GameManager : MonoBehaviour
     private void AssignReferences()
     {
         if (_gameTimer == null)
-        {
             _gameTimer = FindObjectOfType<GameTimer>();
-        }
 
         if (_groundSurface == null)
             _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.DamageReceived, DamageReceived);
         Observer.Instance.AddObserver(EventName.ReactivatePlatform, ReactivatePlatform);
         Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
     }
     public void StartGame()
@@ -134,7 +137,8 @@ public class GameManager : MonoBehaviour
         _gameTimer.StartTimer();
 
         _damageTextPool = new DamageTextPool(damageTextPrefab, damageTextPoolSize);
-        _lootPool = new LootPool(lootPrefabs,lootPoolSize);
+        _lootPool = new LootPool(lootPrefabs, lootPoolSize);
+        _bloodSplashPool = new BloodSplashPool(bloodSplashPrefab, bloodSplashPoolSize);
 
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
@@ -167,6 +171,10 @@ public class GameManager : MonoBehaviour
         damageText.transform.position = targetTransform.position + offset;
 
         damageText.Initialize(_damageTextPool);
+    }
+    private void BloodSpawn(object data)
+    {
+        _bloodSplashPool.GetBloodSplash((Transform)data);
     }
     private void DropLoot(object data)
     {
@@ -246,13 +254,12 @@ public class GameManager : MonoBehaviour
     }
     public void EndGame()
     {
-        Observer.Instance.Notify(EventName.DisableAllLoot);
-
         Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);
         Observer.Instance.RemoveObserver(EventName.TimeLeft, TimeLeft);
         Observer.Instance.RemoveObserver(EventName.DamageReceived, DamageReceived);
         Observer.Instance.RemoveObserver(EventName.ReactivatePlatform, ReactivatePlatform);
         Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
 
         Time.timeScale = 0;

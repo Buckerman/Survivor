@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
 {
     [Header("Enemy Settings")]
     [SerializeField] private float enemySpeed = 2f;
-    [SerializeField] private float enemyAttackRange = 2f;
+    [SerializeField] private float enemyAttackRange = 1.8f;
     [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
 
