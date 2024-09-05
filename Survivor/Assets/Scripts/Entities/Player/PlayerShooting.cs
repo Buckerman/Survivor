@@ -79,19 +79,22 @@ public class PlayerShooting : MonoBehaviour
 
     private Transform FindClosestEnemy()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Vector3 currentPosition = transform.position;
+
+        Collider[] hitColliders = Physics.OverlapSphere(currentPosition, Player.Instance.shootRange, LayerMask.GetMask("Enemy"));
         float closestDistance = Mathf.Infinity;
         Transform closestTransform = null;
 
-        foreach (GameObject enemy in enemies)
+        foreach (Collider hitCollider in hitColliders)
         {
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            float distance = Vector3.Distance(currentPosition, hitCollider.transform.position);
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestTransform = enemy.transform;
+                closestTransform = hitCollider.transform;
             }
         }
+
         return closestTransform;
     }
 

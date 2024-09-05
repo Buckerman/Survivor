@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public float speed = 5f;
     public float rotationSpeed = 20f;
     public float climbSpeed = 3f;
+    public float shootRange = 10f;
+
 
     private void Awake()
     {
