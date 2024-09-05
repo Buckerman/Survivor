@@ -11,11 +11,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private ChainIKConstraint leftHandIK;
     [SerializeField] private Transform leftHandTarget;
 
-    private Animator animator;
+    private Animator _animator;
+    private TrailRenderer _trailRenderer;
     private SwordTrigger currentSwordTrigger;
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
     private void Start()
     {
@@ -30,7 +32,12 @@ public class PlayerAttack : MonoBehaviour
     private void Slash(object data)
     {
         currentSwordTrigger = (SwordTrigger)data;
-        animator.Play("PlayerAttack");
+        _animator.Play("PlayerAttack");
+    }
+
+    private void ActivateTrail()
+    {
+        _trailRenderer.enabled = !_trailRenderer.enabled;
     }
 
     private void DealDamage()

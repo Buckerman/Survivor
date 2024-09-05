@@ -60,7 +60,7 @@ public class GameTimer : MonoBehaviour
     {
         Observer.Instance.Notify(EventName.PickUpAllLoot);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
 
         Observer.Instance.Notify(EventName.DisableAllEnemies);
         Observer.Instance.Notify(EventName.DisableAllBloodSplash);

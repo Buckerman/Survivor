@@ -22,6 +22,7 @@ namespace QuangDM.Common
         public static readonly string Slash = "Slash";
         public static readonly string PickUpAllLoot = "PickUpAllLoot";
         public static readonly string BloodSpawn = "BloodSpawn";
+        public static readonly string PlayerLevelUp = "PlayerLevelUp";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {

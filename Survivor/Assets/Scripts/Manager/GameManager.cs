@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _surviveTime;
     private TextMeshProUGUI _timeLeft;
     private TextMeshProUGUI _coinAmount;
+    private TextMeshProUGUI _playerLevel;
     private VariableJoystick _joystick;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
@@ -60,7 +61,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AssignReferences();
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_waveLevel == null)
-            _waveLevel = GameObject.Find("GUI/WaveLevelBg/LevelText").GetComponentInChildren<TextMeshProUGUI>();
+            _waveLevel = GameObject.Find("GUI/HUDContainer/Container/WaveLevelBg/LevelText").GetComponent<TextMeshProUGUI>();
 
         if (_surviveTime == null)
             _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<TextMeshProUGUI>();
@@ -91,7 +91,10 @@ public class GameManager : MonoBehaviour
             _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
 
         if (_coinAmount == null)
-            _coinAmount = GameObject.Find("GUI/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
+            _coinAmount = GameObject.Find("GUI/HUDContainer/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_playerLevel == null)
+            _playerLevel = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/NumberText").GetComponent<TextMeshProUGUI>();
 
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
@@ -118,11 +121,13 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
         Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
+        Observer.Instance.AddObserver(EventName.PlayerLevelUp, PlayerLevelUp);
     }
     public void StartGame()
     {
         _waveLevel.text = "1";
-        _coinAmount.text = "0";
+        _coinAmount.text = "<sprite=0> 0";
+        _playerLevel.text = "0";
 
         PlayerHealth playerHealth = Player.Instance.GetComponent<PlayerHealth>();
         if (playerHealth != null)
@@ -142,6 +147,10 @@ public class GameManager : MonoBehaviour
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
         //PlayerData.Instance.Save();
+    }
+    private void PlayerLevelUp(object data)
+    {
+        _playerLevel.text = data.ToString();
     }
     private void DamageReceived(object data)
     {
@@ -206,7 +215,6 @@ public class GameManager : MonoBehaviour
 
         _gameTimer.transform.parent.gameObject.SetActive(false);
         _waveLevel.transform.parent.gameObject.SetActive(false);
-        _coinAmount.transform.parent.gameObject.SetActive(false);
 
         Observer.Instance.Notify(EventName.Joy);
 
@@ -222,8 +230,6 @@ public class GameManager : MonoBehaviour
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.transform.parent.gameObject.SetActive(true);
         _waveLevel.transform.parent.gameObject.SetActive(true);
-        _coinAmount.transform.parent.gameObject.SetActive(true);
-
         _joystick.transform.parent.gameObject.SetActive(true);
         _joystick.enabled = true;
 
@@ -233,7 +239,7 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateWalletUI(object data)
     {
-        _coinAmount.text = data.ToString();
+        _coinAmount.text = $"<sprite=0> {data}";
     }
     private void SetupCameraFollow()
     {
@@ -260,6 +266,7 @@ public class GameManager : MonoBehaviour
         Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
         Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
+        Observer.Instance.RemoveObserver(EventName.PlayerLevelUp, PlayerLevelUp);
 
         Time.timeScale = 0;
         _gameTimer.StopTimer();
@@ -275,7 +282,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
     //private void BakeNavMesh()
     //{
     //    GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
@@ -299,5 +305,4 @@ public class GameManager : MonoBehaviour
     //        }
     //    }
     //}
-
 }
