@@ -1,5 +1,4 @@
-﻿using Entities.Player;
-using QuangDM.Common;
+﻿using QuangDM.Common;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,10 +55,10 @@ public class PlayerHealth : MonoBehaviour
         Observer.Instance.Notify(EventName.DisableAllDamageText);
         Observer.Instance.Notify(EventName.DisableAllLoot);
 
-        PlayerController.Instance.GetComponent<PlayerWallet>().ResetWallet();
+        Player.Instance.GetComponent<PlayerWallet>().ResetWallet();
         _healthBar.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
         GameManager.Instance.EndGame();
     }
 

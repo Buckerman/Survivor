@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using QuangDM.Common;
-using Entities.Player;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -58,7 +57,7 @@ public class EnemySpawner : MonoBehaviour
         if (spawnPosition != Vector3.zero)
         {
             enemy.transform.position = spawnPosition;
-            enemy.Initialize(PlayerController.Instance.transform, _enemyPool);
+            enemy.Initialize(Player.Instance.transform, _enemyPool);
             enemy.NavMeshAgent.enabled = true;
             enemy.SetState(new WalkState());
         }
@@ -66,7 +65,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Vector3 GetRandomPositionOnGround()
     {
-        Vector3 playerPosition = PlayerController.Instance.transform.position;
+        Vector3 playerPosition = Player.Instance.transform.position;
         Vector3 randomDirection = new Vector3(
             Random.Range(-1f, 1f),
             0f,

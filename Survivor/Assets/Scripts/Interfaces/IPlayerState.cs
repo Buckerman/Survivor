@@ -1,5 +1,3 @@
-using Entities.Player;
-
 public interface IPlayerState
 {
     void Enter();

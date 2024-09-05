@@ -1,19 +1,18 @@
-using Entities.Player;
 using UnityEngine;
 
 public class RunningState : IPlayerState
 {
-    private PlayerController _player;
+    private PlayerController _playerController;
 
     public void Enter()
     {
-        _player = PlayerController.Instance;
-        _player.SetAnimation("isRunning", true);
+        _playerController = Player.Instance.GetComponent<PlayerController>();
+        _playerController.SetAnimation("isRunning", true);
     }
 
     public void Exit()
     {
-        _player.SetAnimation("isRunning", false);   
+        _playerController.SetAnimation("isRunning", false);   
     }
 
     public void Update()
@@ -23,13 +22,13 @@ public class RunningState : IPlayerState
 
     public void HandleInput()
     {
-        if (_player.IsClimbing)
+        if (_playerController.IsClimbing)
         {
-            _player.SetState(new ClimbingState());
+            _playerController.SetState(new ClimbingState());
         }
-        else if (_player.magnitude <= 0.1f)
+        else if (_playerController.magnitude <= 0.1f)
         {
-            _player.SetState(new IdleState());
+            _playerController.SetState(new IdleState());
         }
     }
 }

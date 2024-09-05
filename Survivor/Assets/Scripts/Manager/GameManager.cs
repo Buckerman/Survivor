@@ -6,7 +6,6 @@ using QuangDM.Common;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
-using Entities.Player;
 using Cinemachine;
 
 public class GameManager : MonoBehaviour
@@ -104,7 +103,7 @@ public class GameManager : MonoBehaviour
         _waveComplete.transform.parent.gameObject.SetActive(false);
         _timeLeft.transform.parent.gameObject.SetActive(false);
 
-        PlayerController.Instance.Joystick = _joystick;
+        Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
     }
     private void InitializeGame()
     {
@@ -125,7 +124,7 @@ public class GameManager : MonoBehaviour
         _waveLevel.text = "1";
         _coinAmount.text = "0";
 
-        PlayerHealth playerHealth = PlayerController.Instance.GetComponent<PlayerHealth>();
+        PlayerHealth playerHealth = Player.Instance.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
             playerHealth.ResetHealth();
@@ -238,9 +237,9 @@ public class GameManager : MonoBehaviour
     }
     private void SetupCameraFollow()
     {
-        if (_cinemachineVirtualCamera != null && PlayerController.Instance != null)
+        if (_cinemachineVirtualCamera != null && Player.Instance != null)
         {
-            _cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
+            _cinemachineVirtualCamera.Follow = Player.Instance.transform;
         }
     }
     public void ReactivatePlatform(object data)

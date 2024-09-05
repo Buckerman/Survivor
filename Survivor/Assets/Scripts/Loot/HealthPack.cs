@@ -1,4 +1,3 @@
-using Entities.Player;
 using UnityEngine;
 
 public class HealthPack : Loot
@@ -13,7 +12,7 @@ public class HealthPack : Loot
     {
         if (other.CompareTag("Player"))
         {
-            PlayerController.Instance.GetComponent<PlayerHealth>().Heal(_amount);
+            Player.Instance.GetComponent<PlayerHealth>().Heal(_amount);
             ReturnToPool();
         }
     }

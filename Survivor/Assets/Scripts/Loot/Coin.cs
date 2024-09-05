@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Entities.Player;
 using QuangDM.Common;
 using System;
 using UnityEngine;
@@ -19,15 +18,15 @@ public class Coin : Loot
 
     private void Update()
     {
-        distanceToPlayer = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
+        distanceToPlayer = Vector3.Distance(transform.position, Player.Instance.transform.position);
 
         if (distanceToPlayer <= pickUpRadius)
         {
-            transform.position = Vector3.MoveTowards(transform.position, PlayerController.Instance.transform.position, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, Player.Instance.transform.position, moveSpeed * Time.deltaTime);
             if (distanceToPlayer <= 0.1f)
             {
                 DOTween.Kill(transform);
-                PlayerController.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);
+                Player.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);
                 Invoke(nameof(RemoveObserver), 0f);
                 ReturnToPool();
             }
@@ -38,7 +37,7 @@ public class Coin : Loot
     {
         if (this != null && gameObject.activeInHierarchy)
         {
-            transform.DOMove(PlayerController.Instance.transform.position, 0.2f);
+            transform.DOMove(Player.Instance.transform.position, 0.2f);
         }
     }
 

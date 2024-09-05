@@ -1,13 +1,12 @@
-using Entities.Player;
 using UnityEngine;
 
 public class IdleState : IPlayerState
 {
-    private PlayerController _player;
+    private PlayerController _playerController;
 
     public void Enter()
     {
-        _player = PlayerController.Instance;
+        _playerController = Player.Instance.GetComponent<PlayerController>();
     }
 
     public void Exit()
@@ -21,13 +20,13 @@ public class IdleState : IPlayerState
 
     public void HandleInput()
     {
-        if (_player.IsClimbing)
+        if (_playerController.IsClimbing)
         {
-            _player.SetState(new ClimbingState());
+            _playerController.SetState(new ClimbingState());
         }
-        else if (_player.magnitude > 0.1f)
+        else if (_playerController.magnitude > 0.1f)
         {
-            _player.SetState(new RunningState());
+            _playerController.SetState(new RunningState());
         }
     }
 }

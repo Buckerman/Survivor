@@ -37,6 +37,7 @@ public class BloodSplashPool
         }
 
         bloodSplash.Initialize(enemyTransform, this);
+
         return bloodSplash;
     }
 

@@ -126,18 +126,27 @@ public class EnemyController : MonoBehaviour
 
     private void DisableAllEnemies(object data)
     {
-        OnDisable();
+        if (this != null)
+        {
+            OnDisable();
+        }
     }
+
     private void OnDisable()
     {
         if (_enemyPool != null)
         {
-            Invoke(nameof(RemoveObserver), 0f);
+            Invoke(nameof(RemoveObserver),0f);
             _enemyPool.ReturnEnemy(this);
         }
     }
+
     private void RemoveObserver()
     {
-        Observer.Instance.RemoveObserver(EventName.DisableAllEnemies, DisableAllEnemies);
+        if (Observer.Instance != null)
+        {
+            Observer.Instance.RemoveObserver(EventName.DisableAllEnemies, DisableAllEnemies);
+        }
     }
+
 }
