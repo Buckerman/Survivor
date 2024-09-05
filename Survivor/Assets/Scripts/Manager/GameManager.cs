@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI _coinAmount;
     private TextMeshProUGUI _playerLevel;
     private VariableJoystick _joystick;
+    private Image _experienceBar;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
     private void Awake()
@@ -99,6 +101,9 @@ public class GameManager : MonoBehaviour
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
+        if (_experienceBar == null)
+            _experienceBar = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/ExpBar").GetComponent<Image>();
+
         if (_cinemachineVirtualCamera == null)
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
@@ -107,6 +112,7 @@ public class GameManager : MonoBehaviour
         _timeLeft.transform.parent.gameObject.SetActive(false);
 
         Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
+        Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
     }
     private void InitializeGame()
     {

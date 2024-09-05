@@ -56,6 +56,7 @@ public class PlayerHealth : MonoBehaviour
         Observer.Instance.Notify(EventName.DisableAllLoot);
 
         Player.Instance.GetComponent<PlayerWallet>().ResetWallet();
+        Player.Instance.GetComponent<PlayerLevelSystem>().ResetExp();
         _healthBar.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(0.1f);

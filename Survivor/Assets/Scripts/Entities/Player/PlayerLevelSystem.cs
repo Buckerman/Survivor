@@ -1,3 +1,4 @@
+using QuangDM.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,27 +11,26 @@ public class PlayerLevelSystem : MonoBehaviour
 
     void Start()
     {
+        ResetExp();
+    }
+
+    public void ResetExp()
+    {
+        Player.Instance._level = 0;
         _currentExp = 0;
         _requiredExp = 20;
         UpdateExperienceBar();
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GainExperience(10);
-        }
-    }
 
-    public void GainExperience(int amount)
+    public void GainExperience()
     {
-        _currentExp += amount;
+        //do zmiany w celu skalowalnosci
+        _currentExp += 1;
 
         while (_currentExp >= _requiredExp)
         {
             LevelUp();
         }
-
         UpdateExperienceBar();
     }
 
@@ -38,6 +38,7 @@ public class PlayerLevelSystem : MonoBehaviour
     {
         _currentExp -= _requiredExp;
         Player.Instance._level++;
+        Observer.Instance.Notify(EventName.PlayerLevelUp, Player.Instance._level);
 
         _requiredExp = Mathf.FloorToInt(_requiredExp * 1.2f);
     }

@@ -26,6 +26,7 @@ public class EnemyHealth : MonoBehaviour
     {
         Observer.Instance.Notify(EventName.BloodSpawn, this.transform);
         Observer.Instance.Notify(EventName.DropLoot, this.transform.position);
+        Player.Instance.GetComponent<PlayerLevelSystem>().GainExperience();
         this.gameObject.SetActive(false);
     }
 }

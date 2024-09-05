@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
-    public int _level = 0;
+    public int _level;
     public float speed = 5f;
     public float rotationSpeed = 20f;
     public float climbSpeed = 3f;
