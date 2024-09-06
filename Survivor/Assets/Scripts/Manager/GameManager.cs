@@ -53,12 +53,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
