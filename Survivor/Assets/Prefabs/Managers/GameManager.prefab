@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6524171224393649984}
   - component: {fileID: 8272117862110249999}
   - component: {fileID: 7572207199557721158}
+  - component: {fileID: 6475037627989693405}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -46,10 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0ea75bd74e06a4e90d8911fe931160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTextPrefab: {fileID: 469245538502582586, guid: 1120262b1c1d7aa4a8745e9507510cdf, type: 3}
-  damageTextPoolSize: 10
   _lootDropManager: {fileID: 8272117862110249999}
   _uiManager: {fileID: 7572207199557721158}
+  _buffManager: {fileID: 6475037627989693405}
+  damageTextPrefab: {fileID: 469245538502582586, guid: 1120262b1c1d7aa4a8745e9507510cdf, type: 3}
+  damageTextPoolSize: 10
   bloodSplashPrefab: {fileID: 1480981597941483419, guid: 3f2c175efb5f2224c87abc2ab9517b64, type: 3}
   bloodSplashPoolSize: 10
 --- !u!114 &8272117862110249999
@@ -80,5 +82,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2be56b8c50f9c499d52637044d4ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _groundSurface: {fileID: 0}
-  _gameTimer: {fileID: 0}
+--- !u!114 &6475037627989693405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352624878009854795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7989c0b43a9e6144d9d414ba2bb31a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

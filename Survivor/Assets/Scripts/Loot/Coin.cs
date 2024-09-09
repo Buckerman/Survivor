@@ -18,12 +18,12 @@ public class Coin : Loot
 
     private void Update()
     {
-        distanceToPlayer = Vector3.Distance(transform.position, Player.Instance.transform.position);
+        distanceToPlayer = Vector3.Distance(transform.position, Player.Instance.transform.position + new Vector3(0, 1, 0));
 
         if (distanceToPlayer <= pickUpRadius)
         {
-            transform.position = Vector3.MoveTowards(transform.position, Player.Instance.transform.position, moveSpeed * Time.deltaTime);
-            if (distanceToPlayer <= 0.1f)
+            transform.position = Vector3.MoveTowards(transform.position, Player.Instance.transform.position + new Vector3(0, 1, 0), moveSpeed * Time.deltaTime);
+            if (distanceToPlayer <= 0.3f)
             {
                 DOTween.Kill(transform);
                 Player.Instance.GetComponent<PlayerWallet>().UpdateWallet(_amount);

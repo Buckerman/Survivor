@@ -6,7 +6,7 @@ public class BuffManager : MonoBehaviour
     private Dictionary<string, IBuff> activeBuffs;
     private List<string> keyBuffer;
 
-    void Start()
+    void Awake()
     {
         activeBuffs = new Dictionary<string, IBuff>();
         keyBuffer = new List<string>();
@@ -22,13 +22,8 @@ public class BuffManager : MonoBehaviour
             {
                 if (buff.IsExpired())
                 {
-                    Debug.Log($"Buff {buff.Name} has expired.");
                     buff.Remove();
                     activeBuffs.Remove(buffName);
-                }
-                else
-                {
-                    Debug.Log($"Buff {buff.Name} has {buff.TimeRemaining()} seconds remaining.");
                 }
             }
         }
@@ -39,13 +34,19 @@ public class BuffManager : MonoBehaviour
         {
             existingBuff.StartTime = Time.time;
             existingBuff.Duration = buff.Duration;
-            Debug.Log($"{buff.Name} timer reset with new duration {buff.Duration} seconds.");
         }
         else
         {
             activeBuffs[buff.Name] = buff;
             buff.Apply();
-            Debug.Log($"{buff.Name} added with duration {buff.Duration} seconds.");
         }
+    }
+    public void ClearAllBuffs()
+    {
+        foreach (var buff in activeBuffs.Values)
+        {
+            buff.Remove();
+        }
+        activeBuffs.Clear();
     }
 }
