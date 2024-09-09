@@ -7,10 +7,18 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     public int _level;
-    public float speed = 5f;
+    [Header("Movement")]
+    public float movementSpeed = 5f;
     public float rotationSpeed = 20f;
     public float climbSpeed = 3f;
-    public float shootRange = 10f;
+    [Header("Melee")]
+    public float attackDamage = 12f;
+
+    [Header("Range")]
+    public float rangeDamage = 12f;
+    public float bulletSpeed = 10f;
+    public float shootingRange = 10f;
+    public float shootingSpeed = 2f;
 
     private void Awake()
     {

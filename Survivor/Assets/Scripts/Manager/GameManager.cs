@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private LootDropManager _lootDropManager;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private BuffManager _buffManager;
 
     [Header("Damage Text Settings")]
     [SerializeField] private DamageText damageTextPrefab;

@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public NavMeshSurface _groundSurface;
-    public GameTimer _gameTimer;
+    private NavMeshSurface _groundSurface;
+    private GameTimer _gameTimer;
     private TextMeshProUGUI _defeatGame;
     private TextMeshProUGUI _waveComplete;
     private TextMeshProUGUI _waveLevel;

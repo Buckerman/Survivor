@@ -5,8 +5,6 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private float attackDamage = 12f;
-
     [Header("Left Hand Target")]
     [SerializeField] private ChainIKConstraint leftHandIK;
     [SerializeField] private Transform leftHandTarget;
@@ -50,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
         {
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.TakeDamage(attackDamage);
+                enemy.TakeDamage(Player.Instance.attackDamage);
             }
         }
 

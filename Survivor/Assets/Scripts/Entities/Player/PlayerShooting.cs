@@ -5,7 +5,6 @@ using System.Collections;
 public class PlayerShooting : MonoBehaviour
 {
     [Header("Shooting Settings")]
-    [SerializeField] private float shootInterval = 2f;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private int bulletPoolSize = 10;
     public Transform bulletSpawnPos;
@@ -73,7 +72,7 @@ public class PlayerShooting : MonoBehaviour
             bullet.transform.position = spawnPos;
             bullet.Initialize(directionToEnemy, _bulletPool);
 
-            shootTimer = shootInterval;
+            shootTimer = Player.Instance.shootingSpeed;
         }
     }
 
@@ -81,7 +80,7 @@ public class PlayerShooting : MonoBehaviour
     {
         Vector3 currentPosition = transform.position;
 
-        Collider[] hitColliders = Physics.OverlapSphere(currentPosition, Player.Instance.shootRange, LayerMask.GetMask("Enemy"));
+        Collider[] hitColliders = Physics.OverlapSphere(currentPosition, Player.Instance.shootingRange, LayerMask.GetMask("Enemy"));
         float closestDistance = Mathf.Infinity;
         Transform closestTransform = null;
 
