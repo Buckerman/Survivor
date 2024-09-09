@@ -6,7 +6,7 @@ public class MeleeDamageBuff : IBuff
     public string Name => EventName.MeleeDamageBuff;
     public float Duration { get; set; }
     public float StartTime { get; set; }
-
+    public float Amount { get; set; }
     public MeleeDamageBuff(float duration)
     {
         Duration = duration;

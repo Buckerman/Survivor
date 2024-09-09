@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     public float climbSpeed = 3f;
     [Header("Melee")]
     public float attackDamage = 12f;
-
     [Header("Range")]
     public float rangeDamage = 12f;
     public float bulletSpeed = 10f;

@@ -8,6 +8,7 @@ public class MovementSpeedBuff : IBuff
     public string Name => EventName.MovementSpeedBuff;
     public float Duration { get; set; }
     public float StartTime { get; set; }
+    public float Amount { get; set; }
 
     public MovementSpeedBuff(float duration)
     {

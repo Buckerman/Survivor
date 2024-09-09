@@ -7,6 +7,8 @@ public class ShootingBuff : IBuff
     public float Duration { get; set; }
     public float StartTime { get; set; }
 
+    public float Amount { get; set; }
+
     public ShootingBuff(float duration)
     {
         Duration = duration;
