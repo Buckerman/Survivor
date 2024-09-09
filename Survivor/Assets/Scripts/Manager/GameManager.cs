@@ -1,7 +1,6 @@
 using Unity.AI.Navigation;
 using UnityEngine;
 using TMPro;
-using System.Collections.Generic;
 using QuangDM.Common;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -11,15 +10,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Managers")]
+    [SerializeField] private LootDropManager _lootDropManager;
+    [SerializeField] private UIManager _uiManager;
+
     [Header("Damage Text Settings")]
     [SerializeField] private DamageText damageTextPrefab;
     [SerializeField] private int damageTextPoolSize = 10;
     private DamageTextPool _damageTextPool;
-
-    [Header("Loot Drop Settings")]
-    [SerializeField] private List<Loot> lootPrefabs;
-    [SerializeField] private int lootPoolSize = 10;
-    private LootPool _lootPool;
 
     [Header("Blood Splash Settings")]
     [SerializeField] private BloodSplash bloodSplashPrefab;
@@ -28,17 +26,6 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    private GameTimer _gameTimer;
-    private NavMeshSurface _groundSurface;
-    private TextMeshProUGUI _defeatGame;
-    private TextMeshProUGUI _waveComplete;
-    private TextMeshProUGUI _waveLevel;
-    private TextMeshProUGUI _surviveTime;
-    private TextMeshProUGUI _timeLeft;
-    private TextMeshProUGUI _coinAmount;
-    private TextMeshProUGUI _playerLevel;
-    private VariableJoystick _joystick;
-    private Image _experienceBar;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
     private void Awake()
@@ -64,75 +51,26 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AssignReferences();
-        InitializeGame();
         SetupCameraFollow();
+        InitializeGame();
     }
     private void AssignReferences()
     {
-        if (_gameTimer == null)
-            _gameTimer = FindObjectOfType<GameTimer>();
-
-        if (_groundSurface == null)
-            _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
-
-        if (_defeatGame == null)
-            _defeatGame = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_waveComplete == null)
-            _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_waveLevel == null)
-            _waveLevel = GameObject.Find("GUI/HUDContainer/Container/WaveLevelBg/LevelText").GetComponent<TextMeshProUGUI>();
-
-        if (_surviveTime == null)
-            _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_timeLeft == null)
-            _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_coinAmount == null)
-            _coinAmount = GameObject.Find("GUI/HUDContainer/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_playerLevel == null)
-            _playerLevel = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/NumberText").GetComponent<TextMeshProUGUI>();
-
-        if (_joystick == null)
-            _joystick = FindObjectOfType<VariableJoystick>();
-
-        if (_experienceBar == null)
-            _experienceBar = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/ExpBar").GetComponent<Image>();
-
         if (_cinemachineVirtualCamera == null)
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-
-        _defeatGame.transform.parent.gameObject.SetActive(false);
-        _waveComplete.transform.parent.gameObject.SetActive(false);
-        _timeLeft.transform.parent.gameObject.SetActive(false);
-
-        Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
-        Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
     }
     private void InitializeGame()
     {
+        _lootDropManager.Initialize();
+        _uiManager.Initialize();
+
         Application.targetFrameRate = 60;
-        //BakeNavMesh();
         StartGame();
 
-        Observer.Instance.AddObserver(EventName.WaveCompleted, WaveCompleted);
-        Observer.Instance.AddObserver(EventName.TimeLeft, TimeLeft);
-        Observer.Instance.AddObserver(EventName.DamageReceived, DamageReceived);
-        Observer.Instance.AddObserver(EventName.ReactivatePlatform, ReactivatePlatform);
-        Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
-        Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
-        Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
-        Observer.Instance.AddObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+        AddObsevers();
     }
     public void StartGame()
     {
-        _waveLevel.text = "1";
-        _coinAmount.text = "<sprite=0> 0";
-        _playerLevel.text = "0";
-
         PlayerHealth playerHealth = Player.Instance.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
@@ -140,12 +78,10 @@ public class GameManager : MonoBehaviour
             playerHealth.HealthBar.gameObject.SetActive(true);
         }
 
-        StartCoroutine(SurviveTime());
-        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        _gameTimer.StartTimer();
+        SurviveTime();
+        _uiManager.StartGame();
 
         _damageTextPool = new DamageTextPool(damageTextPrefab, damageTextPoolSize);
-        _lootPool = new LootPool(lootPrefabs, lootPoolSize);
         _bloodSplashPool = new BloodSplashPool(bloodSplashPrefab, bloodSplashPoolSize);
 
         //PlayerData.Instance.Load();
@@ -154,7 +90,7 @@ public class GameManager : MonoBehaviour
     }
     private void PlayerLevelUp(object data)
     {
-        _playerLevel.text = data.ToString();
+        _uiManager.PlayerLevelUp(data.ToString());
     }
     private void DamageReceived(object data)
     {
@@ -190,60 +126,23 @@ public class GameManager : MonoBehaviour
     }
     private void DropLoot(object data)
     {
-        _lootPool.GetLoot((Vector3)data);
+        _lootDropManager.DropLoot((Vector3)data);
     }
-    private IEnumerator SurviveTime()
+    private void SurviveTime()
     {
-        _surviveTime.text = $"Survive {_gameTimer.StartingTime}s";
-        _surviveTime.transform.parent.gameObject.SetActive(true);
-
-        yield return new WaitForSecondsRealtime(2f);
-
-        _surviveTime.transform.parent.gameObject.SetActive(false);
+        StartCoroutine(_uiManager.SurviveTime());
     }
     private void TimeLeft(object data)
     {
-        _timeLeft.transform.parent.gameObject.SetActive(true);
-        _timeLeft.text = $"{(int)_gameTimer.CurrentTime}s";
+        _uiManager.TimeLeft();
     }
     private void WaveCompleted(object data)
     {
-        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
-        StartCoroutine(WaveDelay(2.0f));
-        _waveLevel.text = data.ToString();
-    }
-    private IEnumerator WaveDelay(float delay)
-    {
-        _timeLeft.transform.parent.gameObject.SetActive(false);
-        _waveComplete.transform.parent.gameObject.SetActive(true);
-
-        _gameTimer.transform.parent.gameObject.SetActive(false);
-        _waveLevel.transform.parent.gameObject.SetActive(false);
-
-        Observer.Instance.Notify(EventName.Joy);
-
-        _joystick.transform.parent.gameObject.SetActive(false);
-        _joystick.enabled = false;
-
-        Time.timeScale = 0;
-
-        yield return new WaitForSecondsRealtime(delay);
-
-        _waveComplete.transform.parent.gameObject.SetActive(false);
-
-        _groundSurface.GetComponent<EnemySpawner>().enabled = true;
-        _gameTimer.transform.parent.gameObject.SetActive(true);
-        _waveLevel.transform.parent.gameObject.SetActive(true);
-        _joystick.transform.parent.gameObject.SetActive(true);
-        _joystick.enabled = true;
-
-        StartCoroutine(SurviveTime());
-
-        Time.timeScale = 1;
+        _uiManager.WaveCompleted(data.ToString());
     }
     private void UpdateWalletUI(object data)
     {
-        _coinAmount.text = $"<sprite=0> {data}";
+        _uiManager.UpdateWalletUI(data);
     }
     private void SetupCameraFollow()
     {
@@ -263,21 +162,10 @@ public class GameManager : MonoBehaviour
     }
     public void EndGame()
     {
-        Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);
-        Observer.Instance.RemoveObserver(EventName.TimeLeft, TimeLeft);
-        Observer.Instance.RemoveObserver(EventName.DamageReceived, DamageReceived);
-        Observer.Instance.RemoveObserver(EventName.ReactivatePlatform, ReactivatePlatform);
-        Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
-        Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
-        Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
-        Observer.Instance.RemoveObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+        RemoveObservers();
 
         Time.timeScale = 0;
-        _gameTimer.StopTimer();
-        _groundSurface.GetComponent<EnemySpawner>().enabled = false;
-        _defeatGame.transform.parent.gameObject.SetActive(true);
-        _joystick.transform.parent.gameObject.SetActive(false);
-
+        _uiManager.EndGame();
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
     private IEnumerator ReloadSceneAfterDelay(float delay)
@@ -286,27 +174,26 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    //private void BakeNavMesh()
-    //{
-    //    GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
-    //    foreach (GameObject building in buildings)
-    //    {
-    //        foreach (Transform child in building.transform)
-    //        {
-    //            if (child.CompareTag(wallTag))
-    //            {
-    //                NavMeshSurface surface = child.gameObject.GetComponent<NavMeshSurface>();
-    //                if (surface == null)
-    //                {
-    //                    surface = child.gameObject.AddComponent<NavMeshSurface>();
-    //                }
-
-    //                surface.layerMask = 1 << LayerMask.NameToLayer("Wall");
-
-    //                wallSurfaces.Add(surface);
-    //                surface.BuildNavMesh();
-    //            }
-    //        }
-    //    }
-    //}
+    private void AddObsevers()
+    {
+        Observer.Instance.AddObserver(EventName.WaveCompleted, WaveCompleted);
+        Observer.Instance.AddObserver(EventName.TimeLeft, TimeLeft);
+        Observer.Instance.AddObserver(EventName.DamageReceived, DamageReceived);
+        Observer.Instance.AddObserver(EventName.ReactivatePlatform, ReactivatePlatform);
+        Observer.Instance.AddObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
+        Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
+        Observer.Instance.AddObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+    }
+    private void RemoveObservers()
+    {
+        Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);
+        Observer.Instance.RemoveObserver(EventName.TimeLeft, TimeLeft);
+        Observer.Instance.RemoveObserver(EventName.DamageReceived, DamageReceived);
+        Observer.Instance.RemoveObserver(EventName.ReactivatePlatform, ReactivatePlatform);
+        Observer.Instance.RemoveObserver(EventName.DropLoot, DropLoot);
+        Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
+        Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
+        Observer.Instance.RemoveObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+    }
 }

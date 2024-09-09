@@ -20,29 +20,6 @@ public class BulletPool
             pool.Enqueue(bullet);
         }
     }
-    //public Bullet GetBullet()
-    //{
-    //    Bullet bullet;
-
-    //    if (pool.Count > 0)
-    //    {
-    //        bullet = pool.Dequeue();
-    //        if (bullet != null && bullet.gameObject != null)
-    //        {
-    //            bullet.gameObject.SetActive(true);
-    //        }
-    //        else
-    //        {
-    //            bullet = Object.Instantiate(bulletPrefab);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        bullet = Object.Instantiate(bulletPrefab);
-    //    }
-
-    //    return bullet;
-    //}
     public Bullet GetBullet() //shortened version
     {
         Bullet bullet = (pool.Count > 0) ? pool.Dequeue() : null;
@@ -55,7 +32,6 @@ public class BulletPool
         bullet.gameObject.SetActive(true);
         return bullet;
     }
-
 
     public void ReturnBullet(Bullet bullet)
     {
