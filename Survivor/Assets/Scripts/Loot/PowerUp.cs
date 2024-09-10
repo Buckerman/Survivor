@@ -16,8 +16,8 @@ public class PowerUp : Loot
     {
         if (other.CompareTag("Player"))
         {
-            IBuff buff = new MovementSpeedBuff(10);
-            GameManager.Instance.GetComponent<BuffManager>().AddBuff(buff);
+            IBuff buff = new MovementSpeedBuff(10); //TEST
+            GameManager.Instance.GetComponent<BuffManager>().AddBuff(buff); //TEST
         }
     }
 }

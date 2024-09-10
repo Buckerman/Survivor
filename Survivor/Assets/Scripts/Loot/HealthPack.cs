@@ -13,6 +13,7 @@ public class HealthPack : Loot
         if (other.CompareTag("Player"))
         {
             Player.Instance.GetComponent<PlayerHealth>().Heal(_amount);
+            Player.Instance.GetComponent<PlayerAuras>().healAura.Play();
             ReturnToPool();
         }
     }

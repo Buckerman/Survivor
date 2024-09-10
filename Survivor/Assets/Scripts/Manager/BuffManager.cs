@@ -26,6 +26,7 @@ public class BuffManager : MonoBehaviour
                     buff.Remove();
                     activeBuffs.Remove(buffName);
                     Observer.Instance.Notify(EventName.RemoveBuffUI);
+                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); // TEST
                 }
                 else
                 {
@@ -48,6 +49,7 @@ public class BuffManager : MonoBehaviour
             buff.Apply();
         }
         Observer.Instance.Notify(EventName.ActiveteBuffUI);
+        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); // TEST
     }
     public void ClearAllBuffs()
     {
