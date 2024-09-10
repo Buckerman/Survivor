@@ -129,6 +129,18 @@ public class GameManager : MonoBehaviour
     {
         _lootDropManager.DropLoot((Vector3)data);
     }
+    private void ActiveteBuffUI(object data)
+    {
+        _uiManager.ActiveteBuffUI();
+    }
+    private void RemoveBuffUI(object data)
+    {
+        _uiManager.RemoveBuffUI();
+    }
+    private void UpdateBuffUI(object data)
+    {
+        _uiManager.UpdateBuffUI(data);
+    }
     private void SurviveTime()
     {
         StartCoroutine(_uiManager.SurviveTime());
@@ -185,6 +197,9 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
         Observer.Instance.AddObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+        Observer.Instance.AddObserver(EventName.ActiveteBuffUI, ActiveteBuffUI);
+        Observer.Instance.AddObserver(EventName.RemoveBuffUI, RemoveBuffUI);
+        Observer.Instance.AddObserver(EventName.UpdateBuffUI, UpdateBuffUI);
     }
     private void RemoveObservers()
     {
@@ -196,5 +211,8 @@ public class GameManager : MonoBehaviour
         Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
         Observer.Instance.RemoveObserver(EventName.PlayerLevelUp, PlayerLevelUp);
+        Observer.Instance.RemoveObserver(EventName.ActiveteBuffUI, ActiveteBuffUI);
+        Observer.Instance.RemoveObserver(EventName.RemoveBuffUI, RemoveBuffUI);
+        Observer.Instance.RemoveObserver(EventName.UpdateBuffUI, UpdateBuffUI);
     }
 }

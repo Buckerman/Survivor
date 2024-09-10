@@ -1,3 +1,4 @@
+using QuangDM.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,8 +25,14 @@ public class BuffManager : MonoBehaviour
                 {
                     buff.Remove();
                     activeBuffs.Remove(buffName);
+                    Observer.Instance.Notify(EventName.RemoveBuffUI);
+                }
+                else
+                {
+                    Observer.Instance.Notify(EventName.UpdateBuffUI, (/*buff.Name,*/buff.TimeRemaining(), buff.Duration));
                 }
             }
+
         }
     }
     public void AddBuff(IBuff buff)
@@ -40,6 +47,7 @@ public class BuffManager : MonoBehaviour
             activeBuffs[buff.Name] = buff;
             buff.Apply();
         }
+        Observer.Instance.Notify(EventName.ActiveteBuffUI);
     }
     public void ClearAllBuffs()
     {

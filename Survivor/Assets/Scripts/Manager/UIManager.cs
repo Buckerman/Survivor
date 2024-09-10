@@ -20,6 +20,53 @@ public class UIManager : MonoBehaviour
     private Image _experienceBar;
     private VariableJoystick _joystick;
 
+    private Image _radiantBuff;
+    private void AssignReferences()
+    {
+        if (_groundSurface == null)
+            _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
+
+        if (_gameTimer == null)
+            _gameTimer = FindObjectOfType<GameTimer>();
+
+        if (_defeatGame == null)
+            _defeatGame = GameObject.Find("HUD/DefeatBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_waveComplete == null)
+            _waveComplete = GameObject.Find("HUD/WaveCompleteBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_waveLevel == null)
+            _waveLevel = GameObject.Find("HUD/HUDContainer/Container/WaveLevelBg/LevelText").GetComponent<TextMeshProUGUI>();
+
+        if (_surviveTime == null)
+            _surviveTime = GameObject.Find("HUD/SurviveTimeBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_timeLeft == null)
+            _timeLeft = GameObject.Find("HUD/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_coinAmount == null)
+            _coinAmount = GameObject.Find("HUD/HUDContainer/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (_playerLevel == null)
+            _playerLevel = GameObject.Find("HUD/HUDContainer/PlayerLevelBg/NumberText").GetComponent<TextMeshProUGUI>();
+
+        if (_experienceBar == null)
+            _experienceBar = GameObject.Find("HUD/HUDContainer/PlayerLevelBg/ExpBar").GetComponent<Image>();
+
+        if (_joystick == null)
+            _joystick = FindObjectOfType<VariableJoystick>();
+
+        if (_radiantBuff == null)
+            _radiantBuff = GameObject.Find("HUD/HUDContainer/BuffsContainer/Buff/RadiantTimer").GetComponent<Image>();
+        _radiantBuff.transform.parent.gameObject.SetActive(false);
+
+        _defeatGame.transform.parent.gameObject.SetActive(false);
+        _waveComplete.transform.parent.gameObject.SetActive(false);
+        _timeLeft.transform.parent.gameObject.SetActive(false);
+
+        Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
+        Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
+    }
     public void Initialize()
     {
         AssignReferences();
@@ -32,48 +79,6 @@ public class UIManager : MonoBehaviour
     {
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.StartTimer();
-    }
-    private void AssignReferences()
-    {
-        if (_groundSurface == null)
-            _groundSurface = FindObjectOfType<EnemySpawner>().GetComponent<NavMeshSurface>();
-
-        if (_gameTimer == null)
-            _gameTimer = FindObjectOfType<GameTimer>();
-
-        if (_defeatGame == null)
-            _defeatGame = GameObject.Find("GUI/DefeatBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_waveComplete == null)
-            _waveComplete = GameObject.Find("GUI/WaveCompleteBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_waveLevel == null)
-            _waveLevel = GameObject.Find("GUI/HUDContainer/Container/WaveLevelBg/LevelText").GetComponent<TextMeshProUGUI>();
-
-        if (_surviveTime == null)
-            _surviveTime = GameObject.Find("GUI/SurviveTimeBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_timeLeft == null)
-            _timeLeft = GameObject.Find("GUI/TimeLeftBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_coinAmount == null)
-            _coinAmount = GameObject.Find("GUI/HUDContainer/CoinAmountBg").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (_playerLevel == null)
-            _playerLevel = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/NumberText").GetComponent<TextMeshProUGUI>();
-
-        if (_experienceBar == null)
-            _experienceBar = GameObject.Find("GUI/HUDContainer/PlayerLevelBg/ExpBar").GetComponent<Image>();
-
-        if (_joystick == null)
-            _joystick = FindObjectOfType<VariableJoystick>();
-
-        _defeatGame.transform.parent.gameObject.SetActive(false);
-        _waveComplete.transform.parent.gameObject.SetActive(false);
-        _timeLeft.transform.parent.gameObject.SetActive(false);
-
-        Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
-        Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
     }
     public void PlayerLevelUp(string text)
     {
@@ -131,6 +136,19 @@ public class UIManager : MonoBehaviour
     public void UpdateWalletUI(object data)
     {
         _coinAmount.text = $"<sprite=0> {data}";
+    }
+    public void ActiveteBuffUI()
+    {
+        _radiantBuff.transform.parent.gameObject.SetActive(true);
+    }
+    public void RemoveBuffUI()
+    {
+        _radiantBuff.transform.parent.gameObject.SetActive(false);
+    }
+    public void UpdateBuffUI(object data)
+    {
+        var (timeRemaining, duration) = ((float, float))data;
+        _radiantBuff.fillAmount = timeRemaining / duration;
     }
     public void EndGame()
     {
