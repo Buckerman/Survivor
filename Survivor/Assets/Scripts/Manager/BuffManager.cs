@@ -27,7 +27,7 @@ public class BuffManager : MonoBehaviour
                     buff.Remove();
                     activeBuffs.Remove(buffName);
                     Observer.Instance.Notify(EventName.RemoveBuffUI, buff.buffType.ToString());
-                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); // TEST
+                    Player.Instance.GetComponent<PlayerAuras>().StopEffect(buff.buffType);
                 }
                 else
                 {
@@ -47,11 +47,11 @@ public class BuffManager : MonoBehaviour
         else
         {
             activeBuffs[buff.buffType.ToString()] = buff;
-            buff.Apply(); // Apply the buff effect
+            buff.Apply();
         }
 
-        Observer.Instance.Notify(EventName.ActiveteBuffUI, buff.buffType.ToString());
-        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); // TEST
+        Observer.Instance.Notify(EventName.ActivateBuffUI, buff.buffType.ToString());
+        Player.Instance.GetComponent<PlayerAuras>().PlayEffect(buff.buffType);
     }
 
     public void ClearAllBuffs()

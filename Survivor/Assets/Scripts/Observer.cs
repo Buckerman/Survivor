@@ -23,7 +23,7 @@ namespace QuangDM.Common
         public static readonly string PickUpAllLoot = "PickUpAllLoot";
         public static readonly string BloodSpawn = "BloodSpawn";
         public static readonly string PlayerLevelUp = "PlayerLevelUp";
-        public static readonly string ActiveteBuffUI = "ActiveteBuffUI";
+        public static readonly string ActivateBuffUI = "ActivateBuffUI";
         public static readonly string RemoveBuffUI = "RemoveBuffUI";
         public static readonly string UpdateBuffUI = "UpdateBuffUI";
     }

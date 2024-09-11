@@ -148,7 +148,7 @@ public class UIManager : MonoBehaviour
     {
         _coinAmount.text = $"<sprite=0> {data}";
     }
-    public void ActiveteBuffUI(string data)
+    public void ActivateBuffUI(string data)
     {
         if (buffUIElements.TryGetValue(data, out GameObject buffUI))
         {
