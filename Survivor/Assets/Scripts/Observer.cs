@@ -26,10 +26,6 @@ namespace QuangDM.Common
         public static readonly string ActiveteBuffUI = "ActiveteBuffUI";
         public static readonly string RemoveBuffUI = "RemoveBuffUI";
         public static readonly string UpdateBuffUI = "UpdateBuffUI";
-
-        public static readonly string ShootingBuff = "ShootingBuff";
-        public static readonly string MeleeDamageBuff = "MeleeDamageBuff";
-        public static readonly string MovementSpeedBuff = "MovementSpeedBuff";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {

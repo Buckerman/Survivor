@@ -71,6 +71,7 @@ public class UIManager : MonoBehaviour
 
         buffUIElements = new Dictionary<string, GameObject>();
 
+        //UI Element has to have exactly the same name as BuffType ENUM in order to work
         foreach (Transform child in _buffsContainer)
         {
             buffUIElements[child.name] = child.gameObject;

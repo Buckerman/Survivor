@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BuffManager : MonoBehaviour
 {
-    private Dictionary<string, IBuff> activeBuffs;
+    private Dictionary<string, PowerUp> activeBuffs;
     private List<string> keyBuffer;
 
     void Awake()
     {
-        activeBuffs = new Dictionary<string, IBuff>();
+        activeBuffs = new Dictionary<string, PowerUp>();
         keyBuffer = new List<string>();
     }
+
     void Update()
     {
         keyBuffer.Clear();
@@ -19,38 +20,40 @@ public class BuffManager : MonoBehaviour
 
         foreach (var buffName in keyBuffer)
         {
-            if (activeBuffs.TryGetValue(buffName, out IBuff buff))
+            if (activeBuffs.TryGetValue(buffName, out PowerUp buff))
             {
                 if (buff.IsExpired())
                 {
                     buff.Remove();
                     activeBuffs.Remove(buffName);
-                    Observer.Instance.Notify(EventName.RemoveBuffUI, buff.Name);
-                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); //TEST
+                    Observer.Instance.Notify(EventName.RemoveBuffUI, buff.buffType.ToString());
+                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); // TEST
                 }
                 else
                 {
-                    Observer.Instance.Notify(EventName.UpdateBuffUI, (buff.Name, buff.TimeRemaining(), buff.Duration));
+                    Observer.Instance.Notify(EventName.UpdateBuffUI, (buff.buffType.ToString(), buff.TimeRemaining(), buff.duration));
                 }
             }
-
         }
     }
-    public void AddBuff(IBuff buff)
+
+    public void AddBuff(PowerUp buff)
     {
-        if (activeBuffs.TryGetValue(buff.Name, out IBuff existingBuff))
+        if (activeBuffs.TryGetValue(buff.buffType.ToString(), out PowerUp existingBuff))
         {
-            existingBuff.StartTime = Time.time;
-            existingBuff.Duration = buff.Duration;
+            existingBuff.startTime = Time.time;
+            existingBuff.duration = buff.duration;
         }
         else
         {
-            activeBuffs[buff.Name] = buff;
-            buff.Apply();
+            activeBuffs[buff.buffType.ToString()] = buff;
+            buff.Apply(); // Apply the buff effect
         }
-        Observer.Instance.Notify(EventName.ActiveteBuffUI, buff.Name);
-        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); //TEST
+
+        Observer.Instance.Notify(EventName.ActiveteBuffUI, buff.buffType.ToString());
+        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); // TEST
     }
+
     public void ClearAllBuffs()
     {
         foreach (var buff in activeBuffs.Values)
