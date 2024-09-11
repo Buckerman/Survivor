@@ -1,6 +1,7 @@
 using Cinemachine;
 using QuangDM.Common;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -20,7 +21,9 @@ public class UIManager : MonoBehaviour
     private Image _experienceBar;
     private VariableJoystick _joystick;
 
-    private Image _radiantBuff;
+    private Transform _buffsContainer;
+    private Dictionary<string, GameObject> buffUIElements;
+
     private void AssignReferences()
     {
         if (_groundSurface == null)
@@ -56,9 +59,8 @@ public class UIManager : MonoBehaviour
         if (_joystick == null)
             _joystick = FindObjectOfType<VariableJoystick>();
 
-        if (_radiantBuff == null)
-            _radiantBuff = GameObject.Find("HUD/HUDContainer/BuffsContainer/Buff/RadiantTimer").GetComponent<Image>();
-        _radiantBuff.transform.parent.gameObject.SetActive(false);
+        if (_buffsContainer == null)
+            _buffsContainer = GameObject.Find("HUD/HUDContainer/BuffsContainer").transform;
 
         _defeatGame.transform.parent.gameObject.SetActive(false);
         _waveComplete.transform.parent.gameObject.SetActive(false);
@@ -66,6 +68,14 @@ public class UIManager : MonoBehaviour
 
         Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
         Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
+
+        buffUIElements = new Dictionary<string, GameObject>();
+
+        foreach (Transform child in _buffsContainer)
+        {
+            buffUIElements[child.name] = child.gameObject;
+            child.gameObject.SetActive(false);
+        }
     }
     public void Initialize()
     {
@@ -137,18 +147,27 @@ public class UIManager : MonoBehaviour
     {
         _coinAmount.text = $"<sprite=0> {data}";
     }
-    public void ActiveteBuffUI()
+    public void ActiveteBuffUI(string data)
     {
-        _radiantBuff.transform.parent.gameObject.SetActive(true);
+        if (buffUIElements.TryGetValue(data, out GameObject buffUI))
+        {
+            buffUI.SetActive(true);
+        }
     }
-    public void RemoveBuffUI()
+    public void RemoveBuffUI(string data)
     {
-        _radiantBuff.transform.parent.gameObject.SetActive(false);
+        if (buffUIElements.TryGetValue(data, out GameObject buffUI))
+        {
+            buffUI.SetActive(false);
+        }
     }
     public void UpdateBuffUI(object data)
     {
-        var (timeRemaining, duration) = ((float, float))data;
-        _radiantBuff.fillAmount = timeRemaining / duration;
+        var (name, timeRemaining, duration) = ((string, float, float))data;
+        if (buffUIElements.TryGetValue(name, out GameObject buffUI))
+        {
+            buffUI.transform.GetChild(0).GetComponentInChildren<Image>().fillAmount = timeRemaining/duration;
+        }
     }
     public void EndGame()
     {

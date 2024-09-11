@@ -131,11 +131,11 @@ public class GameManager : MonoBehaviour
     }
     private void ActiveteBuffUI(object data)
     {
-        _uiManager.ActiveteBuffUI();
+        _uiManager.ActiveteBuffUI(data.ToString());
     }
     private void RemoveBuffUI(object data)
     {
-        _uiManager.RemoveBuffUI();
+        _uiManager.RemoveBuffUI(data.ToString());
     }
     private void UpdateBuffUI(object data)
     {

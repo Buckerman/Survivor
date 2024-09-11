@@ -1,5 +1,6 @@
 using QuangDM.Common;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MeleeDamageBuff : IBuff
 {
@@ -15,12 +16,12 @@ public class MeleeDamageBuff : IBuff
 
     public void Apply()
     {
-        Player.Instance.attackDamage += 5.0f; 
+        Player.Instance.attackDamage += 5.0f;
     }
 
     public void Remove()
     {
-        Player.Instance.attackDamage -= 5.0f; 
+        Player.Instance.attackDamage -= 5.0f;
     }
 
     public bool IsExpired()

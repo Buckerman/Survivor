@@ -2,6 +2,7 @@ using QuangDM.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovementSpeedBuff : IBuff
 {
@@ -9,7 +10,6 @@ public class MovementSpeedBuff : IBuff
     public float Duration { get; set; }
     public float StartTime { get; set; }
     public float Amount { get; set; }
-
     public MovementSpeedBuff(float duration)
     {
         Duration = duration;

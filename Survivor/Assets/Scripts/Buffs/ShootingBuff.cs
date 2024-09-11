@@ -1,14 +1,13 @@
 using QuangDM.Common;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootingBuff : IBuff
 {
     public string Name => EventName.ShootingBuff;
     public float Duration { get; set; }
     public float StartTime { get; set; }
-
     public float Amount { get; set; }
-
     public ShootingBuff(float duration)
     {
         Duration = duration;

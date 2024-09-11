@@ -25,12 +25,12 @@ public class BuffManager : MonoBehaviour
                 {
                     buff.Remove();
                     activeBuffs.Remove(buffName);
-                    Observer.Instance.Notify(EventName.RemoveBuffUI);
-                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); // TEST
+                    Observer.Instance.Notify(EventName.RemoveBuffUI, buff.Name);
+                    Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Stop(); //TEST
                 }
                 else
                 {
-                    Observer.Instance.Notify(EventName.UpdateBuffUI, (/*buff.Name,*/buff.TimeRemaining(), buff.Duration));
+                    Observer.Instance.Notify(EventName.UpdateBuffUI, (buff.Name, buff.TimeRemaining(), buff.Duration));
                 }
             }
 
@@ -48,8 +48,8 @@ public class BuffManager : MonoBehaviour
             activeBuffs[buff.Name] = buff;
             buff.Apply();
         }
-        Observer.Instance.Notify(EventName.ActiveteBuffUI);
-        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); // TEST
+        Observer.Instance.Notify(EventName.ActiveteBuffUI, buff.Name);
+        Player.Instance.GetComponent<PlayerAuras>().speedBuffAura.Play(); //TEST
     }
     public void ClearAllBuffs()
     {
