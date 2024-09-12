@@ -179,6 +179,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0;
         _uiManager.EndGame();
+        ObjectPooling.Instance.ClearPool();
         StartCoroutine(ReloadSceneAfterDelay(2.0f));
     }
     private IEnumerator ReloadSceneAfterDelay(float delay)
