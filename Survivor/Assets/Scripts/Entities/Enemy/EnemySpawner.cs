@@ -40,12 +40,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        GameObject enemyObject = ObjectPooling.Instance.GetObject(enemyPrefab);
-        EnemyController enemy = enemyObject.GetComponent<EnemyController>();
-
         Vector3 spawnPosition = GetRandomPositionOnGround();
         if (spawnPosition != Vector3.zero)
         {
+            GameObject enemyObject = ObjectPooling.Instance.GetObject(enemyPrefab);
+            EnemyController enemy = enemyObject.GetComponent<EnemyController>();
+
             enemy.transform.position = spawnPosition;
             enemy.Initialize(Player.Instance.transform);
             enemy.NavMeshAgent.enabled = true;

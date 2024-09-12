@@ -35,7 +35,11 @@ public class PlayerAttack : MonoBehaviour
 
     private void ActivateTrail()
     {
-        _trailRenderer.enabled = !_trailRenderer.enabled;
+        _trailRenderer.enabled = true;
+    }
+    private void DeactivateTrail()
+    {
+        _trailRenderer.enabled = false;
     }
 
     private void DealDamage()
