@@ -5,8 +5,7 @@ using System.Collections;
 public class PlayerShooting : MonoBehaviour
 {
     [Header("Shooting Settings")]
-    [SerializeField] private Bullet bulletPrefab;
-    [SerializeField] private int bulletPoolSize = 10;
+    [SerializeField] private GameObject bulletPrefab;
     public Transform bulletSpawnPos;
 
     [Header("Right Hand Target")]
@@ -19,16 +18,10 @@ public class PlayerShooting : MonoBehaviour
     private Animator animator;
     private Transform closestEnemy;
     private float shootTimer;
-    private BulletPool _bulletPool;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
-        _bulletPool = new BulletPool(bulletPrefab, bulletPoolSize);
     }
 
     private void FixedUpdate()
@@ -68,9 +61,11 @@ public class PlayerShooting : MonoBehaviour
 
             Vector3 spawnPos = bulletSpawnPos.position;
 
-            Bullet bullet = _bulletPool.GetBullet();
+            GameObject bulletObject = ObjectPooling.Instance.GetObject(bulletPrefab);
+
+            Bullet bullet = bulletObject.GetComponent<Bullet>();
             bullet.transform.position = spawnPos;
-            bullet.Initialize(directionToEnemy, _bulletPool);
+            bullet.Initialize(directionToEnemy);
 
             shootTimer = Player.Instance.shootingSpeed;
         }

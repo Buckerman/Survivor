@@ -16,14 +16,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BuffManager _buffManager;
 
     [Header("Damage Text Settings")]
-    [SerializeField] private DamageText damageTextPrefab;
-    [SerializeField] private int damageTextPoolSize = 10;
-    private DamageTextPool _damageTextPool;
+    [SerializeField] private GameObject damageTextPrefab;
 
     [Header("Blood Splash Settings")]
-    [SerializeField] private BloodSplash bloodSplashPrefab;
-    [SerializeField] private int bloodSplashPoolSize = 10;
-    private BloodSplashPool _bloodSplashPool;
+    [SerializeField] private GameObject bloodSplashPrefab;
 
     public static GameManager Instance { get; private set; }
 
@@ -82,9 +78,6 @@ public class GameManager : MonoBehaviour
         SurviveTime();
         _uiManager.StartGame();
 
-        _damageTextPool = new DamageTextPool(damageTextPrefab, damageTextPoolSize);
-        _bloodSplashPool = new BloodSplashPool(bloodSplashPrefab, bloodSplashPoolSize);
-
         //PlayerData.Instance.Load();
         //PlayerData.Instance.ConversationID = 2;
         //PlayerData.Instance.Save();
@@ -98,32 +91,31 @@ public class GameManager : MonoBehaviour
         if (data == null) return;
 
         Transform targetTransform = null;
-        DamageText damageText = null;
+
+        GameObject damageTextObject = ObjectPooling.Instance.GetObject(damageTextPrefab);
+        DamageText damageText = damageTextObject.GetComponent<DamageText>();
 
         if (data is ValueTuple<PlayerHealth, float> playerData)
         {
             var (playerHealth, damage) = playerData;
             targetTransform = playerHealth.transform;
-            damageText = _damageTextPool.GetDamageText();
             damageText.Setup((int)damage, Color.red);
         }
         else if (data is ValueTuple<EnemyHealth, float> enemyData)
         {
             var (enemyHealth, damage) = enemyData;
             targetTransform = enemyHealth.transform;
-            damageText = _damageTextPool.GetDamageText();
             damageText.Setup((int)damage, Color.white);
         }
 
-        float randomX = UnityEngine.Random.Range(-1f, 1f);
-        Vector3 offset = new Vector3(randomX, 2f, 0f);
-        damageText.transform.position = targetTransform.position + offset;
-
-        damageText.Initialize(_damageTextPool);
+        damageText.Initialize(targetTransform.position);
     }
     private void BloodSpawn(object data)
     {
-        _bloodSplashPool.GetBloodSplash((Transform)data);
+        GameObject bloodSplashObject = ObjectPooling.Instance.GetObject(bloodSplashPrefab);
+        BloodSplash bloodSplash = bloodSplashObject.GetComponent<BloodSplash>();
+
+        bloodSplash.Initialize((Transform)data);
     }
     private void DropLoot(object data)
     {

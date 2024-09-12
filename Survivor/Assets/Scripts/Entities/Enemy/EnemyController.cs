@@ -12,10 +12,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float enemyAttackRange = 1.8f;
     [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
+    [SerializeField] private float maxDistanceFromPlayer = 15f;
 
     private NavMeshAgent agent;
     private Transform _player;
-    private EnemyPool _enemyPool;
     private Animator _animator;
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -28,10 +28,9 @@ public class EnemyController : MonoBehaviour
         agent.speed = enemySpeed;
     }
 
-    public void Initialize(Transform playerTransform, EnemyPool pool)
+    public void Initialize(Transform playerTransform)
     {
         _player = playerTransform;
-        _enemyPool = pool;
 
         Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
         agent.enabled = false;
@@ -46,17 +45,21 @@ public class EnemyController : MonoBehaviour
     {
         if (_player != null)
         {
+            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+            if (distanceToPlayer > maxDistanceFromPlayer)
+            {
+                OnDisable();
+                return;
+            }
+
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(_player.position, path);
             if (path.status == NavMeshPathStatus.PathComplete)
             {
                 agent.SetDestination(_player.position);
 
-                float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-                float rotationX = Mathf.Abs(transform.eulerAngles.x);
-                float rotationZ = Mathf.Abs(transform.eulerAngles.z);
-
-                if (distanceToPlayer <= enemyAttackRange && rotationX < 1f && rotationZ < 1f)
+                //check if player is in enemy range and visible angle
+                if (distanceToPlayer <= enemyAttackRange && Mathf.Abs(transform.eulerAngles.x) < 1f && Mathf.Abs(transform.eulerAngles.z) < 1f)
                 {
                     agent.isStopped = true;
                     SetState(new AttackState());
@@ -69,7 +72,6 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                // Calculate fallback position directly below the player
                 Vector3 fallbackPosition = GetFallbackPosition();
                 if (fallbackPosition != Vector3.zero)
                 {
@@ -134,11 +136,8 @@ public class EnemyController : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_enemyPool != null)
-        {
-            Invoke(nameof(RemoveObserver),0f);
-            _enemyPool.ReturnEnemy(this);
-        }
+        Invoke(nameof(RemoveObserver), 0f);
+        ObjectPooling.Instance.ReturnObject(this.gameObject);
     }
 
     private void RemoveObserver()

@@ -7,17 +7,18 @@ using UnityEngine;
 public class DamageText : MonoBehaviour
 {
     private TextMeshPro _textMeshPro;
-    private Transform _transform;
-    private DamageTextPool _damageTextPool;
 
     private void Awake()
     {
         _textMeshPro = GetComponentInChildren<TextMeshPro>();
     }
 
-    public void Initialize(DamageTextPool pool)
+    public void Initialize(Vector3 position)
     {
-        _damageTextPool = pool;
+        float randomX = Random.Range(-1f, 1f);
+        Vector3 offset = new Vector3(randomX, 2f, 0f);
+
+        this.transform.position = position + offset;
         Observer.Instance.AddObserver(EventName.DisableAllDamageText, DisableAllDamage);
     }
 
@@ -38,11 +39,8 @@ public class DamageText : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (_damageTextPool != null)
-        {
-            Invoke(nameof(RemoveObserver), 0f);
-            _damageTextPool.ReturnDamageText(this);
-        }
+        Invoke(nameof(RemoveObserver), 0f);
+        ObjectPooling.Instance.ReturnObject(this.gameObject);
     }
     private void RemoveObserver()
     {

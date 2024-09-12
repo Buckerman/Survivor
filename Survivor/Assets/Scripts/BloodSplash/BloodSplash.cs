@@ -8,7 +8,6 @@ using UnityEngine;
 public class BloodSplash : MonoBehaviour
 {
     private ParticleSystem _bloodSystem;
-    private BloodSplashPool _bloodSplashPool;
     private float yPositionOffset;
 
     private void Awake()
@@ -16,7 +15,7 @@ public class BloodSplash : MonoBehaviour
         _bloodSystem = GetComponentInChildren<ParticleSystem>();
     }
 
-    public void Initialize(Transform enemyTransform, BloodSplashPool pool)
+    public void Initialize(Transform enemyTransform)
     {
         if (Math.Abs(yPositionOffset) < Mathf.Epsilon)
         {
@@ -26,8 +25,6 @@ public class BloodSplash : MonoBehaviour
         transform.rotation = enemyTransform.rotation * Quaternion.Euler(0, 180, 0);
         Vector3 newPosition = new Vector3(enemyTransform.position.x, enemyTransform.position.y + yPositionOffset, enemyTransform.position.z);
         transform.position = newPosition;
-
-        _bloodSplashPool = pool;
 
         _bloodSystem.Play();
 
@@ -49,12 +46,9 @@ public class BloodSplash : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_bloodSplashPool != null)
-        {
-            Invoke(nameof(RemoveObserver), 0f);
-            _bloodSplashPool.ReturnBloodSplash(this);
-        }
         _bloodSystem.Stop();
+        Invoke(nameof(RemoveObserver), 0f);
+        ObjectPooling.Instance.ReturnObject(this.gameObject);
     }
 
     private void RemoveObserver()

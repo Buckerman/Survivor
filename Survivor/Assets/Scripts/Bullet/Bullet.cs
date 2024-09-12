@@ -4,12 +4,9 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Vector3 _direction;
-
-    private BulletPool _bulletPool;
-    public void Initialize(Vector3 initialDirection, BulletPool bulletPool)
+    public void Initialize(Vector3 initialDirection)
     {
         _direction = initialDirection;
-        _bulletPool = bulletPool;
     }
 
     private void FixedUpdate()
@@ -38,6 +35,6 @@ public class Bullet : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        _bulletPool.ReturnBullet(this);
+        ObjectPooling.Instance.ReturnObject(this.gameObject);
     }
 }

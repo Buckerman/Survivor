@@ -59,6 +59,7 @@ public class BuffManager : MonoBehaviour
         foreach (var buff in activeBuffs.Values)
         {
             buff.Remove();
+            Player.Instance.GetComponent<PlayerAuras>().StopEffect(buff.buffType);
         }
         activeBuffs.Clear();
     }
