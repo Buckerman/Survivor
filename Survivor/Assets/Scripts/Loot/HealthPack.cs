@@ -3,9 +3,9 @@ using UnityEngine;
 public class HealthPack : Loot
 {
     public float _amount = 5f;
-    public override void Initialize(Vector3 position, LootPool pool)
+    public override void Initialize(Vector3 position)
     {
-        base.Initialize(position, pool);
+        base.Initialize(position);
     }
 
     private void OnTriggerEnter(Collider other)

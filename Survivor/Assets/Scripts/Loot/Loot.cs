@@ -4,22 +4,21 @@ using UnityEngine;
 
 public abstract class Loot : MonoBehaviour
 {
-    protected LootPool lootPool;
     private float yPositionOffset;
 
-    public virtual void Initialize(Vector3 position, LootPool pool)
+    public virtual void Initialize(Vector3 position)
     {
-        if (Math.Abs(yPositionOffset) < Mathf.Epsilon)
+        if (Mathf.Approximately(yPositionOffset, 0f))
         {
             yPositionOffset = transform.position.y;
         }
 
         Vector3 newPosition = new Vector3(position.x, position.y + yPositionOffset, position.z);
         transform.position = newPosition;
-        lootPool = pool;
 
         Observer.Instance.AddObserver(EventName.DisableAllLoot, DisableAllLoot);
     }
+
 
     private void DisableAllLoot(object data)
     {
@@ -30,8 +29,8 @@ public abstract class Loot : MonoBehaviour
     {
         if (this != null)
         {
+            ObjectPooling.Instance.ReturnObject(this.gameObject);
             Invoke(nameof(RemoveObserver), 0f);
-            lootPool.ReturnLoot(this);
         }
     }
 

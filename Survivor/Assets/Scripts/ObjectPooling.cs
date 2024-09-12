@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooling: MonoBehaviour
+public class ObjectPooling : MonoBehaviour
 {
-
     public static ObjectPooling Instance;
 
     private void Awake()
@@ -31,20 +30,29 @@ public class ObjectPooling: MonoBehaviour
             _itemPool = _poolObjects[key];
         }
 
-
         foreach (GameObject g in _itemPool)
         {
-            if (g.gameObject.activeSelf)
-                continue;
-            return g;
+            if (!g.gameObject.activeSelf) // Find an inactive object
+            {
+                g.SetActive(true); // Activate the object
+                return g; // Return the reused object
+            }
         }
 
+        // If no inactive object is found, instantiate a new one
         GameObject g2 = Instantiate(key);
         _poolObjects[key].Add(g2);
         return g2;
     }
+
+    // This method returns an object to the pool by deactivating it
+    public void ReturnObject(GameObject obj)
+    {
+        obj.SetActive(false); // Deactivate the object
+    }
+
     public void ClearPool()
     {
-        _poolObjects.Clear();
+        _poolObjects.Clear(); // Clear the pool dictionary
     }
 }

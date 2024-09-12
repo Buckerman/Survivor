@@ -10,9 +10,9 @@ public class Coin : Loot
     public float moveSpeed = 10f;
     private float distanceToPlayer;
 
-    public override void Initialize(Vector3 position, LootPool pool)
+    public override void Initialize(Vector3 position)
     {
-        base.Initialize(position, pool);
+        base.Initialize(position);
         Observer.Instance.AddObserver(EventName.PickUpAllLoot, PickUpAllLoot);
     }
 

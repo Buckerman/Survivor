@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8272117862110249999}
   - component: {fileID: 7572207199557721158}
   - component: {fileID: 6475037627989693405}
+  - component: {fileID: 4537714458693066903}
+  - component: {fileID: 3215664798446287045}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -67,9 +69,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootPrefabs:
-  - {fileID: -5027592555022169034, guid: 7ecea1522a989494a86437763a220669, type: 3}
-  - {fileID: 5804138843811534919, guid: 636e0cf82e18f544481e480617d1ae48, type: 3}
-  lootPoolSize: 10
+  - {fileID: 5735249281848568997, guid: 636e0cf82e18f544481e480617d1ae48, type: 3}
+  - {fileID: 8874683525960983243, guid: c6b1363409d8be44bbceb51a167934cc, type: 3}
+  - {fileID: 2445137885594843915, guid: f45ad3efd6aaf2f49801477aa05cbb04, type: 3}
+  lootProbabilities:
+  - 10
+  - 5
+  - 5
+  defaultLootPrefab: {fileID: 3102827308729024908, guid: 7ecea1522a989494a86437763a220669, type: 3}
 --- !u!114 &7572207199557721158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,5 +99,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7989c0b43a9e6144d9d414ba2bb31a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4537714458693066903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352624878009854795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe9be5ece9a0cf4c9553cf1080e22c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3215664798446287045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352624878009854795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435c2e55efc8ca647af85b3fb836779a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

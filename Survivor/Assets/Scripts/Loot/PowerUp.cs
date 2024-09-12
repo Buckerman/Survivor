@@ -21,9 +21,9 @@ public class PowerUp : Loot
     public float amount = 1.5f;
     public float startTime;
 
-    public override void Initialize(Vector3 position, LootPool pool)
+    public override void Initialize(Vector3 position)
     {
-        base.Initialize(position, pool);
+        base.Initialize(position);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,6 +32,7 @@ public class PowerUp : Loot
         {
             startTime = Time.time;
             GameManager.Instance.GetComponent<BuffManager>().AddBuff(this);
+            ReturnToPool();
         }
     }
 
