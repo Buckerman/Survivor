@@ -68,8 +68,6 @@ public class GameTimer : MonoBehaviour
         Observer.Instance.Notify(EventName.DisableAllLoot);
         Observer.Instance.Notify(EventName.WaveCompleted, waveLevel);
     }
-
-
     public void StopTimer()
     {
         enabled = false;
