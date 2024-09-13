@@ -24,7 +24,7 @@ public class PlayerShooting : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         shootTimer -= Time.deltaTime;
         if (shootTimer <= 0f)

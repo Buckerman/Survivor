@@ -127,7 +127,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     private void HandleJump()
     {
         ApplyGravity();
@@ -145,7 +144,6 @@ public class PlayerController : MonoBehaviour
         jumpAnimationPlaying = false;
         SetAnimation("isJumping", false);
     }
-
     private void ApplyGravity()
     {
         if (!_controller.isGrounded)
