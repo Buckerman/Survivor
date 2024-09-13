@@ -48,7 +48,7 @@ public class BloodSplash : MonoBehaviour
     {
         _bloodSystem.Stop();
         Invoke(nameof(RemoveObserver), 0f);
-        ObjectPooling.Instance.ReturnObject(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 
     private void RemoveObserver()

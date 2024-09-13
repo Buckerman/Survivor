@@ -29,8 +29,8 @@ public abstract class Loot : MonoBehaviour
     {
         if (this != null)
         {
-            ObjectPooling.Instance.ReturnObject(this.gameObject);
             Invoke(nameof(RemoveObserver), 0f);
+            this.gameObject.SetActive(false);
         }
     }
 

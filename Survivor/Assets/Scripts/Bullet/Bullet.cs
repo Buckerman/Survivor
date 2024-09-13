@@ -35,6 +35,6 @@ public class Bullet : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        ObjectPooling.Instance.ReturnObject(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 }

@@ -40,7 +40,7 @@ public class DamageText : MonoBehaviour
     private void OnDisable()
     {
         Invoke(nameof(RemoveObserver), 0f);
-        ObjectPooling.Instance.ReturnObject(this.gameObject);
+        this.gameObject.SetActive(false);
     }
     private void RemoveObserver()
     {

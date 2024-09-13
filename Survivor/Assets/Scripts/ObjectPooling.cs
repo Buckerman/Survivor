@@ -45,12 +45,6 @@ public class ObjectPooling : MonoBehaviour
         return g2;
     }
 
-    // This method returns an object to the pool by deactivating it
-    public void ReturnObject(GameObject obj)
-    {
-        obj.SetActive(false); // Deactivate the object
-    }
-
     public void ClearPool()
     {
         _poolObjects.Clear(); // Clear the pool dictionary

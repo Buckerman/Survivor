@@ -81,6 +81,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    //called in animator
     private void AttackPlayer()
     {
         _player.GetComponent<PlayerHealth>().TakeDamage(enemyAttackDamage);
@@ -137,7 +138,7 @@ public class EnemyController : MonoBehaviour
     private void OnDisable()
     {
         Invoke(nameof(RemoveObserver), 0f);
-        ObjectPooling.Instance.ReturnObject(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 
     private void RemoveObserver()
