@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     public float rotationSpeed = 20f;
     public float climbSpeed = 3f;
     [Header("Melee")]
+    public float attackRange = 2f;
     public float attackDamage = 12f;
+    public float detectionAngle = 120f;
     [Header("Range")]
     public float rangeDamage = 12f;
     public float bulletSpeed = 10f;

@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         {
             var (enemyHealth, damage) = enemyData;
             targetTransform = enemyHealth.transform;
-            damageText.Setup((int)damage, Color.white);
+            damageText.Setup((int)damage, Color.yellow);
         }
 
         damageText.Initialize(targetTransform.position);

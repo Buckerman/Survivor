@@ -9,10 +9,11 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float maxHealth = 12f;
     private int _currentHealth;
 
-    private void Start()
+    private void OnEnable()
     {
         _currentHealth = (int)maxHealth;
     }
+
     public void TakeDamage(float damage)
     {
         _currentHealth -= (int)damage;
@@ -29,4 +30,5 @@ public class EnemyHealth : MonoBehaviour
         Player.Instance.GetComponent<PlayerLevelSystem>().GainExperience();
         this.gameObject.SetActive(false);
     }
+
 }

@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     private Animator _animator;
     private TrailRenderer _trailRenderer;
     private SwordTrigger currentSwordTrigger;
+    public bool isAttacking;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -36,10 +37,12 @@ public class PlayerAttack : MonoBehaviour
     private void ActivateTrail()
     {
         _trailRenderer.enabled = true;
+        isAttacking = true;
     }
     private void DeactivateTrail()
     {
         _trailRenderer.enabled = false;
+        isAttacking = false;
     }
 
     private void DealDamage()
@@ -55,7 +58,5 @@ public class PlayerAttack : MonoBehaviour
                 enemy.TakeDamage(Player.Instance.attackDamage);
             }
         }
-
-        currentSwordTrigger.ClearEnemiesInRange();
     }
 }

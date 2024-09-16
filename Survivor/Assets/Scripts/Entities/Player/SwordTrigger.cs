@@ -1,66 +1,63 @@
-using DG.Tweening;
 using QuangDM.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordTrigger : MonoBehaviour
 {
-    private Collider slashCollider;
-    private List<EnemyHealth> enemiesInRange = new List<EnemyHealth>();
-    private Vector3 originalPos;
-
-    private void Awake()
-    {
-        slashCollider = GetComponent<Collider>();
-        originalPos = transform.localPosition;
-    }
+    private HashSet<EnemyHealth> enemiesInRange = new HashSet<EnemyHealth>();
 
     private void Update()
     {
-        if (Player.Instance.GetComponent<PlayerController>().magnitude >= 0.1f)
+        DetectEnemiesUsingCone(Player.Instance.attackRange);
+
+        if (Player.Instance.GetComponent<PlayerAttack>().isAttacking)
+            RemoveEnemiesOutOfRange(Player.Instance.attackRange);
+    }
+
+    private void DetectEnemiesUsingCone(float range)
+    {
+        HashSet<EnemyHealth> detectedEnemies = new HashSet<EnemyHealth>();
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
+        foreach (var hitCollider in hitColliders)
         {
-            Vector3 newPosition = transform.localPosition;
-            newPosition.z = 1.5f;
-            transform.localPosition = newPosition;
+            if (hitCollider.CompareTag("Enemy"))
+            {
+                EnemyHealth enemyHealth = hitCollider.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    Vector3 directionToEnemy = (hitCollider.transform.position - transform.position).normalized;
+                    float angle = Vector3.Angle(transform.forward, directionToEnemy);
+
+                    if (angle <= Player.Instance.detectionAngle / 2)
+                    {
+                        detectedEnemies.Add(enemyHealth);
+                    }
+                }
+            }
         }
-        else
+
+        enemiesInRange = detectedEnemies;
+
+        if (enemiesInRange.Count > 0)
         {
-            transform.localPosition = originalPos;
+            Observer.Instance.Notify(EventName.Slash, this);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void RemoveEnemiesOutOfRange(float range)
     {
-        if (other.CompareTag("Enemy"))
+        enemiesInRange.RemoveWhere(enemy =>
         {
-            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-            if (enemyHealth != null && !enemiesInRange.Contains(enemyHealth))
-            {
-                enemiesInRange.Add(enemyHealth);
-                Observer.Instance.Notify(EventName.Slash, this);
-            }
-        }
-    }
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) return true;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-            if (enemyHealth != null && enemiesInRange.Contains(enemyHealth))
-            {
-                enemiesInRange.Remove(enemyHealth);
-            }
-        }
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            return distance > range;
+        });
     }
 
     public List<EnemyHealth> GetEnemiesInRange()
     {
-        return enemiesInRange;
-    }
-
-    public void ClearEnemiesInRange()
-    {
-        enemiesInRange.Clear();
+        return new List<EnemyHealth>(enemiesInRange);
     }
 }

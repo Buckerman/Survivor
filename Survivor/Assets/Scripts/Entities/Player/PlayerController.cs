@@ -1,6 +1,7 @@
 using QuangDM.Common;
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -107,21 +108,19 @@ public class PlayerController : MonoBehaviour
 
         if (_controller.isGrounded)
         {
-            Vector3 origin = transform.position + transform.forward * offsetDistance;
+            Vector3 origin = transform.position;
 
             Vector3 forwardDirection = transform.forward;
             Ray forwardRay = new Ray(origin, forwardDirection);
             RaycastHit forwardHit;
 
-            Ray downwardRay = new Ray(origin, Vector3.down);
+            Ray downwardRay = new Ray(origin + transform.forward * offsetDistance, Vector3.down);
             RaycastHit downwardHit;
 
-            if (Physics.Raycast(forwardRay, out forwardHit, edgeDetectionDistance))
-            {
-                return;
-            }
+            bool isWallInFront = Physics.Raycast(forwardRay, out forwardHit, edgeDetectionDistance);
+            bool isEdge = !Physics.Raycast(downwardRay, out downwardHit, edgeDetectionDistance);
 
-            if (!Physics.Raycast(downwardRay, out downwardHit, edgeDetectionDistance))
+            if (!isWallInFront && isEdge)
             {
                 HandleJump();
             }
