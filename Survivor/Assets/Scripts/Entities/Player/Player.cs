@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     public float rangeDamage = 12f;
     public float bulletSpeed = 10f;
     public float shootingRange = 10f;
-    public float shootingSpeed = 2f;
+    public float shootingSpeed = 1f;
 
     private void Awake()
     {

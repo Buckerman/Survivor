@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using QuangDM.Common;
-using System;
-using System.Collections.Generic;
 
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy Settings")]
     [SerializeField] private float enemySpeed = 2f;
     [SerializeField] private float enemyAttackRange = 1.8f;
+    [SerializeField] private float enemyRotateSpeed = 150f;
+    [SerializeField] private float viewAngle = 60f;
     [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
     [SerializeField] private float maxDistanceFromPlayer = 15f;
@@ -17,9 +16,8 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Transform _player;
     private Animator _animator;
-    public NavMeshAgent NavMeshAgent => agent;
 
-    private IEnemyState _currentState;
+    public NavMeshAgent NavMeshAgent => agent;
 
     private void Awake()
     {
@@ -31,60 +29,80 @@ public class EnemyController : MonoBehaviour
     public void Initialize(Transform playerTransform)
     {
         _player = playerTransform;
-
-        Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
         agent.enabled = false;
+        Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Chase();
     }
 
     private void Chase()
     {
-        if (_player != null)
+        if (_player == null) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        if (distanceToPlayer > maxDistanceFromPlayer)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
-            if (distanceToPlayer > maxDistanceFromPlayer)
-            {
-                OnDisable();
-                return;
-            }
+            OnDisable();
+            return;
+        }
 
-            NavMeshPath path = new NavMeshPath();
-            agent.CalculatePath(_player.position, path);
-            if (path.status == NavMeshPathStatus.PathComplete)
-            {
-                agent.SetDestination(_player.position);
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(_player.position, path);
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
+            agent.SetDestination(_player.position);
 
-                //check if player is in enemy range and visible angle
-                if (distanceToPlayer <= enemyAttackRange && Mathf.Abs(transform.eulerAngles.x) < 1f && Mathf.Abs(transform.eulerAngles.z) < 1f)
+            if (distanceToPlayer <= enemyAttackRange)
+            {
+                if (IsPlayerInView())
                 {
                     agent.isStopped = true;
-                    SetState(new AttackState());
+                    _animator.Play("EnemyAttack");
                 }
                 else
                 {
-                    agent.isStopped = false;
-                    SetState(new WalkState());
+                    RotateTowards(_player.position);
+                    _animator.Play("EnemyWalk");
                 }
             }
             else
             {
-                Vector3 fallbackPosition = GetFallbackPosition();
-                if (fallbackPosition != Vector3.zero)
-                {
-                    agent.SetDestination(fallbackPosition);
-                }
+                agent.isStopped = false;
+                _animator.Play("EnemyWalk");
+            }
+        }
+        else
+        {
+            Vector3 fallbackPosition = GetFallbackPosition();
+            if (fallbackPosition != Vector3.zero)
+            {
+                agent.SetDestination(fallbackPosition);
             }
         }
     }
-
-    //called in animator
     private void AttackPlayer()
     {
-        _player.GetComponent<PlayerHealth>().TakeDamage(enemyAttackDamage);
+        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        if (distanceToPlayer <= enemyAttackRange && IsPlayerInView())
+        {
+            _player.GetComponent<PlayerHealth>().TakeDamage(enemyAttackDamage);
+        }
+    }
+    private bool IsPlayerInView()
+    {
+        Vector3 directionToPlayer = (_player.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        return angleToPlayer <= viewAngle / 2f;
+    }
+    void RotateTowards(Vector3 targetPosition)
+    {
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, enemyRotateSpeed * Time.deltaTime);
     }
     private void OnTriggerExit(Collider other)
     {
@@ -112,21 +130,6 @@ public class EnemyController : MonoBehaviour
         return Vector3.zero;
     }
 
-    public void SetState(IEnemyState newState)
-    {
-        if (_currentState != null)
-        {
-            _currentState.Exit();
-        }
-        _currentState = newState;
-        _currentState.Enter(this);
-    }
-
-    public void SetAnimation(string parameter, bool state)
-    {
-        _animator.SetBool(parameter, state);
-    }
-
     private void DisableAllEnemies(object data)
     {
         if (this != null)
@@ -148,5 +151,4 @@ public class EnemyController : MonoBehaviour
             Observer.Instance.RemoveObserver(EventName.DisableAllEnemies, DisableAllEnemies);
         }
     }
-
 }

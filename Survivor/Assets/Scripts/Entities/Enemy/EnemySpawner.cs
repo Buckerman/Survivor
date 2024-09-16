@@ -49,7 +49,8 @@ public class EnemySpawner : MonoBehaviour
             enemy.transform.position = spawnPosition;
             enemy.Initialize(Player.Instance.transform);
             enemy.NavMeshAgent.enabled = true;
-            enemy.SetState(new WalkState());
+            enemy.GetComponent<Animator>().Play("EnemyWalk");
+
         }
     }
 
