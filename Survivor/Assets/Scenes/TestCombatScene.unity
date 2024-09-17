@@ -66268,7 +66268,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c350dff0a65e36f43988866324b1a14b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 5727215482435740817, guid: c89760e29d915ef4cb48b374171bd0e0, type: 3}
+  enemyPrefabs:
+  - {fileID: 5727215482435740817, guid: c89760e29d915ef4cb48b374171bd0e0, type: 3}
+  - {fileID: 295246445304572536, guid: 6270271eeb01cab488497e8e3250aee2, type: 3}
+  enemyProbabilities:
+  - 33
+  - 33
+  defaultEnemyPrefab: {fileID: 5832024315241714047, guid: 28e6c2cab9ef4c14c9b4ad7215e56be6, type: 3}
   spawnInterval: 1
   spawnDistance: 10
   maxSampleDistance: 2

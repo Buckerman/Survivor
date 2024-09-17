@@ -6,7 +6,9 @@ using QuangDM.Common;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Spawn Settings")]
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private List<float> enemyProbabilities;
+    [SerializeField] private GameObject defaultEnemyPrefab;
     [SerializeField] private float spawnInterval = 0.3f;
 
     [SerializeField] private float spawnDistance = 10f;
@@ -14,10 +16,12 @@ public class EnemySpawner : MonoBehaviour
 
     private float _timeSinceLastSpawn;
     private int _currentWave = 1;
+    private List<float> cumulativeProbability;
 
     private void Start()
     {
         Observer.Instance.AddObserver(EventName.WaveCompleted, WaveCompleted);
+        MakeCumulativeProbability(enemyProbabilities);
     }
 
     private void WaveCompleted(object data)
@@ -43,6 +47,7 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = GetRandomPositionOnGround();
         if (spawnPosition != Vector3.zero)
         {
+            GameObject enemyPrefab = GetLEnemyPrefab();
             GameObject enemyObject = ObjectPooling.Instance.GetObject(enemyPrefab);
             EnemyController enemy = enemyObject.GetComponent<EnemyController>();
 
@@ -53,8 +58,44 @@ public class EnemySpawner : MonoBehaviour
 
         }
     }
+    private GameObject GetLEnemyPrefab()
+    {
+        int index = GetEnemyByProbability();
+        if (index == -1 || index >= enemyPrefabs.Count)
+        {
+            return defaultEnemyPrefab;
+        }
+        return enemyPrefabs[index];
+    }
+    public int GetEnemyByProbability()
+    {
+        float rnd = Random.Range(0f, 100f);
 
+        for (int i = 0; i < cumulativeProbability.Count; i++)
+        {
+            if (rnd < cumulativeProbability[i])
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    private void MakeCumulativeProbability(List<float> probability)
+    {
+        float cumulativeSum = 0;
+        cumulativeProbability = new List<float>();
 
+        for (int i = 0; i < probability.Count; i++)
+        {
+            cumulativeSum += probability[i];
+            cumulativeProbability.Add(cumulativeSum);
+        }
+
+        if (cumulativeProbability.Count == 0 || cumulativeSum < 100f)
+        {
+            cumulativeProbability.Add(100f);
+        }
+    }
     private Vector3 GetRandomPositionOnGround()
     {
         Vector3 playerPosition = Player.Instance.transform.position;
@@ -74,7 +115,6 @@ public class EnemySpawner : MonoBehaviour
 
         return Vector3.zero;
     }
-
     void OnDestroy()
     {
         Observer.Instance.RemoveObserver(EventName.WaveCompleted, WaveCompleted);

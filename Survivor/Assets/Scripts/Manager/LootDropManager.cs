@@ -46,7 +46,6 @@ public class LootDropManager : MonoBehaviour
                 return i;
             }
         }
-
         return -1;
     }
 

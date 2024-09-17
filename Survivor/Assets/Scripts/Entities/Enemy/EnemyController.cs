@@ -48,6 +48,12 @@ public class EnemyController : MonoBehaviour
             OnDisable();
             return;
         }
+        if (distanceToPlayer < 0.1f)
+        {
+            RotateTowards(_player.position);
+            _animator.Play("EnemyAttack");
+            return;
+        }
 
         NavMeshPath path = new NavMeshPath();
         agent.CalculatePath(_player.position, path);
