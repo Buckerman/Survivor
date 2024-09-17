@@ -5,11 +5,12 @@ using QuangDM.Common;
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy Settings")]
+    [SerializeField] private int enemyAttackDamage = 5;
     [SerializeField] private float enemySpeed = 2f;
     [SerializeField] private float enemyAttackRange = 1.8f;
     [SerializeField] private float enemyRotateSpeed = 150f;
     [SerializeField] private float viewAngle = 60f;
-    [SerializeField] private int enemyAttackDamage = 5;
+    [SerializeField] private float animationSpeed = 1f;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
     [SerializeField] private float maxDistanceFromPlayer = 15f;
 
@@ -25,19 +26,17 @@ public class EnemyController : MonoBehaviour
         _animator = GetComponent<Animator>();
         agent.speed = enemySpeed;
     }
-
     public void Initialize(Transform playerTransform)
     {
         _player = playerTransform;
         agent.enabled = false;
+        _animator.SetFloat("Speed", animationSpeed);
         Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
     }
-
     private void Update()
     {
         Chase();
     }
-
     private void Chase()
     {
         if (_player == null) return;
@@ -110,18 +109,6 @@ public class EnemyController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, enemyRotateSpeed * Time.deltaTime);
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(enemyAttackDamage);
-            }
-        }
-    }
-
     private Vector3 GetFallbackPosition()
     {
         Vector3 playerPosition = _player.position;
@@ -135,7 +122,17 @@ public class EnemyController : MonoBehaviour
 
         return Vector3.zero;
     }
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(enemyAttackDamage);
+            }
+        }
+    }
     private void DisableAllEnemies(object data)
     {
         if (this != null)

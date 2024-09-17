@@ -56,8 +56,13 @@ public class PlayerShooting : MonoBehaviour
     {
         if (closestEnemy != null)
         {
-            Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
+            Vector3 directionToEnemy = (closestEnemy.position - transform.position);
             directionToEnemy.y = 0;
+
+            if (directionToEnemy.magnitude < 0.5f)
+                directionToEnemy = transform.forward;
+            else
+                directionToEnemy.Normalize();
 
             Vector3 spawnPos = bulletSpawnPos.position;
 
