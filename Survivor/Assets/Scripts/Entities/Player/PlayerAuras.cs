@@ -19,33 +19,33 @@ public class PlayerAuras : MonoBehaviour
         levelUpAura.Play();
     }
 
-    public void PlayEffect(BuffType buffType)
+    public void PlayEffect(PowerUpType powerUpType)
     {
-        switch (buffType)
+        switch (powerUpType)
         {
-            case BuffType.MOVEMENT_SPEED:
+            case PowerUpType.MOVEMENT_SPEED:
                 speedBuffAura.Play();
                 break;
-            case BuffType.SHOOTING_SPEED:
+            case PowerUpType.SHOOTING_SPEED:
                 shootingBuffAura.Play();
                 break;
-            case BuffType.MELEE_DAMAGE:
+            case PowerUpType.MELEE_DAMAGE:
                 damageBuffAura.Play();
                 break;
         }
     }
 
-    public void StopEffect(BuffType buffType)
+    public void StopEffect(PowerUpType powerUpType)
     {
-        switch (buffType)
+        switch (powerUpType)
         {
-            case BuffType.MOVEMENT_SPEED:
+            case PowerUpType.MOVEMENT_SPEED:
                 speedBuffAura.Stop();
                 break;
-            case BuffType.SHOOTING_SPEED:
+            case PowerUpType.SHOOTING_SPEED:
                 shootingBuffAura.Stop();
                 break;
-            case BuffType.MELEE_DAMAGE:
+            case PowerUpType.MELEE_DAMAGE:
                 damageBuffAura.Stop();
                 break;
         }

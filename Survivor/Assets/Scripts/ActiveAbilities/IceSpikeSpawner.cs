@@ -1,15 +1,17 @@
 using UnityEngine;
 
-public class IceSpikeSpawner : MonoBehaviour
+public class IceSpikeSpawner
 {
-    public GameObject iceSpikePrefab;  
-    public int numberOfSpikes = 8;
-    public float radius = 5f;
+    private GameObject iceSpikePrefab;
+    public int numberOfSpikes = 7;
+    public float radius = 1.5f;
 
-    void SpawnIceSpikes()
+    private void Awake()
     {
-        Vector3 playerPosition = transform.position;
-
+        iceSpikePrefab = ResourcesManager.Instance.Load<GameObject>("Prefabs/ActiveAbilities/IceSpikes.prefab");
+    }
+    void SpawnIceSpikes(Vector3 playerPosition)
+    {
         float angleStep = 360f / numberOfSpikes;
 
         for (int i = 0; i < numberOfSpikes; i++)
@@ -17,15 +19,11 @@ public class IceSpikeSpawner : MonoBehaviour
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector3 spikePosition = new Vector3(
                 playerPosition.x + Mathf.Cos(angle) * radius,
-                playerPosition.y, 
+                playerPosition.y,
                 playerPosition.z + Mathf.Sin(angle) * radius
             );
             Quaternion spikeRotation = Quaternion.Euler(0, -i * angleStep, -15);
-            Instantiate(iceSpikePrefab, spikePosition, spikeRotation);
+            GameObject iceSpikeObject = ObjectPooling.Instance.GetObject(iceSpikePrefab);
         }
-    }
-    private void Start()
-    {
-        SpawnIceSpikes();
     }
 }

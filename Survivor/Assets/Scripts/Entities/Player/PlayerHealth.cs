@@ -57,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
 
         Player.Instance.GetComponent<PlayerWallet>().ResetWallet();
         Player.Instance.GetComponent<PlayerLevelSystem>().ResetExp();
-        GameManager.Instance.GetComponent<BuffManager>().ClearAllBuffs();
+        GameManager.Instance.GetComponent<PowerUpManager>().ClearAllPowers();
 
         _healthBar.gameObject.SetActive(false);
 

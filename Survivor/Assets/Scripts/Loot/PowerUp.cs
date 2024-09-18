@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BuffType
+public enum PowerUpType
 {
     MOVEMENT_SPEED,
     SHOOTING_SPEED,
@@ -16,7 +16,7 @@ public class PowerUp : Loot
     private float distanceToPlayer;
 
     [Header("PowerUp Settings")]
-    public BuffType buffType;
+    public PowerUpType powerUpType;
     public float duration = 10.0f;
     public float amount = 1.5f;
     public float startTime;
@@ -31,24 +31,24 @@ public class PowerUp : Loot
         if (other.CompareTag("Player"))
         {
             startTime = Time.time;
-            GameManager.Instance.GetComponent<BuffManager>().AddBuff(this);
+            GameManager.Instance.GetComponent<PowerUpManager>().AddPowerUp(this);
             ReturnToPool();
         }
     }
 
     public void Apply()
     {
-        switch (buffType)
+        switch (powerUpType)
         {
-            case BuffType.MOVEMENT_SPEED:
+            case PowerUpType.MOVEMENT_SPEED:
                 Player.Instance.movementSpeed += amount;
                 break;
 
-            case BuffType.SHOOTING_SPEED:
+            case PowerUpType.SHOOTING_SPEED:
                 Player.Instance.shootingSpeed *= amount;
                 break;
 
-            case BuffType.MELEE_DAMAGE:
+            case PowerUpType.MELEE_DAMAGE:
                 Player.Instance.attackDamage += amount;
                 break;
         }
@@ -56,17 +56,17 @@ public class PowerUp : Loot
 
     public void Remove()
     {
-        switch (buffType)
+        switch (powerUpType)
         {
-            case BuffType.MOVEMENT_SPEED:
+            case PowerUpType.MOVEMENT_SPEED:
                 Player.Instance.movementSpeed -= amount;
                 break;
 
-            case BuffType.SHOOTING_SPEED:
+            case PowerUpType.SHOOTING_SPEED:
                 Player.Instance.shootingSpeed /= amount;
                 break;
 
-            case BuffType.MELEE_DAMAGE:
+            case PowerUpType.MELEE_DAMAGE:
                 Player.Instance.attackDamage -= amount;
                 break;
         }

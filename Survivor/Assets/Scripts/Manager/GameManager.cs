@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private LootDropManager _lootDropManager;
     [SerializeField] private UIManager _uiManager;
-    [SerializeField] private BuffManager _buffManager;
+    [SerializeField] private PowerUpManager _powerUpManager;
+    [SerializeField] private AbilityManager _abilityManager;
 
     [Header("Damage Text Settings")]
     [SerializeField] private GameObject damageTextPrefab;
@@ -121,15 +122,15 @@ public class GameManager : MonoBehaviour
     {
         _lootDropManager.DropLoot((Vector3)data);
     }
-    private void ActivateBuffUI(object data)
+    private void ActivatePowerUpfUI(object data)
     {
         _uiManager.ActivateBuffUI(data.ToString());
     }
-    private void RemoveBuffUI(object data)
+    private void RemovePowerUpUI(object data)
     {
         _uiManager.RemoveBuffUI(data.ToString());
     }
-    private void UpdateBuffUI(object data)
+    private void UpdatePowerUpUI(object data)
     {
         _uiManager.UpdateBuffUI(data);
     }
@@ -190,9 +191,9 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.AddObserver(EventName.UpdateWalletUI, UpdateWalletUI);
         Observer.Instance.AddObserver(EventName.PlayerLevelUp, PlayerLevelUp);
-        Observer.Instance.AddObserver(EventName.ActivateBuffUI, ActivateBuffUI);
-        Observer.Instance.AddObserver(EventName.RemoveBuffUI, RemoveBuffUI);
-        Observer.Instance.AddObserver(EventName.UpdateBuffUI, UpdateBuffUI);
+        Observer.Instance.AddObserver(EventName.ActivatePowerUpfUI, ActivatePowerUpfUI);
+        Observer.Instance.AddObserver(EventName.RemovePowerUpUI, RemovePowerUpUI);
+        Observer.Instance.AddObserver(EventName.UpdatePowerUpUI, UpdatePowerUpUI);
     }
     private void RemoveObservers()
     {
@@ -204,8 +205,8 @@ public class GameManager : MonoBehaviour
         Observer.Instance.RemoveObserver(EventName.BloodSpawn, BloodSpawn);
         Observer.Instance.RemoveObserver(EventName.UpdateWalletUI, UpdateWalletUI);
         Observer.Instance.RemoveObserver(EventName.PlayerLevelUp, PlayerLevelUp);
-        Observer.Instance.RemoveObserver(EventName.ActivateBuffUI, ActivateBuffUI);
-        Observer.Instance.RemoveObserver(EventName.RemoveBuffUI, RemoveBuffUI);
-        Observer.Instance.RemoveObserver(EventName.UpdateBuffUI, UpdateBuffUI);
+        Observer.Instance.RemoveObserver(EventName.ActivatePowerUpfUI, ActivatePowerUpfUI);
+        Observer.Instance.RemoveObserver(EventName.RemovePowerUpUI, RemovePowerUpUI);
+        Observer.Instance.RemoveObserver(EventName.UpdatePowerUpUI, UpdatePowerUpUI);
     }
 }
