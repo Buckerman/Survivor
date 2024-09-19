@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     {
         _lootDropManager.Initialize();
         _uiManager.Initialize();
+        _abilityManager.Initialize();
 
         Application.targetFrameRate = 60;
         StartGame();

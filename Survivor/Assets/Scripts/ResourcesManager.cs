@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourcesManager : MonoBehaviour
+public class ResourcesManager : MonoBehaviour //IN ORDER TO WORK MUST BE IN RESOURCES FOLDER
 {
     public static ResourcesManager Instance;
     private void Awake()
