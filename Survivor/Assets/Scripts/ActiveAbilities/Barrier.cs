@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
-    public float cooldown = 15f;
+    public float cooldown = 30f;
 
     public void ActivateBarrier()
     {

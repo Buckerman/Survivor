@@ -17,6 +17,7 @@ public class PlayerAttack : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
+        isAttacking = false;
     }
     private void Start()
     {

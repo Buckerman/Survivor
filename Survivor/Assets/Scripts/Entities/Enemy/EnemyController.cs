@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using QuangDM.Common;
+using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Transform _player;
     private Animator _animator;
+    private bool isPaused = false;
 
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -35,7 +37,10 @@ public class EnemyController : MonoBehaviour
     }
     private void Update()
     {
-        Chase();
+        if (!isPaused)
+        {
+            Chase();
+        }
     }
     private void Chase()
     {
@@ -109,6 +114,18 @@ public class EnemyController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, enemyRotateSpeed * Time.deltaTime);
     }
+    public void StunEnemy(float duration)
+    {
+        StartCoroutine(TemporarilyStopEnemy(duration));
+    }
+    public IEnumerator TemporarilyStopEnemy(float duration)
+    {
+        isPaused = true;
+        agent.isStopped = true;
+        yield return new WaitForSeconds(duration);
+        agent.isStopped = false;
+        isPaused = false;
+    }
     private Vector3 GetFallbackPosition()
     {
         Vector3 playerPosition = _player.position;
@@ -140,14 +157,12 @@ public class EnemyController : MonoBehaviour
             OnDisable();
         }
     }
-
     private void OnDisable()
     {
-        Invoke(nameof(RemoveObserver), 0f);
+        Invoke(nameof(RemoveObservers), 0f);
         this.gameObject.SetActive(false);
     }
-
-    private void RemoveObserver()
+    private void RemoveObservers()
     {
         if (Observer.Instance != null)
         {

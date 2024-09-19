@@ -6,7 +6,7 @@ public class IceRing: MonoBehaviour
     public float radius = 1.5f;
     public float cooldown = 20f;
 
-    void SpawnIceSpikes(Vector3 playerPosition, GameObject iceSpikePrefab)
+    void SpawnIceSpikes(Vector3 playerPosition)
     {
         float angleStep = 360f / numberOfSpikes;
 
@@ -19,7 +19,7 @@ public class IceRing: MonoBehaviour
                 playerPosition.z + Mathf.Sin(angle) * radius
             );
             Quaternion spikeRotation = Quaternion.Euler(0, -i * angleStep, -15);
-            GameObject iceSpikeObject = ObjectPooling.Instance.GetObject(iceSpikePrefab);
+            GameObject iceSpikeObject = ObjectPooling.Instance.GetObject(ResourcesManager.Instance.Load<GameObject>("Prefabs/ActiveAbilities/IceSpike"));
         }
     }
     void PerformAction()

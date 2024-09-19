@@ -1,35 +1,34 @@
+using QuangDM.Common;
+using System.Collections;
 using UnityEngine;
 
-public class LightningStrike: MonoBehaviour
+public class LightningStrike : MonoBehaviour
 {
-    public float damageAmount = 1f;
-    public float radius = 1.5f;
-    public float cooldown = 10f;
-
-    void SpawnLightningBolt(Vector3 playerPosition, Vector3 enemyPosition, GameObject lightningBoltPrefab)
+    private ParticleSystem lightningParticleSystem;
+    private void Awake()
     {
-        GameObject lightningBoltObject = ObjectPooling.Instance.GetObject(lightningBoltPrefab);
-        lightningBoltObject.transform.position = playerPosition;
-
-        Vector3 direction = (enemyPosition - playerPosition).normalized;
-
-        lightningBoltObject.transform.forward = direction;
-
+        lightningParticleSystem = GetComponent<ParticleSystem>();
     }
-
-    // Depending on lengh from enemy, particle system render lengh change
-    public void PerformAction(Vector3 playerPosition, GameObject lightningBoltPrefab)
+    public void Initialize(Vector3 playerPosition, GameObject target, float distance, float damageAmount, float lightningDuration)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(playerPosition, Player.Instance.shootingRange, LayerMask.GetMask("Enemy"));
+        transform.position = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
+        Vector3 direction = (target.transform.position - playerPosition).normalized;
+        transform.forward = -direction;
 
-        foreach (Collider hitCollider in hitColliders)
+        lightningParticleSystem.GetComponent<ParticleSystemRenderer>().lengthScale = distance / transform.localScale.z;
+        lightningParticleSystem.Play();
+
+        target.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
+        target.gameObject.GetComponent<EnemyController>().StunEnemy(lightningDuration);
+
+        StartCoroutine(DisableAfterParticles());
+    }
+    private IEnumerator DisableAfterParticles()
+    {
+        while (!lightningParticleSystem.isStopped)
         {
-            float distance = Vector3.Distance(playerPosition, hitCollider.transform.position);
-            if (distance <= radius)
-            {
-                SpawnLightningBolt(playerPosition, hitCollider.transform.position, lightningBoltPrefab);
-                hitCollider.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
-            }
+            yield return null;
         }
+        gameObject.SetActive(false);
     }
 }
