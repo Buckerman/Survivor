@@ -18,9 +18,11 @@ public class LightningStrike : MonoBehaviour
         lightningParticleSystem.GetComponent<ParticleSystemRenderer>().lengthScale = distance / transform.localScale.z;
         lightningParticleSystem.Play();
 
-        target.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
-        target.gameObject.GetComponent<EnemyController>().StunEnemy(GameManager.Instance.GetComponent<AbilityManager>().lightningStunDuration);
-
+        if (target != null)
+        {
+            target.gameObject.GetComponent<EnemyController>().StunEnemy(GameManager.Instance.GetComponent<AbilityManager>().lightningStunDuration);
+            target.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
+        }
         StartCoroutine(DisableAfterParticles());
     }
     private IEnumerator DisableAfterParticles()

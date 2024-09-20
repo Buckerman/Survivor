@@ -20,8 +20,11 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Transform _player;
     private Animator _animator;
+    private float originalAnimationSpeed;
     public bool isPaused = false;
     public bool isSlowed = false;
+    public bool isStuned = false;
+
 
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -29,14 +32,20 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
-        agent.speed = enemySpeed;
+        originalAnimationSpeed = _animator.speed;
     }
     public void Initialize(Transform playerTransform)
     {
-        _player = playerTransform;
         agent.enabled = false;
         isPaused = false;
+        isSlowed = false;
+        isStuned = false;
+
+        _player = playerTransform;
+        agent.speed = enemySpeed;
+        _animator.speed = originalAnimationSpeed;
         _animator.SetFloat("Speed", animationSpeed);
+
         Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
     }
     private void Update()
@@ -120,15 +129,28 @@ public class EnemyController : MonoBehaviour
     }
     public void StunEnemy(float duration)
     {
-        StartCoroutine(TemporarilyStopEnemy(duration));
+        if (!isStuned)
+        {
+            StartCoroutine(TemporarilyStopEnemy(duration));
+        }
     }
     public IEnumerator TemporarilyStopEnemy(float duration)
     {
         isPaused = true;
         agent.isStopped = true;
+        isStuned = true;
+
+        _animator.speed = 0f;
+        gameObject.GetComponent<EnemyAuras>().PlayEffect(DebuffType.STUN);
+
         yield return new WaitForSeconds(duration);
+
+        gameObject.GetComponent<EnemyAuras>().StopEffect(DebuffType.STUN);
+        _animator.speed = originalAnimationSpeed;
+
         agent.isStopped = false;
         isPaused = false;
+        isStuned = false;
     }
     public void SlowDownEnemy(float duration, float slowAmount)
     {
@@ -142,10 +164,12 @@ public class EnemyController : MonoBehaviour
         agent.speed *= slowAmount;
         isSlowed = true;
         gameObject.GetComponent<EnemyAuras>().PlayEffect(DebuffType.SLOW);
+
         yield return new WaitForSeconds(duration);
+
+        gameObject.GetComponent<EnemyAuras>().StopEffect(DebuffType.SLOW);
         agent.speed = enemySpeed;
         isSlowed = false;
-        gameObject.GetComponent<EnemyAuras>().StopEffect(DebuffType.SLOW);
     }
     private Vector3 GetFallbackPosition()
     {

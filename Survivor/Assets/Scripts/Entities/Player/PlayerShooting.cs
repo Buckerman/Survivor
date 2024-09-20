@@ -37,11 +37,11 @@ public class PlayerShooting : MonoBehaviour
         }
     }
 
-    private void AimAtEnemy()
+    private void AimAtEnemy() //Uncomment when IK finally works..
     {
-        Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
-        Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f); // Custom offset for bullet spawn
-        rightHandTarget.position = transform.position + targetOffset;
+        //Vector3 directionToEnemy = (closestEnemy.position - transform.position).normalized;
+        //Vector3 targetOffset = new Vector3(directionToEnemy.x * 3f, 1.3f, directionToEnemy.z * 3f); // Custom offset for bullet spawn
+        //rightHandTarget.position = transform.position + targetOffset;
         //rightHandIK.weight = 1f;
 
         animator.Play("PlayerShoot");

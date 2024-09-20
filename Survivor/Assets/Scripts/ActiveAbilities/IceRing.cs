@@ -30,10 +30,10 @@ public class IceRing : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && other != null)
         {
-            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesDamage);
             other.gameObject.GetComponent<EnemyController>().SlowDownEnemy(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesSlowDuration, GameManager.Instance.GetComponent<AbilityManager>().iceSpikesSlowAmount);
+            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesDamage);
         }
     }
 }

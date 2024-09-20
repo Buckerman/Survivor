@@ -4,11 +4,13 @@ using UnityEngine;
 
 public enum DebuffType
 {
-    SLOW
+    SLOW,
+    STUN
 }
 public class EnemyAuras : MonoBehaviour
 {
     [SerializeField] public ParticleSystem freezeAura;
+    [SerializeField] public ParticleSystem zapAura;
 
     public void PlayEffect(DebuffType debuffType)
     {
@@ -16,6 +18,9 @@ public class EnemyAuras : MonoBehaviour
         {
             case DebuffType.SLOW:
                 freezeAura.Play();
+                break;
+            case DebuffType.STUN:
+                zapAura.Play();
                 break;
         }
     }
@@ -26,6 +31,9 @@ public class EnemyAuras : MonoBehaviour
         {
             case DebuffType.SLOW:
                 freezeAura.Stop();
+                break;
+            case DebuffType.STUN:
+                zapAura.Stop();
                 break;
         }
     }
