@@ -27,4 +27,12 @@ public class IceRing : MonoBehaviour
         }
         gameObject.SetActive(false);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesDamage);
+        }
+    }
 }

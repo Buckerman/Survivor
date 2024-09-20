@@ -5,6 +5,8 @@ public class AbilityManager : MonoBehaviour
 {
     private Barrier barrier;
     private bool isBarrier;
+    private float lightningTimer;
+    private float iceSpikesTimer;
 
     [Header("Lightning Settings")]
     public float lightningCooldown = 10f;
@@ -12,16 +14,11 @@ public class AbilityManager : MonoBehaviour
     public float lightningDamage = 1f;
     public float lightningDuration = 0.5f;
 
-    private float lightningTimer;
-
     [Header("IceSpikes Settings")]
     public float iceSpikesCooldown = 25f;
     public float iceSpikesRadius = 1.5f;
-    public float iceSpikesDamage = 1f;
+    public float iceSpikesDamage = 5f;
     public float iceSpikesNumber = 7f;
-    public float iceSpikesDuration = 1f;
-
-    private float iceSpikesTimer;
 
     public void Initialize()
     {

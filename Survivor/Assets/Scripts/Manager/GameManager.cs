@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using Cinemachine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {

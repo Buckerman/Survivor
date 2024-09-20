@@ -21,7 +21,6 @@ public class BuildingAndPlatformScatterer : MonoBehaviour
     public Transform bigBuildingsParent;
     public Transform mediumBuildingsParent;
     public Transform smallBuildingsParent;
-    public Transform tinyBuildingsParent;
     public Transform platformsParent;
 
     private List<Vector3> buildingPositionList = new List<Vector3>();
@@ -34,7 +33,6 @@ public class BuildingAndPlatformScatterer : MonoBehaviour
         ClearExistingObjects(bigBuildingsParent);
         ClearExistingObjects(mediumBuildingsParent);
         ClearExistingObjects(smallBuildingsParent);
-        ClearExistingObjects(tinyBuildingsParent);
         ClearExistingObjects(platformsParent);
         buildingPositionList.Clear();
 
@@ -162,8 +160,6 @@ public class BuildingAndPlatformScatterer : MonoBehaviour
                 return mediumBuildingsParent;
             case "Small":
                 return smallBuildingsParent;
-            case "Tiny":
-                return tinyBuildingsParent;
             default:
                 return null;
         }

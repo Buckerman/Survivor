@@ -5,13 +5,15 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("Enemy Settings")]
+    [Header("Enemy Combat Settings")]
     [SerializeField] private int enemyAttackDamage = 5;
-    [SerializeField] private float enemySpeed = 2f;
     [SerializeField] private float enemyAttackRange = 1.8f;
-    [SerializeField] private float enemyRotateSpeed = 150f;
     [SerializeField] private float viewAngle = 60f;
     [SerializeField] private float animationSpeed = 1f;
+
+    [Header("Enemy Movement Settings")]
+    [SerializeField] private float enemySpeed = 2f;
+    [SerializeField] private float enemyRotateSpeed = 150f;
     [SerializeField] private float fallbackDistance = 10f; // Distance below player to fallback to
     [SerializeField] private float maxDistanceFromPlayer = 15f;
 
