@@ -1,29 +1,30 @@
+using System.Collections;
 using UnityEngine;
 
-public class IceRing: MonoBehaviour
+public class IceRing : MonoBehaviour
 {
-    public int numberOfSpikes = 7;
-    public float radius = 1.5f;
-    public float cooldown = 20f;
+    ParticleSystem iceSpikeParticleSystem;
 
-    void SpawnIceSpikes(Vector3 playerPosition)
+    private void Awake()
     {
-        float angleStep = 360f / numberOfSpikes;
-
-        for (int i = 0; i < numberOfSpikes; i++)
-        {
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            Vector3 spikePosition = new Vector3(
-                playerPosition.x + Mathf.Cos(angle) * radius,
-                playerPosition.y,
-                playerPosition.z + Mathf.Sin(angle) * radius
-            );
-            Quaternion spikeRotation = Quaternion.Euler(0, -i * angleStep, -15);
-            GameObject iceSpikeObject = ObjectPooling.Instance.GetObject(ResourcesManager.Instance.Load<GameObject>("Prefabs/ActiveAbilities/IceSpike"));
-        }
+        iceSpikeParticleSystem = GetComponent<ParticleSystem>();
     }
-    void PerformAction()
+    public void Initialize(Vector3 playerPosition, float angle, float radius)
     {
-
+        transform.position = new Vector3(
+            playerPosition.x + Mathf.Cos(angle) * radius,
+            playerPosition.y,
+            playerPosition.z + Mathf.Sin(angle) * radius
+        );
+        iceSpikeParticleSystem.Play();
+        StartCoroutine(DisableAfterParticles());
+    }
+    private IEnumerator DisableAfterParticles()
+    {
+        while (!iceSpikeParticleSystem.isStopped)
+        {
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

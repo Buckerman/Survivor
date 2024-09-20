@@ -27,9 +27,10 @@ public class SwordTrigger : MonoBehaviour
                 if (enemyHealth != null)
                 {
                     Vector3 directionToEnemy = (hitCollider.transform.position - transform.position).normalized;
+                    float distanceToEnemy = Vector3.Distance(transform.position, hitCollider.transform.position);
                     float angle = Vector3.Angle(transform.forward, directionToEnemy);
 
-                    if (angle <= Player.Instance.detectionAngle / 2)
+                    if (angle <= Player.Instance.detectionAngle / 2 && distanceToEnemy <= range)
                     {
                         detectedEnemies.Add(enemyHealth);
                     }
@@ -60,4 +61,5 @@ public class SwordTrigger : MonoBehaviour
     {
         return new List<EnemyHealth>(enemiesInRange);
     }
+
 }
