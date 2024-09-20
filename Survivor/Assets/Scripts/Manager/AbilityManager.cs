@@ -13,17 +13,15 @@ public class AbilityManager : MonoBehaviour
     public float lightningDuration = 0.5f;
 
     private float lightningTimer;
-    private bool isLightningStrikes = true;
 
     [Header("IceSpikes Settings")]
-    public float iceSpikesCooldown = 20f;
+    public float iceSpikesCooldown = 25f;
     public float iceSpikesRadius = 1.5f;
     public float iceSpikesDamage = 1f;
     public float iceSpikesNumber = 7f;
     public float iceSpikesDuration = 1f;
 
     private float iceSpikesTimer;
-    private bool isIceSpikes = true;
 
     public void Initialize()
     {
@@ -34,31 +32,23 @@ public class AbilityManager : MonoBehaviour
 
     private void Update()
     {
+        iceSpikesTimer -= Time.deltaTime;
+        lightningTimer -= Time.deltaTime;
+
         if (isBarrier)
         {
             barrier.ActivateBarrier();
         }
 
-        if (isIceSpikes)
+        if (iceSpikesTimer <= 0f)
         {
-            iceSpikesTimer -= Time.deltaTime;
-
-            if (iceSpikesTimer <= 0f)
-            {
-                ActivateIceSpikes();
-                iceSpikesTimer = iceSpikesCooldown;
-            }
+            ActivateIceSpikes();
+            iceSpikesTimer = iceSpikesCooldown;
         }
-
-        if (isLightningStrikes)
+        if (lightningTimer <= 0f)
         {
-            lightningTimer -= Time.deltaTime;
-
-            if (lightningTimer <= 0f)
-            {
-                ActivateLightningStrikes();
-                lightningTimer = lightningCooldown;
-            }
+            ActivateLightningStrikes();
+            lightningTimer = lightningCooldown;
         }
     }
     private void ActivateLightningStrikes()
@@ -89,7 +79,7 @@ public class AbilityManager : MonoBehaviour
             IceRing iceRing = iceSpikeObject.GetComponent<IceRing>();
 
             iceSpikeObject.transform.rotation = Quaternion.Euler(0, -i * angleStep, -15);
-            iceRing.Initialize(Player.Instance.transform.position,angle, iceSpikesRadius);
+            iceRing.Initialize(Player.Instance.transform.position, angle, iceSpikesRadius);
         }
     }
 }

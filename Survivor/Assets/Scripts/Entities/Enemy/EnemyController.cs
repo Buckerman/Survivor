@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Transform _player;
     private Animator _animator;
-    private bool isPaused = false;
+    public bool isPaused = false;
 
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
     {
         _player = playerTransform;
         agent.enabled = false;
+        isPaused = false;
         _animator.SetFloat("Speed", animationSpeed);
         Observer.Instance.AddObserver(EventName.DisableAllEnemies, DisableAllEnemies);
     }
