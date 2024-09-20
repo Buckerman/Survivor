@@ -6056,6 +6056,7 @@ GameObject:
   - component: {fileID: 1205398601333623377}
   - component: {fileID: 6527783971117826347}
   - component: {fileID: 7540745922655677005}
+  - component: {fileID: 7540745922655677006}
   - component: {fileID: 2790123461195527192}
   - component: {fileID: 847265431646363232}
   m_Layer: 6
@@ -7151,12 +7152,13 @@ MonoBehaviour:
   lightningCooldown: 100000
   lightningRadius: 5
   lightningDamage: 1
-  lightningDuration: 0.5
+  lightningStunDuration: 0.5
   iceSpikesCooldown: 2
   iceSpikesRadius: 1.5
   iceSpikesDamage: 10
   iceSpikesNumber: 7
-  iceSpikesDuration: 1
+  iceSpikesSlowDuration: 1.5
+  iceSpikesSlowAmount: 0.8
 --- !u!1 &1160114764255548119
 GameObject:
   m_ObjectHideFlags: 0
@@ -80402,7 +80404,7 @@ MonoBehaviour:
   rangeDamage: 12
   bulletSpeed: 10
   shootingRange: 10
-  shootingSpeed: 2
+  shootingSpeed: 1
 --- !u!1 &5850640188339770408
 GameObject:
   m_ObjectHideFlags: 0
@@ -81413,6 +81415,7 @@ MonoBehaviour:
   fallbackDistance: 10
   maxDistanceFromPlayer: 15
   isPaused: 0
+  isSlowed: 0
 --- !u!33 &6540115376791759587
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -82848,6 +82851,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 200000
+--- !u!114 &7540745922655677006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449620838660930591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3006f7b722a70954f9de74f6ed051b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  freezeAura: {fileID: 5281770152291658459}
 --- !u!1 &7567032949163572161
 GameObject:
   m_ObjectHideFlags: 0

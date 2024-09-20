@@ -9,7 +9,7 @@ public class LightningStrike : MonoBehaviour
     {
         lightningParticleSystem = GetComponent<ParticleSystem>();
     }
-    public void Initialize(Vector3 playerPosition, GameObject target, float distance, float damageAmount, float lightningDuration)
+    public void Initialize(Vector3 playerPosition, GameObject target, float distance, float damageAmount)
     {
         transform.position = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
         Vector3 direction = (target.transform.position - playerPosition).normalized;
@@ -19,7 +19,7 @@ public class LightningStrike : MonoBehaviour
         lightningParticleSystem.Play();
 
         target.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
-        target.gameObject.GetComponent<EnemyController>().StunEnemy(lightningDuration);
+        target.gameObject.GetComponent<EnemyController>().StunEnemy(GameManager.Instance.GetComponent<AbilityManager>().lightningStunDuration);
 
         StartCoroutine(DisableAfterParticles());
     }

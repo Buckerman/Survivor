@@ -33,6 +33,7 @@ public class IceRing : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             other.gameObject.GetComponent<EnemyHealth>().TakeDamage(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesDamage);
+            other.gameObject.GetComponent<EnemyController>().SlowDownEnemy(GameManager.Instance.GetComponent<AbilityManager>().iceSpikesSlowDuration, GameManager.Instance.GetComponent<AbilityManager>().iceSpikesSlowAmount);
         }
     }
 }

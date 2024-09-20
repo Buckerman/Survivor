@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: -2420264717472670456}
   - component: {fileID: 216945577216541225}
   - component: {fileID: 4629978639259507880}
+  - component: {fileID: 6905606097739242441}
   - component: {fileID: 9067388151833095014}
   - component: {fileID: 6813362385624764815}
   m_Layer: 6
@@ -786,14 +787,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAttackDamage: 5
-  enemySpeed: 2
   enemyAttackRange: 1.8
-  enemyRotateSpeed: 150
   viewAngle: 60
   animationSpeed: 1
+  enemySpeed: 2
+  enemyRotateSpeed: 150
   fallbackDistance: 10
   maxDistanceFromPlayer: 15
   isPaused: 0
+  isSlowed: 0
 --- !u!114 &4629978639259507880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,6 +809,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 12
+--- !u!114 &6905606097739242441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5832024315241714047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3006f7b722a70954f9de74f6ed051b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  freezeAura: {fileID: 4822807623267781478}
 --- !u!195 &9067388151833095014
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1608,6 +1623,11 @@ PrefabInstance:
 --- !u!4 &4621604213150128590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4427366791618786, guid: 23981215f5bbd55418039f95730dde55, type: 3}
+  m_PrefabInstance: {fileID: 4624218393722272044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4822807623267781478 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198875102602375754, guid: 23981215f5bbd55418039f95730dde55, type: 3}
   m_PrefabInstance: {fileID: 4624218393722272044}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5935811532967646295

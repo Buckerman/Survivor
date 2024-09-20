@@ -72,7 +72,7 @@ public class PlayerShooting : MonoBehaviour
             bullet.transform.position = spawnPos;
             bullet.Initialize(directionToEnemy);
 
-            shootTimer = Player.Instance.shootingSpeed;
+            shootTimer = 1f / Player.Instance.shootingSpeed;
         }
     }
 

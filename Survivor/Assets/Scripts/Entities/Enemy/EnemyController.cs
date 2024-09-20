@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
     private Transform _player;
     private Animator _animator;
     public bool isPaused = false;
+    public bool isSlowed = false;
 
     public NavMeshAgent NavMeshAgent => agent;
 
@@ -128,6 +129,23 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         agent.isStopped = false;
         isPaused = false;
+    }
+    public void SlowDownEnemy(float duration, float slowAmount)
+    {
+        if (!isSlowed)
+        {
+            StartCoroutine(TemporarilySlowDownEnemy(duration, slowAmount));
+        }
+    }
+    public IEnumerator TemporarilySlowDownEnemy(float duration, float slowAmount)
+    {
+        agent.speed *= slowAmount;
+        isSlowed = true;
+        gameObject.GetComponent<EnemyAuras>().PlayEffect(DebuffType.SLOW);
+        yield return new WaitForSeconds(duration);
+        agent.speed = enemySpeed;
+        isSlowed = false;
+        gameObject.GetComponent<EnemyAuras>().StopEffect(DebuffType.SLOW);
     }
     private Vector3 GetFallbackPosition()
     {
