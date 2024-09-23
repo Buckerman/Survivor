@@ -45,7 +45,7 @@ public class PowerUp : Loot
                 break;
 
             case PowerUpType.SHOOTING_SPEED:
-                Player.Instance.shootingSpeed *= amount;
+                Player.Instance.shootingSpeed += amount;
                 break;
 
             case PowerUpType.MELEE_DAMAGE:
@@ -63,7 +63,7 @@ public class PowerUp : Loot
                 break;
 
             case PowerUpType.SHOOTING_SPEED:
-                Player.Instance.shootingSpeed *= amount;
+                Player.Instance.shootingSpeed -= amount;
                 break;
 
             case PowerUpType.MELEE_DAMAGE:

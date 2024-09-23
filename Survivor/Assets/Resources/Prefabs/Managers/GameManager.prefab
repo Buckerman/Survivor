@@ -72,7 +72,9 @@ MonoBehaviour:
   - {fileID: 5735249281848568997, guid: 636e0cf82e18f544481e480617d1ae48, type: 3}
   - {fileID: 8874683525960983243, guid: c6b1363409d8be44bbceb51a167934cc, type: 3}
   - {fileID: 2445137885594843915, guid: f45ad3efd6aaf2f49801477aa05cbb04, type: 3}
+  - {fileID: 4174265350684240134, guid: b71c87ba804e2fb4aa41e275932ca3f8, type: 3}
   lootProbabilities:
+  - 5
   - 5
   - 5
   - 5
@@ -137,11 +139,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96a2523698e8f242bca4fcdb112d969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrierCooldown: 30
   lightningCooldown: 10
   lightningRadius: 5
   lightningDamage: 1
-  lightningDuration: 0.5
+  lightningStunDuration: 0.5
   iceSpikesCooldown: 25
   iceSpikesRadius: 1.5
   iceSpikesDamage: 2
   iceSpikesNumber: 7
+  iceSpikesSlowDuration: 1.5
+  iceSpikesSlowAmount: 0.8
