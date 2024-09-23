@@ -31,7 +31,7 @@ public class AbilityManager : MonoBehaviour
         lightningTimer = lightningCooldown;
         iceSpikesTimer = iceSpikesCooldown;
         barrierTimer = barrierCooldown;
-        barrier = Player.Instance.gameObject.GetComponentInChildren<Barrier>();
+        barrier = Player.Instance.GetComponentInChildren<Barrier>();
     }
 
     private void Update()

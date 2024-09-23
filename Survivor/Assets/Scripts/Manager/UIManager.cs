@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     private VariableJoystick _joystick;
 
     private Transform _buffsContainer;
+    private Transform _activeAbilitiesContainer;
     private Dictionary<string, GameObject> buffUIElements;
 
     private void AssignReferences()
@@ -62,9 +63,13 @@ public class UIManager : MonoBehaviour
         if (_buffsContainer == null)
             _buffsContainer = GameObject.Find("HUD/HUDContainer/BuffsContainer").transform;
 
+        if (_activeAbilitiesContainer == null)
+            _activeAbilitiesContainer = GameObject.Find("HUD/ActiveAbilitiesContainer").transform;
+
         _defeatGame.transform.parent.gameObject.SetActive(false);
         _waveComplete.transform.parent.gameObject.SetActive(false);
         _timeLeft.transform.parent.gameObject.SetActive(false);
+        _activeAbilitiesContainer.gameObject.SetActive(false);
 
         Player.Instance.GetComponent<PlayerLevelSystem>().experienceBar = _experienceBar;
         Player.Instance.GetComponent<PlayerController>().Joystick = _joystick;
@@ -125,20 +130,20 @@ public class UIManager : MonoBehaviour
 
         Observer.Instance.Notify(EventName.Joy);
 
-        _joystick.transform.parent.gameObject.SetActive(false);
-        _joystick.enabled = false;
+        SetJoystick(false);
 
         Time.timeScale = 0;
 
         yield return new WaitForSecondsRealtime(delay);
+
+        SetJoystick(true);
 
         _waveComplete.transform.parent.gameObject.SetActive(false);
 
         _groundSurface.GetComponent<EnemySpawner>().enabled = true;
         _gameTimer.transform.parent.gameObject.SetActive(true);
         _waveLevel.transform.parent.gameObject.SetActive(true);
-        _joystick.transform.parent.gameObject.SetActive(true);
-        _joystick.enabled = true;
+       
 
         SurviveTime();
 
@@ -148,33 +153,42 @@ public class UIManager : MonoBehaviour
     {
         _coinAmount.text = $"<sprite=0> {data}";
     }
-    public void ActivateBuffUI(string data)
+    public void ActivatePowerUpfUI(string data)
     {
         if (buffUIElements.TryGetValue(data, out GameObject buffUI))
         {
             buffUI.SetActive(true);
         }
     }
-    public void RemoveBuffUI(string data)
+    public void RemovePowerUpUI(string data)
     {
         if (buffUIElements.TryGetValue(data, out GameObject buffUI))
         {
             buffUI.SetActive(false);
         }
     }
-    public void UpdateBuffUI(object data)
+    public void UpdatePowerUpUI(object data)
     {
         var (name, timeRemaining, duration) = ((string, float, float))data;
         if (buffUIElements.TryGetValue(name, out GameObject buffUI))
         {
-            buffUI.transform.GetChild(0).GetComponentInChildren<Image>().fillAmount = timeRemaining/duration;
+            buffUI.transform.GetChild(0).GetComponentInChildren<Image>().fillAmount = timeRemaining / duration;
         }
+    }
+    public void ActivateAbilityMenu()
+    {
+        _activeAbilitiesContainer.gameObject.SetActive(true);
+    }
+    public void SetJoystick(bool flag)
+    {
+        _joystick.transform.parent.gameObject.SetActive(flag);
+        _joystick.enabled = flag;
     }
     public void EndGame()
     {
         _gameTimer.StopTimer();
         _groundSurface.GetComponent<EnemySpawner>().enabled = false;
         _defeatGame.transform.parent.gameObject.SetActive(true);
-        _joystick.transform.parent.gameObject.SetActive(false);
+        SetJoystick(false);
     }
 }

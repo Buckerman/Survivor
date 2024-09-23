@@ -20,11 +20,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Blood Splash Settings")]
     [SerializeField] private GameObject bloodSplashPrefab;
-
     public static GameManager Instance { get; private set; }
 
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
-
     private void Awake()
     {
         if (Instance == null)
@@ -86,6 +84,10 @@ public class GameManager : MonoBehaviour
     private void PlayerLevelUp(object data)
     {
         _uiManager.PlayerLevelUp(data.ToString());
+        _uiManager.ActivateAbilityMenu();
+        Player.Instance.GetComponent<PlayerHealth>().HealthBar.gameObject.SetActive(false);
+        _uiManager.SetJoystick(false);
+        Time.timeScale = 0f;
     }
     private void DamageReceived(object data)
     {
@@ -124,15 +126,15 @@ public class GameManager : MonoBehaviour
     }
     private void ActivatePowerUpfUI(object data)
     {
-        _uiManager.ActivateBuffUI(data.ToString());
+        _uiManager.ActivatePowerUpfUI(data.ToString());
     }
     private void RemovePowerUpUI(object data)
     {
-        _uiManager.RemoveBuffUI(data.ToString());
+        _uiManager.RemovePowerUpUI(data.ToString());
     }
     private void UpdatePowerUpUI(object data)
     {
-        _uiManager.UpdateBuffUI(data);
+        _uiManager.UpdatePowerUpUI(data);
     }
     private void SurviveTime()
     {
