@@ -6613,7 +6613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96a2523698e8f242bca4fcdb112d969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightningCooldown: 5
+  barrierCooldown: 10
+  lightningCooldown: 1000
   lightningRadius: 5
   lightningDamage: 1
   lightningStunDuration: 10
@@ -8101,6 +8102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 200
+  isBarrier: 0
 --- !u!4 &3042014261105593607
 Transform:
   m_ObjectHideFlags: 0
@@ -91086,7 +91088,7 @@ MonoBehaviour:
   - 33
   - 33
   defaultEnemyPrefab: {fileID: 5727215482435740817, guid: c89760e29d915ef4cb48b374171bd0e0, type: 3}
-  spawnInterval: 1
+  spawnInterval: 5
   spawnDistance: 10
   maxSampleDistance: 2
 --- !u!1 &8436916275262761058

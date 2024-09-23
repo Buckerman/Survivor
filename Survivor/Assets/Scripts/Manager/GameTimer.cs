@@ -39,7 +39,7 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
-        currentTime -= Time.deltaTime;
+        currentTime = Mathf.Max(0, currentTime - Time.deltaTime);
         _countDown.text = ((int)currentTime).ToString();
 
         if (currentTime < 6f)

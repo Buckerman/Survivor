@@ -26,7 +26,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
-        shootTimer -= Time.deltaTime;
+        shootTimer = Mathf.Max(0, shootTimer - Time.deltaTime);
         if (shootTimer <= 0f)
         {
             closestEnemy = FindClosestEnemy();

@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     private int _currentHealth;
     private PlayerHealthBar _healthBar;
+    public bool isBarrier = false;
 
     public PlayerHealthBar HealthBar { get => _healthBar; set => _healthBar = value; }
 
@@ -28,12 +29,23 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _currentHealth -= (int)damage;
-        Observer.Instance.Notify(EventName.DamageReceived, (this, damage));
-        _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
+        if (!isBarrier)
+        {
+            _currentHealth -= (int)damage;
+            Observer.Instance.Notify(EventName.DamageReceived, (this, damage));
+            _healthBar.UpdateHealthBar(_currentHealth, maxHealth);
 
-        if (_currentHealth <= 0)
-            Die();
+            if (_currentHealth <= 0)
+            {
+                gameObject.GetComponentInChildren<Barrier>().DisableBarrier();
+                Die();
+            }
+        }
+        else
+        {
+            isBarrier = false;
+            gameObject.GetComponentInChildren<Barrier>().DisableBarrier();
+        }
     }
 
     public void Heal(float amount)

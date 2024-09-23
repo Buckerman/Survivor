@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class AbilityManager : MonoBehaviour
 {
-    private Barrier barrier;
-    private bool isBarrier;
+    private float barrierTimer;
     private float lightningTimer;
     private float iceSpikesTimer;
+
+    [Header("Barrier Settings")]
+    public float barrierCooldown = 30f;
+    private bool isBarrier;
+    private Barrier barrier;
 
     [Header("Lightning Settings")]
     public float lightningCooldown = 10f;
@@ -17,27 +21,29 @@ public class AbilityManager : MonoBehaviour
     [Header("IceSpikes Settings")]
     public float iceSpikesCooldown = 25f;
     public float iceSpikesRadius = 1.5f;
-    public float iceSpikesDamage = 5f;
+    public float iceSpikesDamage = 2f;
     public float iceSpikesNumber = 7f;
     public float iceSpikesSlowDuration = 1.5f;
     public float iceSpikesSlowAmount = 0.8f;
-
 
     public void Initialize()
     {
         lightningTimer = lightningCooldown;
         iceSpikesTimer = iceSpikesCooldown;
+        barrierTimer = barrierCooldown;
         barrier = Player.Instance.gameObject.GetComponentInChildren<Barrier>();
     }
 
     private void Update()
     {
-        iceSpikesTimer -= Time.deltaTime;
-        lightningTimer -= Time.deltaTime;
+        barrierTimer = Mathf.Max(0, barrierTimer - Time.deltaTime);
+        iceSpikesTimer = Mathf.Max(0, iceSpikesTimer - Time.deltaTime);
+        lightningTimer = Mathf.Max(0, lightningTimer - Time.deltaTime);
 
-        if (isBarrier)
+        if (barrierTimer <= 0f)
         {
             barrier.ActivateBarrier();
+            barrierTimer = barrierCooldown;
         }
 
         if (iceSpikesTimer <= 0f)
