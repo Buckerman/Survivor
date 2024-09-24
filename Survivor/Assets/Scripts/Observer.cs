@@ -18,7 +18,6 @@ namespace QuangDM.Common
         public static readonly string DropLoot = "DropLoot";
         public static readonly string UpdateWalletUI = "UpdateWalletUI";
         public static readonly string CurrentWaveLevel = "CurrentWaveLevel";
-        public static readonly string Joy = "Joy";
         public static readonly string Slash = "Slash";
         public static readonly string PickUpAllLoot = "PickUpAllLoot";
         public static readonly string BloodSpawn = "BloodSpawn";
@@ -26,6 +25,7 @@ namespace QuangDM.Common
         public static readonly string ActivatePowerUpfUI = "ActivatePowerUpfUI";
         public static readonly string RemovePowerUpUI = "RemovePowerUpUI";
         public static readonly string UpdatePowerUpUI = "UpdatePowerUpUI";
+        public static readonly string SetAbilityMenu = "SetAbilityMenu";
     }
     public class Observer : MonoBehaviour //do rozdzielenia zaleznosci miedzy skryptami, wywolywanie zmian w UI, zliczania, questy
     {

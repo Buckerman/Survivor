@@ -39,6 +39,10 @@ public class PlayerLevelSystem : MonoBehaviour
         _currentExp -= _requiredExp;
         Player.Instance._level++;
         Observer.Instance.Notify(EventName.PlayerLevelUp, Player.Instance._level);
+        if (Player.Instance._level % 3 == 0)
+        {
+            Observer.Instance.Notify(EventName.SetAbilityMenu, true);
+        }
 
         _requiredExp = Mathf.FloorToInt(_requiredExp * 1.2f);
     }

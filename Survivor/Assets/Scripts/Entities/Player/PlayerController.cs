@@ -38,13 +38,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         SetState(new IdleState());
-
-        Observer.Instance.AddObserver(EventName.Joy, Joy);
-    }
-
-    private void Joy(object data)
-    {
-        _joystick.OnPointerUp2(); //custom made
     }
 
     void FixedUpdate()

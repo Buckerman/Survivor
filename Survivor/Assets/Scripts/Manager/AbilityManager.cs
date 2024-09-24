@@ -1,5 +1,9 @@
+using QuangDM.Common;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class AbilityManager : MonoBehaviour
 {
@@ -7,19 +11,22 @@ public class AbilityManager : MonoBehaviour
     private float lightningTimer;
     private float iceSpikesTimer;
 
+    public bool isBarrier;
+    private bool isLightning;
+    private bool isIceSpikes;
+
     [Header("Barrier Settings")]
-    public float barrierCooldown = 30f;
-    private bool isBarrier;
+    public float barrierCooldown = 20f;
     private Barrier barrier;
 
     [Header("Lightning Settings")]
-    public float lightningCooldown = 10f;
+    public float lightningCooldown = 5f;
     public float lightningRadius = 5f;
     public float lightningDamage = 1f;
     public float lightningStunDuration = 0.5f;
 
     [Header("IceSpikes Settings")]
-    public float iceSpikesCooldown = 25f;
+    public float iceSpikesCooldown = 15f;
     public float iceSpikesRadius = 1.5f;
     public float iceSpikesDamage = 2f;
     public float iceSpikesNumber = 7f;
@@ -40,24 +47,25 @@ public class AbilityManager : MonoBehaviour
         iceSpikesTimer = Mathf.Max(0, iceSpikesTimer - Time.deltaTime);
         lightningTimer = Mathf.Max(0, lightningTimer - Time.deltaTime);
 
-        if (barrierTimer <= 0f)
+        if (isBarrier && barrierTimer <= 0f)
         {
             barrier.ActivateBarrier();
             barrierTimer = barrierCooldown;
         }
 
-        if (iceSpikesTimer <= 0f)
+        if (isIceSpikes && iceSpikesTimer <= 0f)
         {
-            ActivateIceSpikes();
+            IceSpikes();
             iceSpikesTimer = iceSpikesCooldown;
         }
-        if (lightningTimer <= 0f)
+
+        if (isLightning && lightningTimer <= 0f)
         {
-            ActivateLightningStrikes();
+            LightningStrikes();
             lightningTimer = lightningCooldown;
         }
     }
-    private void ActivateLightningStrikes()
+    private void LightningStrikes()
     {
         Collider[] hitColliders = Physics.OverlapSphere(Player.Instance.transform.position, lightningRadius, LayerMask.GetMask("Enemy"));
 
@@ -73,7 +81,7 @@ public class AbilityManager : MonoBehaviour
             }
         }
     }
-    private void ActivateIceSpikes()
+    private void IceSpikes()
     {
         float angleStep = 360f / iceSpikesNumber;
 
@@ -87,5 +95,24 @@ public class AbilityManager : MonoBehaviour
             iceSpikeObject.transform.rotation = Quaternion.Euler(0, -i * angleStep, -15);
             iceRing.Initialize(Player.Instance.transform.position, angle, iceSpikesRadius);
         }
+    }
+    public void ActivateBarrierFlag()
+    {
+        isBarrier = true;
+        CloseAbilityMenu();
+    }
+    public void ActivateLightningFlag()
+    {
+        isLightning = true;
+        CloseAbilityMenu();
+    }
+    public void ActivateIceSpikesFlag()
+    {
+        isIceSpikes = true;
+        CloseAbilityMenu();
+    }
+    private void CloseAbilityMenu()
+    {
+        Observer.Instance.Notify(EventName.SetAbilityMenu,false);
     }
 }

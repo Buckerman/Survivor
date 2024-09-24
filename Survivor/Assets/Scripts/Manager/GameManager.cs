@@ -84,10 +84,10 @@ public class GameManager : MonoBehaviour
     private void PlayerLevelUp(object data)
     {
         _uiManager.PlayerLevelUp(data.ToString());
-        _uiManager.ActivateAbilityMenu();
-        Player.Instance.GetComponent<PlayerHealth>().HealthBar.gameObject.SetActive(false);
-        _uiManager.SetJoystick(false);
-        Time.timeScale = 0f;
+    }
+    private void SetAbilityMenu(object data)
+    {
+        _uiManager.SetAbilityMenu((bool)data);
     }
     private void DamageReceived(object data)
     {
@@ -196,6 +196,7 @@ public class GameManager : MonoBehaviour
         Observer.Instance.AddObserver(EventName.ActivatePowerUpfUI, ActivatePowerUpfUI);
         Observer.Instance.AddObserver(EventName.RemovePowerUpUI, RemovePowerUpUI);
         Observer.Instance.AddObserver(EventName.UpdatePowerUpUI, UpdatePowerUpUI);
+        Observer.Instance.AddObserver(EventName.SetAbilityMenu, SetAbilityMenu);
     }
     private void RemoveObservers()
     {
@@ -210,5 +211,6 @@ public class GameManager : MonoBehaviour
         Observer.Instance.RemoveObserver(EventName.ActivatePowerUpfUI, ActivatePowerUpfUI);
         Observer.Instance.RemoveObserver(EventName.RemovePowerUpUI, RemovePowerUpUI);
         Observer.Instance.RemoveObserver(EventName.UpdatePowerUpUI, UpdatePowerUpUI);
+        Observer.Instance.RemoveObserver(EventName.SetAbilityMenu, SetAbilityMenu);
     }
 }

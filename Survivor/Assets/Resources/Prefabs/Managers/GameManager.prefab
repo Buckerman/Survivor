@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 454843768890144045}
   - component: {fileID: 6524171224393649984}
   - component: {fileID: 8272117862110249999}
+  - component: {fileID: 5587232433542925713}
   - component: {fileID: 7572207199557721158}
   - component: {fileID: 2276551543029036501}
   - component: {fileID: 4537714458693066903}
   - component: {fileID: 3215664798446287045}
-  - component: {fileID: 5587232433542925713}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -79,6 +79,30 @@ MonoBehaviour:
   - 5
   - 5
   defaultLootPrefab: {fileID: 3102827308729024908, guid: 7ecea1522a989494a86437763a220669, type: 3}
+--- !u!114 &5587232433542925713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352624878009854795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96a2523698e8f242bca4fcdb112d969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBarrier: 0
+  barrierCooldown: 20
+  lightningCooldown: 5
+  lightningRadius: 5
+  lightningDamage: 1
+  lightningStunDuration: 0.5
+  iceSpikesCooldown: 15
+  iceSpikesRadius: 1.5
+  iceSpikesDamage: 2
+  iceSpikesNumber: 7
+  iceSpikesSlowDuration: 1.5
+  iceSpikesSlowAmount: 0.8
 --- !u!114 &7572207199557721158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2be56b8c50f9c499d52637044d4ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _activeAbilitiesContainer: {fileID: 0}
 --- !u!114 &2276551543029036501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,26 +152,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435c2e55efc8ca647af85b3fb836779a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5587232433542925713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 352624878009854795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d96a2523698e8f242bca4fcdb112d969, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  barrierCooldown: 30
-  lightningCooldown: 10
-  lightningRadius: 5
-  lightningDamage: 1
-  lightningStunDuration: 0.5
-  iceSpikesCooldown: 25
-  iceSpikesRadius: 1.5
-  iceSpikesDamage: 2
-  iceSpikesNumber: 7
-  iceSpikesSlowDuration: 1.5
-  iceSpikesSlowAmount: 0.8
