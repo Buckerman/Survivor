@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
         GetComponentInChildren<TrailRenderer>().enabled = true;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         MoveBullet();
     }
