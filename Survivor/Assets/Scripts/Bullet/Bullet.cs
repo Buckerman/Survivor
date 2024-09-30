@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     public void Initialize(Vector3 initialDirection)
     {
         _direction = initialDirection;
-        GetComponentInChildren<TrailRenderer>().enabled = true;
+        GetComponentInChildren<TrailRenderer>().emitting = true;
     }
 
     private void Update()
@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        GetComponentInChildren<TrailRenderer>().enabled = false;
+        GetComponentInChildren<TrailRenderer>().emitting = false;
         this.gameObject.SetActive(false);
     }
 }
